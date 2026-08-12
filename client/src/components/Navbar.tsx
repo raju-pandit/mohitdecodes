@@ -25,7 +25,7 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
     return () => document.removeEventListener('mousedown', handleOutsideClick);
   }, [profileDropdownOpen]);
 
-  // Close dropdown & mobile menu on route change
+  // Close dropdowns on route change
   useEffect(() => {
     setProfileDropdownOpen(false);
     setMobileMenuOpen(false);
@@ -43,8 +43,9 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
   ];
 
   return (
-    <>
-      <header className="fixed top-0 inset-x-0 z-[9990] p-2.5 sm:p-3 flex justify-center pointer-events-none">
+    <header className="fixed top-0 inset-x-0 z-[9990] p-2.5 sm:p-3 flex justify-center pointer-events-none">
+      <div className="w-full max-w-7xl flex flex-col items-center">
+        {/* Floating Navbar Bar */}
         <div 
           style={{ 
             backgroundColor: 'rgba(10, 10, 18, 0.55)',
@@ -52,7 +53,7 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
             WebkitBackdropFilter: 'blur(14px)',
             border: '1px solid rgba(255, 255, 255, 0.12)',
           }}
-          className="w-full max-w-7xl pointer-events-auto flex items-center justify-between h-14 sm:h-16 px-3.5 sm:px-6 rounded-2xl sm:rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] shadow-purple-950/20 transition-all duration-300"
+          className="w-full pointer-events-auto flex items-center justify-between h-14 sm:h-16 px-3.5 sm:px-6 rounded-2xl sm:rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] shadow-purple-950/20 transition-all duration-300"
         >
           {/* Logo */}
           <BrandLogo size="md" />
@@ -171,118 +172,91 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
               </div>
             )}
 
-            {/* Mobile Menu Toggle */}
+            {/* Mobile Menu Toggle Button */}
             <button 
               className="lg:hidden p-2 text-slate-200 hover:text-white rounded-xl hover:bg-white/10 border border-white/10 bg-white/5 transition-all select-none shrink-0"
-              onClick={() => setMobileMenuOpen(true)}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle Navigation Menu"
             >
-              <Menu className="w-5 h-5" />
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
-      </header>
 
-      {/* Mobile Menu Drawer (outside transformed container so fixed inset-0 covers 100% viewport) */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <div className="fixed inset-0 z-[9999] lg:hidden">
-            {/* Backdrop overlay */}
+        {/* Mobile Menu Dropdown (Clean, top-down expansion — NO side sliding drawer) */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.15 }}
-              className="absolute inset-0 bg-black/80 backdrop-blur-md"
-              onClick={() => setMobileMenuOpen(false)}
-            />
-
-            {/* Slide-out Drawer */}
-            <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ ease: 'easeOut', duration: 0.2 }}
+              initial={{ opacity: 0, y: -10, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.98 }}
+              transition={{ duration: 0.15, ease: "easeOut" }}
               style={{
-                backgroundColor: 'rgba(10, 10, 25, 0.97)',
-                backdropFilter: 'blur(24px)',
-                WebkitBackdropFilter: 'blur(24px)',
+                backgroundColor: 'rgba(10, 10, 25, 0.96)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
               }}
-              className="absolute top-0 right-0 bottom-0 w-[85%] max-w-sm border-l border-white/10 p-6 flex flex-col shadow-2xl"
+              className="mt-2.5 w-full pointer-events-auto rounded-2xl p-4 shadow-2xl lg:hidden flex flex-col gap-1 max-h-[80vh] overflow-y-auto"
             >
-              <div className="flex justify-between items-center mb-8">
-                <BrandLogo size="sm" />
-                <button 
-                  onClick={() => setMobileMenuOpen(false)} 
-                  className="p-2 text-slate-300 hover:text-white rounded-full bg-white/5 border border-white/10"
+              {navLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`px-4 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                    location.pathname === link.path 
+                      ? 'bg-primary-600/20 text-primary-300 border border-primary-500/30' 
+                      : 'text-slate-200 hover:bg-white/5 hover:text-white'
+                  }`}
                 >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
+                  {link.name}
+                </Link>
+              ))}
 
-              <nav className="flex flex-col gap-1.5 flex-grow overflow-y-auto pr-1">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.name}
-                    to={link.path}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`px-4 py-3 rounded-xl text-base font-semibold transition-all ${
-                      location.pathname === link.path 
-                        ? 'bg-primary-600/20 text-primary-300 border border-primary-500/30' 
-                        : 'text-slate-200 hover:bg-white/5 hover:text-white'
-                    }`}
-                  >
-                    {link.name}
-                  </Link>
-                ))}
-              </nav>
-
-              {user ? (
-                <div className="flex flex-col gap-3 mt-auto pt-6 border-t border-white/10">
-                  <div className="flex items-center gap-3 px-2 mb-2">
-                    <div className="w-9 h-9 rounded-full bg-primary-600/30 border border-primary-500/40 flex items-center justify-center text-white text-xs font-extrabold overflow-hidden shrink-0">
-                      {hasCustomAvatar(user.avatar) ? <img src={user.avatar} className="w-full h-full object-cover" /> : getInitials(user.name || '')}
+              <div className="border-t border-white/10 my-2 pt-2">
+                {user ? (
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center gap-3 px-2 py-1">
+                      <div className="w-8 h-8 rounded-full bg-primary-600/30 border border-primary-500/40 flex items-center justify-center text-white text-xs font-extrabold overflow-hidden shrink-0">
+                        {hasCustomAvatar(user.avatar) ? <img src={user.avatar} className="w-full h-full object-cover" /> : getInitials(user.name || '')}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs font-bold text-white truncate">{user.name}</p>
+                        <p className="text-[10px] text-slate-400 truncate">{user.email}</p>
+                      </div>
                     </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-bold text-white truncate">{user.name}</p>
-                      <p className="text-[10px] text-slate-400 truncate mt-0.5">{user.email}</p>
-                    </div>
-                  </div>
-                  <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
-                    <Button variant="outline" className="w-full flex justify-center items-center gap-2">
-                      <User className="w-4 h-4 text-slate-400" /> Profile Dashboard
-                    </Button>
-                  </Link>
-                  {user.role === 'admin' && (
-                    <Link to="/admin" onClick={() => setMobileMenuOpen(false)}>
-                      <Button variant="outline" className="w-full flex justify-center items-center gap-2 text-primary-400">
-                        <Settings className="w-4 h-4 text-primary-500" /> Admin Panel
-                      </Button>
+                    <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)} className="px-4 py-2 rounded-xl text-sm font-semibold text-slate-300 hover:bg-white/5 flex items-center gap-2">
+                      <User className="w-4 h-4 text-slate-400" /> Dashboard
                     </Link>
-                  )}
-                  <Button 
-                    variant="ghost" 
-                    className="w-full flex justify-center items-center gap-2 text-red-400 hover:bg-red-500/10 font-bold"
-                    onClick={() => { logout(); setMobileMenuOpen(false); }}
-                  >
-                    <LogOut className="w-4 h-4 text-red-400" /> Sign Out
-                  </Button>
-                </div>
-              ) : (
-                <div className="flex flex-col gap-3 mt-auto pt-6 border-t border-white/10">
-                  <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
-                    <Button variant="outline" className="w-full justify-center">Login</Button>
-                  </Link>
-                  <Link to="/register" onClick={() => setMobileMenuOpen(false)}>
-                    <Button variant="primary" className="w-full justify-center">Sign Up</Button>
-                  </Link>
-                </div>
-              )}
+                    {user.role === 'admin' && (
+                      <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="px-4 py-2 rounded-xl text-sm font-semibold text-primary-400 hover:bg-white/5 flex items-center gap-2">
+                        <Settings className="w-4 h-4 text-primary-500" /> Admin Panel
+                      </Link>
+                    )}
+                    <button 
+                      onClick={() => { logout(); setMobileMenuOpen(false); }}
+                      className="px-4 py-2 rounded-xl text-sm font-semibold text-red-400 hover:bg-red-500/10 flex items-center gap-2 w-full text-left"
+                    >
+                      <LogOut className="w-4 h-4 text-red-400" /> Sign Out
+                    </button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 gap-2 pt-1">
+                    <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
+                      <Button variant="outline" size="sm" className="w-full justify-center">Login</Button>
+                    </Link>
+                    <Link to="/register" onClick={() => setMobileMenuOpen(false)}>
+                      <Button variant="primary" size="sm" className="w-full justify-center">Sign Up</Button>
+                    </Link>
+                  </div>
+                )}
+              </div>
             </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-    </>
+          )}
+        </AnimatePresence>
+      </div>
+    </header>
   );
 };
 
