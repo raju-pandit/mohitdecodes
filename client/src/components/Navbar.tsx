@@ -26,6 +26,11 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
     return () => document.removeEventListener('mousedown', handleOutsideClick);
   }, [profileDropdownOpen]);
 
+  // Close dropdown on route change
+  useEffect(() => {
+    setProfileDropdownOpen(false);
+  }, [location.pathname]);
+
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Courses', path: '/courses' },
