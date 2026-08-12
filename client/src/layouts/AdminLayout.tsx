@@ -107,9 +107,9 @@ const AdminLayout: React.FC = () => {
   )
 
   return (
-    <div className="flex h-screen bg-dark-950 overflow-hidden">
+    <div className="flex h-screen bg-dark-950">
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 bg-dark-900 border-r border-dark-700 flex-shrink-0">
+      <aside className="hidden lg:flex flex-col w-64 bg-dark-900 border-r border-dark-700 flex-shrink-0 overflow-y-auto">
         <Sidebar />
       </aside>
 
@@ -129,7 +129,7 @@ const AdminLayout: React.FC = () => {
               animate={{ x: 0 }}
               exit={{ x: -280 }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="fixed left-0 top-0 h-full w-64 z-50 bg-dark-900 border-r border-dark-700 lg:hidden"
+              className="fixed left-0 top-0 h-full w-64 z-50 bg-dark-900 border-r border-dark-700 lg:hidden overflow-y-auto"
             >
               <Sidebar />
             </motion.aside>
@@ -138,7 +138,7 @@ const AdminLayout: React.FC = () => {
       </AnimatePresence>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Top Bar */}
         <header className="h-14 bg-dark-900 border-b border-dark-700 flex items-center gap-4 px-4 flex-shrink-0">
           <button
@@ -154,7 +154,7 @@ const AdminLayout: React.FC = () => {
           </div>
         </header>
 
-        {/* Page Content */}
+        {/* Page Content - scrollable area */}
         <main className="flex-1 overflow-y-auto p-6">
           <Outlet />
         </main>
@@ -162,5 +162,6 @@ const AdminLayout: React.FC = () => {
     </div>
   )
 }
+
 
 export default AdminLayout
