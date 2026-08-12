@@ -84,7 +84,8 @@ const AdminCourses = () => {
     try {
       const payload = {
         ...formData,
-        price: formData.isFree ? 0 : (Number(formData.price) || 0),
+        price: formData.isFree ? 0 : Math.max(0, Number(formData.price) || 0),
+
         instructor: { name: formData.instructorName, bio: formData.instructorBio }
       };
       
@@ -246,7 +247,20 @@ const AdminCourses = () => {
                     <div>
                       <label className="block text-sm mb-1 text-gray-300">Price (₹)</label>
 
-                      <input type="number" placeholder="e.g. 499" className="input w-full" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} />
+                      <input 
+                        type="number" 
+                        min="0"
+                        placeholder="e.g. 499" 
+                        className="input w-full" 
+                        value={formData.price} 
+                        onChange={e => {
+                          const val = e.target.value;
+                          if (val === '' || Number(val) >= 0) {
+                            setFormData({...formData, price: val});
+                          }
+                        }} 
+                      />
+
 
                     </div>
                   )}
