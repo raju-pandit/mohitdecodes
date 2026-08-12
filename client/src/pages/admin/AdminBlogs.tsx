@@ -34,7 +34,7 @@ const AdminBlogs = () => {
 
   const fetchBlogs = async () => {
     try {
-      const data = await api.get('/api/blogs/admin/all');
+      const data = await api.get('/blogs/admin/all');
       setBlogs(data?.data || []);
     } catch (error) {
       toast.error('Failed to fetch blogs');
@@ -70,10 +70,10 @@ const AdminBlogs = () => {
       };
       
       if (selectedBlog) {
-        await api.put(`/api/blogs/${selectedBlog._id}`, payload);
+        await api.put(`/blogs/${selectedBlog._id}`, payload);
         toast.success('Blog updated successfully');
       } else {
-        await api.post('/api/blogs', payload);
+        await api.post('/blogs', payload);
         toast.success('Blog created successfully');
       }
       setIsModalOpen(false);
@@ -86,7 +86,7 @@ const AdminBlogs = () => {
   const handleDelete = async () => {
     if (!selectedBlog) return;
     try {
-      await api.delete(`/api/blogs/${selectedBlog._id}`);
+      await api.delete(`/blogs/${selectedBlog._id}`);
       toast.success('Blog deleted successfully');
       setIsDeleteModalOpen(false);
       fetchBlogs();

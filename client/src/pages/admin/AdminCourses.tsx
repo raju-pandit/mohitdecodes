@@ -38,7 +38,7 @@ const AdminCourses = () => {
 
   const fetchCourses = async () => {
     try {
-      const data = await api.get('/api/courses/admin/all');
+      const data = await api.get('/courses/admin/all');
       setCourses(data?.data || []);
     } catch (error) {
       toast.error('Failed to fetch courses');
@@ -77,10 +77,10 @@ const AdminCourses = () => {
       };
       
       if (selectedCourse) {
-        await api.put(`/api/courses/${selectedCourse._id}`, payload);
+        await api.put(`/courses/${selectedCourse._id}`, payload);
         toast.success('Course updated successfully');
       } else {
-        await api.post('/api/courses', payload);
+        await api.post('/courses', payload);
         toast.success('Course created successfully');
       }
       setIsModalOpen(false);
@@ -94,7 +94,7 @@ const AdminCourses = () => {
   const handleDelete = async () => {
     if (!selectedCourse) return;
     try {
-      await api.delete(`/api/courses/${selectedCourse._id}`);
+      await api.delete(`/courses/${selectedCourse._id}`);
       toast.success('Course deleted successfully');
       setIsDeleteModalOpen(false);
       fetchCourses();

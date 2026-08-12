@@ -33,7 +33,7 @@ const AdminTutorials = () => {
 
   const fetchTutorials = async () => {
     try {
-      const data = await api.get('/api/tutorials/admin/all');
+      const data = await api.get('/tutorials/admin/all');
       setTutorials(data?.data || []);
     } catch (error) {
       toast.error('Failed to fetch tutorials');
@@ -69,10 +69,10 @@ const AdminTutorials = () => {
       };
       
       if (selectedTutorial) {
-        await api.put(`/api/tutorials/${selectedTutorial._id}`, payload);
+        await api.put(`/tutorials/${selectedTutorial._id}`, payload);
         toast.success('Tutorial updated successfully');
       } else {
-        await api.post('/api/tutorials', payload);
+        await api.post('/tutorials', payload);
         toast.success('Tutorial created successfully');
       }
       setIsModalOpen(false);
@@ -85,7 +85,7 @@ const AdminTutorials = () => {
   const handleDelete = async () => {
     if (!selectedTutorial) return;
     try {
-      await api.delete(`/api/tutorials/${selectedTutorial._id}`);
+      await api.delete(`/tutorials/${selectedTutorial._id}`);
       toast.success('Tutorial deleted successfully');
       setIsDeleteModalOpen(false);
       fetchTutorials();

@@ -25,7 +25,7 @@ const AdminTestimonials = () => {
 
   const fetchTestimonials = async () => {
     try {
-      const data = await api.get('/api/testimonials/admin/all');
+      const data = await api.get('/testimonials/admin/all');
       setTestimonials(data?.data || []);
     } catch (error) {
       toast.error('Failed to fetch testimonials');
@@ -36,7 +36,7 @@ const AdminTestimonials = () => {
 
   const handleApproveToggle = async (id: string) => {
     try {
-      await api.put(`/api/testimonials/${id}/approve`);
+      await api.put(`/testimonials/${id}/approve`);
       toast.success('Status updated');
       fetchTestimonials();
     } catch (error) {
@@ -47,7 +47,7 @@ const AdminTestimonials = () => {
   const handleDelete = async () => {
     if (!selectedTestimonial) return;
     try {
-      await api.delete(`/api/testimonials/${selectedTestimonial._id}`);
+      await api.delete(`/testimonials/${selectedTestimonial._id}`);
       toast.success('Testimonial deleted successfully');
       setIsDeleteModalOpen(false);
       fetchTestimonials();

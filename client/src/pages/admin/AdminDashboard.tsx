@@ -59,7 +59,7 @@ const AdminDashboard: React.FC = () => {
 
   const fetchStats = async () => {
     try {
-      const response = await api.get('/api/admin/stats');
+      const response = await api.get('/admin/stats');
       
       let statsData = null;
       if (response) {

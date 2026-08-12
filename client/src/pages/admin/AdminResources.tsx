@@ -31,7 +31,7 @@ const AdminResources = () => {
 
   const fetchResources = async () => {
     try {
-      const data = await api.get('/api/resources/admin/all');
+      const data = await api.get('/resources/admin/all');
       setResources(data?.data || []);
     } catch (error) {
       toast.error('Failed to fetch resources');
@@ -63,10 +63,10 @@ const AdminResources = () => {
     e.preventDefault();
     try {
       if (selectedResource) {
-        await api.put(`/api/resources/${selectedResource._id}`, formData);
+        await api.put(`/resources/${selectedResource._id}`, formData);
         toast.success('Resource updated successfully');
       } else {
-        await api.post('/api/resources', formData);
+        await api.post('/resources', formData);
         toast.success('Resource created successfully');
       }
       setIsModalOpen(false);
@@ -79,7 +79,7 @@ const AdminResources = () => {
   const handleDelete = async () => {
     if (!selectedResource) return;
     try {
-      await api.delete(`/api/resources/${selectedResource._id}`);
+      await api.delete(`/resources/${selectedResource._id}`);
       toast.success('Resource deleted successfully');
       setIsDeleteModalOpen(false);
       fetchResources();

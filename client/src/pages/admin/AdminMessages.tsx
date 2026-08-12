@@ -24,7 +24,7 @@ const AdminMessages = () => {
 
   const fetchMessages = async () => {
     try {
-      const data = await api.get('/api/contact');
+      const data = await api.get('/contact');
       setMessages(data?.data || []);
     } catch (error) {
       toast.error('Failed to fetch messages');
@@ -35,7 +35,7 @@ const AdminMessages = () => {
 
   const handleStatusChange = async (id: string, newStatus: string) => {
     try {
-      await api.put(`/api/contact/${id}`, { status: newStatus });
+      await api.put(`/contact/${id}`, { status: newStatus });
       toast.success('Message status updated');
       setMessages(messages.map(m => m._id === id ? { ...m, status: newStatus as any } : m));
       if (selectedMessage && selectedMessage._id === id) {

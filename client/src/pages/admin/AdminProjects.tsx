@@ -32,7 +32,7 @@ const AdminProjects = () => {
 
   const fetchProjects = async () => {
     try {
-      const data = await api.get('/api/projects');
+      const data = await api.get('/projects');
       setProjects(data?.data || []);
     } catch (error) {
       toast.error('Failed to fetch projects');
@@ -69,10 +69,10 @@ const AdminProjects = () => {
       };
       
       if (selectedProject) {
-        await api.put(`/api/projects/${selectedProject._id}`, payload);
+        await api.put(`/projects/${selectedProject._id}`, payload);
         toast.success('Project updated successfully');
       } else {
-        await api.post('/api/projects', payload);
+        await api.post('/projects', payload);
         toast.success('Project created successfully');
       }
       setIsModalOpen(false);
@@ -85,7 +85,7 @@ const AdminProjects = () => {
   const handleDelete = async () => {
     if (!selectedProject) return;
     try {
-      await api.delete(`/api/projects/${selectedProject._id}`);
+      await api.delete(`/projects/${selectedProject._id}`);
       toast.success('Project deleted successfully');
       setIsDeleteModalOpen(false);
       fetchProjects();

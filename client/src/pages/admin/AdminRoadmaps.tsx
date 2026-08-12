@@ -30,7 +30,7 @@ const AdminRoadmaps = () => {
 
   const fetchRoadmaps = async () => {
     try {
-      const data = await api.get('/api/roadmaps');
+      const data = await api.get('/roadmaps');
       setRoadmaps(data?.data || []);
     } catch (error) {
       toast.error('Failed to fetch roadmaps');
@@ -61,10 +61,10 @@ const AdminRoadmaps = () => {
     e.preventDefault();
     try {
       if (selectedRoadmap) {
-        await api.put(`/api/roadmaps/${selectedRoadmap._id}`, formData);
+        await api.put(`/roadmaps/${selectedRoadmap._id}`, formData);
         toast.success('Roadmap updated successfully');
       } else {
-        await api.post('/api/roadmaps', formData);
+        await api.post('/roadmaps', formData);
         toast.success('Roadmap created successfully');
       }
       setIsModalOpen(false);
@@ -77,7 +77,7 @@ const AdminRoadmaps = () => {
   const handleDelete = async () => {
     if (!selectedRoadmap) return;
     try {
-      await api.delete(`/api/roadmaps/${selectedRoadmap._id}`);
+      await api.delete(`/roadmaps/${selectedRoadmap._id}`);
       toast.success('Roadmap deleted successfully');
       setIsDeleteModalOpen(false);
       fetchRoadmaps();

@@ -1,8 +1,13 @@
 import axios from 'axios';
 
-// Strip trailing /api from baseURL if present to avoid /api/api/... double prefix
-const rawBase = import.meta.env.VITE_API_URL || 'https://mohitdecodes.onrender.com';
-const baseURL = rawBase.replace(/\/api\/?$/, '');
+// Normalise base URL:
+// - Strip trailing slash and /api if present (in case VITE_API_URL ends with /api)
+// - Then always append /api so every relative call like '/auth/login' works correctly
+const rawBase = (import.meta.env.VITE_API_URL || 'https://mohitdecodes.onrender.com')
+  .replace(/\/+$/, '')          // remove trailing slashes
+  .replace(/\/api$/, '');       // remove trailing /api
+
+const baseURL = rawBase + '/api';
 
 const api = axios.create({
   baseURL,
