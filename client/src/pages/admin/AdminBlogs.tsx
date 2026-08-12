@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Edit2, Trash2, X, AlertTriangle } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
 
@@ -25,12 +26,18 @@ const AdminBlogs = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
+  const location = useLocation();
   const [formData, setFormData] = useState({
     title: '', excerpt: '', content: '', coverImage: '', category: 'Tech',
     tags: '', published: false, seoTitle: '', seoDescription: ''
   });
 
-  useEffect(() => { fetchBlogs(); }, []);
+  useEffect(() => {
+    fetchBlogs();
+    if ((location.state as any)?.openModal) {
+      handleOpenModal();
+    }
+  }, [location.state]);
 
   const fetchBlogs = async () => {
     try {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Users, BookOpen, FileText, Download, Mail, MessageSquare, Plus, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
 
@@ -52,6 +53,7 @@ const CountUp = ({ to }: { to: number }) => {
 const AdminDashboard: React.FC = () => {
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchStats();
@@ -102,10 +104,10 @@ const AdminDashboard: React.FC = () => {
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-white">Admin Dashboard</h1>
         <div className="flex gap-3">
-          <button className="btn-primary flex items-center gap-2">
+          <button onClick={() => navigate('/admin/courses', { state: { openModal: true } })} className="btn-primary flex items-center gap-2">
             <Plus size={18} /> Create Course
           </button>
-          <button className="btn-secondary flex items-center gap-2">
+          <button onClick={() => navigate('/admin/blogs', { state: { openModal: true } })} className="btn-secondary flex items-center gap-2">
             <Plus size={18} /> Write Blog
           </button>
         </div>
@@ -118,7 +120,7 @@ const AdminDashboard: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="glass-card p-6 flex items-center justify-between"
+            className="glass-card p-6 flex items-center justify-between cursor-pointer hover:border-primary-500/50 transition-colors"
           >
             <div>
               <p className="text-gray-400 mb-1">{stat.title}</p>
@@ -145,15 +147,15 @@ const AdminDashboard: React.FC = () => {
         <div className="glass-card p-6">
           <h2 className="text-xl font-bold text-white mb-4">Quick Actions</h2>
           <div className="space-y-3">
-            <button className="w-full flex items-center justify-between p-3 rounded-lg bg-gray-800/50 hover:bg-gray-700/50 transition-colors text-white">
+            <button onClick={() => navigate('/admin/courses')} className="w-full flex items-center justify-between p-3 rounded-lg bg-gray-800/50 hover:bg-gray-700/50 transition-colors text-white">
               <span className="flex items-center gap-3"><BookOpen size={18} className="text-purple-400" /> Manage Courses</span>
               <ArrowRight size={18} className="text-gray-400" />
             </button>
-            <button className="w-full flex items-center justify-between p-3 rounded-lg bg-gray-800/50 hover:bg-gray-700/50 transition-colors text-white">
+            <button onClick={() => navigate('/admin/blogs')} className="w-full flex items-center justify-between p-3 rounded-lg bg-gray-800/50 hover:bg-gray-700/50 transition-colors text-white">
               <span className="flex items-center gap-3"><FileText size={18} className="text-green-400" /> Manage Blogs</span>
               <ArrowRight size={18} className="text-gray-400" />
             </button>
-            <button className="w-full flex items-center justify-between p-3 rounded-lg bg-gray-800/50 hover:bg-gray-700/50 transition-colors text-white">
+            <button onClick={() => navigate('/admin/resources')} className="w-full flex items-center justify-between p-3 rounded-lg bg-gray-800/50 hover:bg-gray-700/50 transition-colors text-white">
               <span className="flex items-center gap-3"><Download size={18} className="text-orange-400" /> Manage Resources</span>
               <ArrowRight size={18} className="text-gray-400" />
             </button>
@@ -165,3 +167,4 @@ const AdminDashboard: React.FC = () => {
 };
 
 export default AdminDashboard;
+

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Edit2, Trash2, X, AlertTriangle } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
 
@@ -28,13 +29,19 @@ const AdminCourses = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const location = useLocation();
   const [formData, setFormData] = useState({
     title: '', shortDescription: '', description: '', category: 'React',
     difficulty: 'Beginner', price: 0, isFree: true, thumbnail: '',
     instructorName: '', instructorBio: '', isPublished: false, duration: ''
   });
 
-  useEffect(() => { fetchCourses(); }, []);
+  useEffect(() => {
+    fetchCourses();
+    if ((location.state as any)?.openModal) {
+      handleOpenModal();
+    }
+  }, [location.state]);
 
   const fetchCourses = async () => {
     try {
