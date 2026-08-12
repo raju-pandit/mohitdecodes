@@ -58,6 +58,21 @@
 
   a {
     @apply transition-colors duration-200;
+    /* Prevent link text from being included when user selects surrounding text */
+    -webkit-user-drag: none;
+  }
+
+  /* Nav links, buttons, icons — not selectable */
+  nav a,
+  button,
+  label,
+  .btn-primary,
+  .btn-secondary,
+  .btn-outline,
+  .btn-ghost,
+  [role="button"] {
+    user-select: none;
+    -webkit-user-select: none;
   }
 
   img {
