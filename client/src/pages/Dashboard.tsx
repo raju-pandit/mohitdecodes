@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { BookOpen, Flame, Bookmark, ArrowRight, ShieldCheck, GraduationCap } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
-import { getInitials } from '../utils/formatters'
+import { getInitials, hasCustomAvatar } from '../utils/formatters'
 import { Course, Blog } from '../types'
 import { CourseCard } from '../components/CourseCard'
 
@@ -53,7 +53,7 @@ const Dashboard: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-dark-900 border border-dark-700 p-8 rounded-2xl">
         <div className="flex items-center gap-6">
           <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-primary-500 to-cyan-500 flex items-center justify-center text-white font-extrabold text-3xl shrink-0 border-2 border-primary-500 overflow-hidden">
-            {user.avatar ? <img src={user.avatar} className="w-full h-full object-cover" /> : getInitials(user.name || '')}
+            {hasCustomAvatar(user.avatar) ? <img src={user.avatar} className="w-full h-full object-cover" /> : getInitials(user.name || '')}
           </div>
           <div>
             <div className="flex items-center gap-2">

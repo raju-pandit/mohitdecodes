@@ -4,7 +4,7 @@ import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-
 import { Code2, Search, Menu, X, LogOut, LayoutDashboard, Settings, User } from 'lucide-react';
 import { Button } from './ui/Button';
 import { useAuth } from '../context/AuthContext';
-import { getInitials } from '../utils/formatters';
+import { getInitials, hasCustomAvatar } from '../utils/formatters';
 
 export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
   const { user, logout } = useAuth();
@@ -115,7 +115,7 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
                   className="flex items-center gap-2.5 bg-dark-900/90 px-3 py-1.5 border border-primary-500/35 rounded-full cursor-pointer hover:bg-dark-850 transition-all shadow-inner-glow"
                 >
                   <div className="w-6 h-6 rounded-full bg-primary-600/30 border border-primary-500/40 flex items-center justify-center text-white text-xs font-extrabold overflow-hidden shrink-0">
-                    {user?.avatar ? <img src={user.avatar} className="w-full h-full object-cover" /> : getInitials(user?.name || '')}
+                    {hasCustomAvatar(user?.avatar) ? <img src={user.avatar} className="w-full h-full object-cover" /> : getInitials(user?.name || '')}
                   </div>
                   <span className="text-xs font-semibold text-white tracking-wide">{user?.name}</span>
                   <span className="text-gray-400 text-[9px] ml-0.5">{profileDropdownOpen ? '▲' : '▼'}</span>
@@ -133,7 +133,7 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
                       {/* Dropdown Header Info Card */}
                       <div className="flex items-start mb-3">
                         <div className="w-12 h-12 rounded-full bg-primary-600/20 border border-primary-500/30 flex items-center justify-center text-white text-sm font-extrabold overflow-hidden shrink-0 mr-3">
-                          {user?.avatar ? <img src={user.avatar} className="w-full h-full object-cover" /> : getInitials(user?.name || '')}
+                          {hasCustomAvatar(user?.avatar) ? <img src={user.avatar} className="w-full h-full object-cover" /> : getInitials(user?.name || '')}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-1.5">

@@ -7,7 +7,7 @@ import {
   ChevronRight, LogOut, ExternalLink, Code2
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
-import { getInitials } from '../utils/formatters'
+import { getInitials, hasCustomAvatar } from '../utils/formatters'
 
 const adminNavItems = [
   { label: 'Dashboard', path: '/admin', icon: LayoutDashboard },
@@ -98,7 +98,7 @@ const AdminLayout: React.FC = () => {
         {user && (
           <div className="flex items-center gap-2 px-3 py-2 mt-2">
             <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-primary-500 to-cyan-500 flex items-center justify-center text-white font-bold text-xs shrink-0 overflow-hidden">
-              {user.avatar ? <img src={user.avatar} className="w-full h-full object-cover" /> : getInitials(user.name || '')}
+              {hasCustomAvatar(user.avatar) ? <img src={user.avatar} className="w-full h-full object-cover" /> : getInitials(user.name || '')}
             </div>
             <div>
               <p className="text-xs font-medium text-slate-300">{user.name}</p>

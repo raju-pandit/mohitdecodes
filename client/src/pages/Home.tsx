@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { 
   BookOpen, 
@@ -26,6 +26,81 @@ import { BlogCard } from '../components/BlogCard'
 import { CourseCardSkeleton } from '../components/ui/SkeletonLoader'
 import { TestimonialCard } from '../components/TestimonialCard'
 import { useTitle } from '../hooks/useTitle'
+
+const words = ["Future!", "MohitDecodes", "Family!"];
+
+const AnimatedWord: React.FC = () => {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prevIndex) => (prevIndex + 1) % words.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const currentWord = words[index];
+  const characters = Array.from(currentWord);
+
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.08,
+      },
+    },
+    exit: {
+      transition: {
+        staggerChildren: 0.05,
+        staggerDirection: -1,
+      },
+    },
+  };
+
+  const letterVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: 15,
+      transition: { type: "spring", damping: 12, stiffness: 200 }
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { type: "spring", damping: 12, stiffness: 200 }
+    },
+    exit: {
+      opacity: 0,
+      y: -15,
+      transition: { ease: "easeIn", duration: 0.15 }
+    }
+  };
+
+  return (
+    <span className="gradient-text drop-shadow-[0_0_15px_rgba(124,58,237,0.4)] inline-block">
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={currentWord}
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          className="inline-block"
+        >
+          {characters.map((char, charIdx) => (
+            <motion.span
+              key={charIdx}
+              variants={letterVariants}
+              className="inline-block"
+              style={{ display: 'inline-block' }}
+            >
+              {char === ' ' ? '\u00A0' : char}
+            </motion.span>
+          ))}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  );
+};
 
 const Home: React.FC = () => {
   useTitle('Learn. Build. Decode.', 'Practical programming courses, roadmaps, and projects to master MERN full-stack development.')
@@ -116,7 +191,7 @@ const Home: React.FC = () => {
           >
             <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] text-white">
               Be a part of our <br />
-              <span className="gradient-text drop-shadow-[0_0_15px_rgba(124,58,237,0.4)]">Future!</span>
+              <AnimatedWord />
             </h1>
             
             <p className="text-lg md:text-xl text-slate-400 max-w-lg mx-auto lg:mx-0 leading-relaxed font-medium">

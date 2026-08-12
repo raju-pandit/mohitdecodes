@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Trash2, Shield, AlertTriangle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
-import { getInitials } from '../../utils/formatters';
+import { getInitials, hasCustomAvatar } from '../../utils/formatters';
 
 interface User {
   _id: string;
@@ -102,7 +102,7 @@ const AdminUsers = () => {
                   <td className="p-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-blue-500/20 text-blue-500 flex items-center justify-center font-bold overflow-hidden">
-                        {user.avatar ? <img src={user.avatar} className="w-full h-full object-cover" /> : getInitials(user.name || '')}
+                        {hasCustomAvatar(user.avatar) ? <img src={user.avatar} className="w-full h-full object-cover" /> : getInitials(user.name || '')}
                       </div>
                       <div>
                         <p className="font-medium text-white">{user.name}</p>
