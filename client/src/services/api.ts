@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-// Strip trailing /api if Vercel env var has it (prevents /api/api/... double prefix)
-const rawBase = import.meta.env.VITE_API_URL || 'https://mohitdecodes.onrender.com';
-const BASE_URL = rawBase.endsWith('/api') ? rawBase.slice(0, -4) : rawBase;
+// Strip trailing /api if already present in env var to avoid /api/api doubling
+const _base = import.meta.env.VITE_API_URL || 'https://mohitdecodes.onrender.com';
+const baseURL = _base.replace(/\/api\/?$/, '');
 
 const api = axios.create({
-  baseURL: BASE_URL,
+  baseURL,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
