@@ -207,20 +207,21 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
       <AnimatePresence>
         {mobileMenuOpen && (
           <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-dark-950/80 backdrop-blur-sm z-50 md:hidden"
-              onClick={() => setMobileMenuOpen(false)}
-            />
-            <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 bottom-0 w-[80%] max-w-sm bg-dark-900 border-l border-dark-800 z-50 p-6 flex flex-col md:hidden"
-            >
+             <motion.div
+               initial={{ opacity: 0 }}
+               animate={{ opacity: 1 }}
+               exit={{ opacity: 0 }}
+               transition={{ duration: 0.15 }}
+               className="fixed inset-0 bg-black/75 z-50 md:hidden"
+               onClick={() => setMobileMenuOpen(false)}
+             />
+             <motion.div
+               initial={{ x: '100%' }}
+               animate={{ x: 0 }}
+               exit={{ x: '100%' }}
+               transition={{ ease: 'easeOut', duration: 0.18 }}
+               className="fixed top-0 right-0 bottom-0 w-[80%] max-w-sm bg-dark-900 border-l border-dark-800 z-50 p-6 flex flex-col md:hidden"
+             >
               <div className="flex justify-between items-center mb-8">
                 <div className="flex items-center gap-2">
                   <Code2 className="w-6 h-6 text-primary-400" />
