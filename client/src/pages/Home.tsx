@@ -176,13 +176,13 @@ const Home: React.FC = () => {
   return (
     <div className="overflow-hidden bg-grid particles-bg">
       {/* HERO SECTION */}
-      <section className="relative min-h-[85vh] lg:min-h-[88vh] flex items-center pt-16 lg:pt-20 pb-8">
+      <section className="relative min-h-[75vh] lg:min-h-[80vh] flex items-center pt-12 lg:pt-14 pb-8">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-700/10 rounded-full blur-[120px]" />
           <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-accent-600/10 rounded-full blur-[150px]" />
         </div>
         
-        <div className="container-max grid lg:grid-cols-2 gap-12 items-center relative z-10">
+        <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center relative z-10">
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -250,7 +250,7 @@ const Home: React.FC = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="w-full flex justify-center lg:justify-end lg:-translate-y-8 relative z-10 px-4 sm:px-0 lg:pr-8"
+            className="w-full flex justify-center lg:justify-end lg:-translate-y-4 relative z-10 px-4 sm:px-0 lg:pr-0"
           >
             <div className="relative">
               {/* Outer Glowing Radial Orb Background */}
