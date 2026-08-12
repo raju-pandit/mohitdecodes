@@ -118,7 +118,7 @@ const Home: React.FC = () => {
 
             <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.1]">
               Decode. Build. <br />
-              <span className="gradient-text text-glow-blue">Become a Better Developer.</span>
+              <span className="gradient-text">Become a Better Developer.</span>
             </h1>
             <p className="text-xl text-slate-400 max-w-lg mx-auto lg:mx-0 leading-relaxed">
               Practical tutorials, courses, roadmaps, projects and resources designed to take your coding skills to the next level.
