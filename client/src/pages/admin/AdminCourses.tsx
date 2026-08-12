@@ -147,7 +147,8 @@ const AdminCourses = () => {
                   </td>
                   <td className="p-4 font-medium text-white">{course.title}</td>
                   <td className="p-4">{course.category}</td>
-                  <td className="p-4">{course.isFree ? <span className="badge-green">Free</span> : `$${course.price}`}</td>
+                  <td className="p-4">{course.isFree ? <span className="badge-green">Free</span> : `₹${course.price}`}</td>
+
                   <td className="p-4">{course.studentsCount || 0}</td>
                   <td className="p-4">
                     <span className={course.isPublished ? 'badge-primary' : 'badge-orange'}>
@@ -237,7 +238,8 @@ const AdminCourses = () => {
                   </div>
                   {!formData.isFree && (
                     <div>
-                      <label className="block text-sm mb-1 text-gray-300">Price ($)</label>
+                      <label className="block text-sm mb-1 text-gray-300">Price (₹)</label>
+
                       <input type="number" className="input w-full" value={formData.price} onChange={e => setFormData({...formData, price: Number(e.target.value)})} />
                     </div>
                   )}
