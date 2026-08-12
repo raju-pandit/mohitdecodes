@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
 import { Code2, Search, Menu, X, LogOut, LayoutDashboard, Settings } from 'lucide-react';
@@ -13,6 +13,15 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    if (!profileDropdownOpen) return;
+    const handleOutsideClick = () => {
+      setProfileDropdownOpen(false);
+    };
+    document.addEventListener('click', handleOutsideClick);
+    return () => document.removeEventListener('click', handleOutsideClick);
+  }, [profileDropdownOpen]);
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -91,9 +100,12 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
             </Button>
 
             {user ? (
-              <div className="relative">
+              <div 
+                className="relative"
+                onMouseLeave={() => setProfileDropdownOpen(false)}
+              >
                 <button 
-                  onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                  onClick={(e) => { e.stopPropagation(); setProfileDropdownOpen(!profileDropdownOpen); }}
                   className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary-500 to-cyan-500 flex items-center justify-center text-white font-bold text-sm outline-none ring-2 ring-transparent focus:ring-primary-500 transition-all"
                 >
                   {user?.name?.charAt(0) || 'U'}
