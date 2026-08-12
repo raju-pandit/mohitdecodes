@@ -1,8 +1,10 @@
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Search, MonitorPlay, FileText, CodeSquare, BookOpen, ChevronRight, Loader2, Map } from 'lucide-react';
 import { Modal } from './ui/Modal';
 import { Badge } from './ui/Badge';
 import { globalSearch } from '../services/searchService';
+
 
 export const SearchModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const [query, setQuery] = useState('');
