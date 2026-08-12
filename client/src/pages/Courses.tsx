@@ -32,7 +32,7 @@ const Courses: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [category, setCategory] = useState('')
   const [difficulty, setDifficulty] = useState('')
-  const [priceType, setPriceType] = useState('') // 'free', 'paid', ''
+  const [activeTab, setActiveTab] = useState<'premium' | 'free'>('premium')
   const [sort, setSort] = useState('-createdAt')
 
   const debouncedSearch = useDebounce(searchTerm, 300)
@@ -45,8 +45,8 @@ const Courses: React.FC = () => {
         if (debouncedSearch) params.search = debouncedSearch
         if (category) params.category = category
         if (difficulty) params.difficulty = difficulty
-        if (priceType === 'free') params.isFree = true
-        if (priceType === 'paid') params.isFree = false
+        if (activeTab === 'free') params.isFree = true
+        if (activeTab === 'premium') params.isFree = false
 
         const res = await getCourses(params)
         setCourses(res.data || [])
@@ -57,7 +57,7 @@ const Courses: React.FC = () => {
       }
     }
     fetchCourses()
-  }, [debouncedSearch, category, difficulty, priceType, sort])
+  }, [debouncedSearch, category, difficulty, activeTab, sort])
 
   return (
     <div className="container-max py-12">
@@ -68,6 +68,32 @@ const Courses: React.FC = () => {
         <p className="text-xl text-gray-400 max-w-2xl">
           Level up your skills with our comprehensive, project-based courses designed for modern developers.
         </p>
+      </div>
+
+      {/* Course Type Tabs */}
+      <div className="flex border-b border-dark-800 mb-8 pb-px">
+        <button
+          onClick={() => setActiveTab('premium')}
+          className={`pb-3 text-lg font-bold transition-all relative px-2 ${
+            activeTab === 'premium' ? 'text-primary-400' : 'text-gray-400 hover:text-gray-200'
+          }`}
+        >
+          Premium Courses
+          {activeTab === 'premium' && (
+            <motion.div layoutId="course-type-indicator" className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-500" />
+          )}
+        </button>
+        <button
+          onClick={() => setActiveTab('free')}
+          className={`ml-6 pb-3 text-lg font-bold transition-all relative px-2 ${
+            activeTab === 'free' ? 'text-primary-400' : 'text-gray-400 hover:text-gray-200'
+          }`}
+        >
+          Free Courses
+          {activeTab === 'free' && (
+            <motion.div layoutId="course-type-indicator" className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-500" />
+          )}
+        </button>
       </div>
 
       {/* Filter Row */}
@@ -85,7 +111,7 @@ const Courses: React.FC = () => {
         </div>
 
         {/* Dropdowns */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
@@ -104,16 +130,6 @@ const Courses: React.FC = () => {
             {Difficulties.map(diff => (
               <option key={diff.value} value={diff.value}>{diff.label}</option>
             ))}
-          </select>
-
-          <select
-            value={priceType}
-            onChange={(e) => setPriceType(e.target.value)}
-            className="input py-3 rounded-xl bg-dark-800 border-dark-700 min-w-[140px] text-sm text-slate-300"
-          >
-            <option value="">All Pricing</option>
-            <option value="free">Free</option>
-            <option value="paid">Paid</option>
           </select>
 
           <select
@@ -155,7 +171,7 @@ const Courses: React.FC = () => {
               setSearchTerm('')
               setCategory('')
               setDifficulty('')
-              setPriceType('')
+              setActiveTab('premium')
             }}
             className="btn-outline btn-sm"
           >
