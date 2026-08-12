@@ -71,8 +71,11 @@ const YouTubePage = () => {
       <div className="bg-gradient-to-r from-red-950/20 to-dark-900 border border-red-900/30 rounded-3xl p-8 md:p-12 flex flex-col lg:flex-row items-center justify-between gap-8">
         <div className="space-y-6">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-red-600/10 text-red-500 rounded-2xl flex items-center justify-center shrink-0">
-              <Youtube size={32} />
+            <div className="w-12 h-12 bg-red-600/10 rounded-2xl flex items-center justify-center shrink-0">
+              <svg viewBox="0 0 24 24" className="w-7 h-7 text-[#FF0000] fill-current" xmlns="http://www.w3.org/2000/svg">
+                <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.108C19.524 3.545 12 3.545 12 3.545s-7.525 0-9.387.51a3.003 3.003 0 0 0-2.11 2.108C0 8.025 0 12 0 12s0 3.975.503 5.837a3.003 3.003 0 0 0 2.11 2.108c1.862.51 9.387.51 9.387.51s7.525 0 9.387-.51a3.003 3.003 0 0 0 2.11-2.108C24 15.975 24 12 24 12s0-3.975-.502-5.837z" />
+                <polygon points="9.545 15.568 15.818 12 9.545 8.432" className="fill-white" />
+              </svg>
             </div>
             <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight">
               MohitDecodes <span className="text-red-500">YouTube</span>

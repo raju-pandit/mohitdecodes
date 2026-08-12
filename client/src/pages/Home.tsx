@@ -217,7 +217,10 @@ const Home: React.FC = () => {
                 Start Paid Learning
               </Link>
               <a href="https://youtube.com/@mohitdecodes" target="_blank" rel="noreferrer" className="btn-secondary py-3 px-6 sm:py-3.5 sm:px-8 font-semibold rounded-xl flex items-center gap-2 border border-dark-700 bg-dark-900/60 hover:bg-dark-800 transition-all">
-                <Youtube className="text-red-500 fill-red-500" size={20} />
+                <svg viewBox="0 0 24 24" className="w-5 h-5 text-[#FF0000] fill-current shrink-0" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.108C19.524 3.545 12 3.545 12 3.545s-7.525 0-9.387.51a3.003 3.003 0 0 0-2.11 2.108C0 8.025 0 12 0 12s0 3.975.503 5.837a3.003 3.003 0 0 0 2.11 2.108c1.862.51 9.387.51 9.387.51s7.525 0 9.387-.51a3.003 3.003 0 0 0 2.11-2.108C24 15.975 24 12 24 12s0-3.975-.502-5.837z" />
+                  <polygon points="9.545 15.568 15.818 12 9.545 8.432" className="fill-white" />
+                </svg>
                 Watch on YouTube
               </a>
             </div>
