@@ -45,22 +45,45 @@ const RoadmapDetail: React.FC = () => {
 
   const handleStepToggle = async (stepId: string, isCompleted: boolean) => {
     if (!user) {
-      toast.error('Please log in to track your progress')
-      return
+      toast.error('Please log in to track your progress');
+      return;
     }
-    try {
-      await updateProgress(roadmap?._id!, stepId, isCompleted)
-      
-      // Update profile locally to keep UIs in sync
-      const res = await getMe()
-      if (res.data && res.data.user) {
-        updateUser(res.data.user)
+
+    // 1. Instant Optimistic State Update
+    const currentProgress = user.roadmapProgress || [];
+    let updatedProgress = JSON.parse(JSON.stringify(currentProgress));
+    
+    let targetRp = updatedProgress.find(
+      (rp: any) => rp.roadmapId === roadmap?._id || rp.roadmapId?._id === roadmap?._id
+    );
+
+    if (targetRp) {
+      let steps = targetRp.completedSteps || [];
+      if (isCompleted) {
+        if (!steps.includes(stepId)) steps.push(stepId);
+      } else {
+        steps = steps.filter((id: string) => id !== stepId);
       }
-      toast.success(isCompleted ? 'Step completed!' : 'Step marked incomplete')
-    } catch {
-      toast.error('Failed to update progress')
+      targetRp.completedSteps = steps;
+    } else if (isCompleted) {
+      updatedProgress.push({ roadmapId: roadmap?._id, completedSteps: [stepId] });
     }
-  }
+
+    // Update local UI immediately (0ms instant response)
+    const previousUser = user;
+    updateUser({ ...user, roadmapProgress: updatedProgress });
+    toast.success(isCompleted ? 'Step completed!' : 'Step marked incomplete');
+
+    // 2. Perform background API call
+    try {
+      await updateProgress(roadmap?._id!, stepId, isCompleted);
+    } catch {
+      // Revert if API fails
+      updateUser(previousUser);
+      toast.error('Failed to update progress on server');
+    }
+  };
+
 
   if (loading) {
     return (
