@@ -259,7 +259,7 @@ const Home: React.FC = () => {
                 <img 
                   src="/mohit.png" 
                   alt="Mohit Decodes" 
-                  className="w-full h-full object-cover object-top hover:scale-[1.08] transition-transform duration-500"
+                  className="w-full h-full object-cover scale-[1.3] origin-[25%_25%] hover:scale-[1.38] transition-transform duration-500"
                 />
               </div>
             </div>
