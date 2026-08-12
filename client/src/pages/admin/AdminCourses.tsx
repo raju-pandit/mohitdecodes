@@ -181,102 +181,233 @@ const AdminCourses = () => {
       {/* Form Modal */}
       <AnimatePresence>
         {isModalOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 overflow-y-auto">
-            <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }} className="glass-card w-full max-w-3xl my-8 p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold text-white">{selectedCourse ? 'Edit Course' : 'Create Course'}</h2>
-                <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-white"><X size={24} /></button>
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-3"
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
+              className="relative w-full max-w-3xl flex flex-col rounded-2xl border border-purple-700/30 shadow-[0_0_40px_rgba(139,92,246,0.15)]"
+              style={{ background: 'linear-gradient(135deg, #0f0f1a 0%, #13111f 100%)', maxHeight: '88vh' }}
+            >
+              {/* Sticky Header */}
+              <div className="flex justify-between items-center px-5 py-3.5 border-b border-white/5 flex-shrink-0">
+                <h2 className="text-base font-bold text-white">
+                  {selectedCourse ? 'Edit Course' : 'Create Course'}
+                </h2>
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-white/5 transition"
+                >
+                  <X size={18} />
+                </button>
               </div>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm mb-1 text-gray-300">Title</label>
-                    <input required type="text" className="input w-full" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} />
-                  </div>
-                  <div>
-                    <label className="block text-sm mb-1 text-gray-300">Category</label>
-                    <select className="input w-full" value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})}>
-                      <option value="React">React</option>
-                      <option value="JavaScript">JavaScript</option>
-                      <option value="Node.js">Node.js</option>
-                      <option value="MongoDB">MongoDB</option>
-                      <option value="MERN">MERN</option>
-                      <option value="Backend">Backend</option>
-                      <option value="Frontend">Frontend</option>
-                      <option value="DSA">DSA</option>
-                      <option value="Full Stack">Full Stack</option>
-                      <option value="Other">Other</option>
-                    </select>
-                  </div>
-                  <div className="md:col-span-2">
-                    <label className="block text-sm mb-1 text-gray-300">Short Description</label>
-                    <input required type="text" className="input w-full" value={formData.shortDescription} onChange={e => setFormData({...formData, shortDescription: e.target.value})} />
-                  </div>
-                  <div className="md:col-span-2">
-                    <label className="block text-sm mb-1 text-gray-300">Description</label>
-                    <textarea required className="input w-full h-24" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})}></textarea>
-                  </div>
-                  <div>
-                    <label className="block text-sm mb-1 text-gray-300">Thumbnail URL</label>
-                    <input required type="text" className="input w-full" value={formData.thumbnail} onChange={e => setFormData({...formData, thumbnail: e.target.value})} />
-                  </div>
-                  <div>
-                    <label className="block text-sm mb-1 text-gray-300">Difficulty</label>
-                    <select className="input w-full" value={formData.difficulty} onChange={e => setFormData({...formData, difficulty: e.target.value})}>
-                      <option>Beginner</option><option>Intermediate</option><option>Advanced</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm mb-1 text-gray-300">Instructor Name</label>
-                    <input type="text" className="input w-full" value={formData.instructorName} onChange={e => setFormData({...formData, instructorName: e.target.value})} />
-                  </div>
-                  <div>
-                    <label className="block text-sm mb-1 text-gray-300">Instructor Bio</label>
-                    <input type="text" className="input w-full" value={formData.instructorBio} onChange={e => setFormData({...formData, instructorBio: e.target.value})} />
-                  </div>
-                  <div>
-                    <label className="block text-sm mb-1 text-gray-300">Duration (e.g. "12 hours")</label>
-                    <input type="text" className="input w-full" placeholder="e.g. 10 hours" value={formData.duration} onChange={e => setFormData({...formData, duration: e.target.value})} />
-                  </div>
-                  <div>
-                    <label className="flex items-center space-x-2 text-sm text-gray-300 mt-6">
-                      <input type="checkbox" checked={formData.isFree} onChange={e => setFormData({...formData, isFree: e.target.checked})} className="rounded bg-gray-700 border-gray-600 text-blue-500" />
-                      <span>Is Free Course</span>
-                    </label>
-                  </div>
-                  {!formData.isFree && (
+
+              {/* Scrollable Body */}
+              <div className="overflow-y-auto flex-1 px-5 py-4">
+                <form id="course-form" onSubmit={handleSubmit} className="space-y-3">
+                  {/* Row 1: Title | Category */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-sm mb-1 text-gray-300">Price (₹)</label>
-
-                      <input 
-                        type="number" 
-                        min="0"
-                        placeholder="e.g. 499" 
-                        className="input w-full" 
-                        value={formData.price} 
-                        onChange={e => {
-                          const val = e.target.value;
-                          if (val === '' || Number(val) >= 0) {
-                            setFormData({...formData, price: val});
-                          }
-                        }} 
+                      <label className="block text-xs font-medium mb-1 text-gray-400">
+                        Title <span className="text-red-400">*</span>
+                      </label>
+                      <input
+                        required
+                        type="text"
+                        className="input w-full text-sm"
+                        style={{ height: '40px' }}
+                        placeholder="Course title..."
+                        value={formData.title}
+                        onChange={e => setFormData({ ...formData, title: e.target.value })}
                       />
-
-
                     </div>
-                  )}
-                  <div className="md:col-span-2 mt-2">
-                    <label className="flex items-center space-x-2 text-sm text-gray-300">
-                      <input type="checkbox" checked={formData.isPublished} onChange={e => setFormData({...formData, isPublished: e.target.checked})} className="rounded bg-gray-700 border-gray-600 text-blue-500" />
-                      <span>Publish immediately</span>
+                    <div>
+                      <label className="block text-xs font-medium mb-1 text-gray-400">Category</label>
+                      <select
+                        className="input w-full text-sm"
+                        style={{ height: '40px' }}
+                        value={formData.category}
+                        onChange={e => setFormData({ ...formData, category: e.target.value })}
+                      >
+                        <option value="React">React</option>
+                        <option value="JavaScript">JavaScript</option>
+                        <option value="Node.js">Node.js</option>
+                        <option value="MongoDB">MongoDB</option>
+                        <option value="MERN">MERN</option>
+                        <option value="Backend">Backend</option>
+                        <option value="Frontend">Frontend</option>
+                        <option value="DSA">DSA</option>
+                        <option value="Full Stack">Full Stack</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Row 2: Short Description */}
+                  <div>
+                    <label className="block text-xs font-medium mb-1 text-gray-400">
+                      Short Description <span className="text-red-400">*</span>
+                    </label>
+                    <textarea
+                      required
+                      className="input w-full text-sm resize-none"
+                      style={{ height: '75px' }}
+                      placeholder="Brief overview of the course..."
+                      value={formData.shortDescription}
+                      onChange={e => setFormData({ ...formData, shortDescription: e.target.value })}
+                    />
+                  </div>
+
+                  {/* Row 3: Description */}
+                  <div>
+                    <label className="block text-xs font-medium mb-1 text-gray-400">
+                      Description <span className="text-red-400">*</span>
+                    </label>
+                    <textarea
+                      required
+                      className="input w-full text-sm resize-none"
+                      style={{ height: '140px' }}
+                      placeholder="Detailed course description..."
+                      value={formData.description}
+                      onChange={e => setFormData({ ...formData, description: e.target.value })}
+                    />
+                  </div>
+
+                  {/* Row 4: Thumbnail URL | Difficulty */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium mb-1 text-gray-400">
+                        Thumbnail URL <span className="text-red-400">*</span>
+                      </label>
+                      <input
+                        required
+                        type="text"
+                        className="input w-full text-sm"
+                        style={{ height: '40px' }}
+                        placeholder="https://..."
+                        value={formData.thumbnail}
+                        onChange={e => setFormData({ ...formData, thumbnail: e.target.value })}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium mb-1 text-gray-400">Difficulty</label>
+                      <select
+                        className="input w-full text-sm"
+                        style={{ height: '40px' }}
+                        value={formData.difficulty}
+                        onChange={e => setFormData({ ...formData, difficulty: e.target.value })}
+                      >
+                        <option>Beginner</option>
+                        <option>Intermediate</option>
+                        <option>Advanced</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Row 5: Instructor Name | Instructor Bio */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium mb-1 text-gray-400">Instructor Name</label>
+                      <input
+                        type="text"
+                        className="input w-full text-sm"
+                        style={{ height: '40px' }}
+                        placeholder="Instructor name..."
+                        value={formData.instructorName}
+                        onChange={e => setFormData({ ...formData, instructorName: e.target.value })}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium mb-1 text-gray-400">Instructor Bio</label>
+                      <input
+                        type="text"
+                        className="input w-full text-sm"
+                        style={{ height: '40px' }}
+                        placeholder="Instructor bio..."
+                        value={formData.instructorBio}
+                        onChange={e => setFormData({ ...formData, instructorBio: e.target.value })}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Row 6: Duration | Is Free Course / Price */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-start">
+                    <div>
+                      <label className="block text-xs font-medium mb-1 text-gray-400">Duration (e.g. "12 hours")</label>
+                      <input
+                        type="text"
+                        className="input w-full text-sm"
+                        style={{ height: '40px' }}
+                        placeholder="e.g. 10 hours"
+                        value={formData.duration}
+                        onChange={e => setFormData({ ...formData, duration: e.target.value })}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="flex items-center gap-2 cursor-pointer select-none pt-6 sm:pt-6">
+                        <input
+                          type="checkbox"
+                          checked={formData.isFree}
+                          onChange={e => setFormData({ ...formData, isFree: e.target.checked })}
+                          className="w-4 h-4 rounded accent-purple-500"
+                        />
+                        <span className="text-sm font-medium text-gray-300">Is Free Course</span>
+                      </label>
+                      {!formData.isFree && (
+                        <div>
+                          <label className="block text-xs font-medium mb-1 text-gray-400">Price (₹)</label>
+                          <input
+                            type="number"
+                            min="0"
+                            placeholder="e.g. 499"
+                            className="input w-full text-sm"
+                            style={{ height: '40px' }}
+                            value={formData.price}
+                            onChange={e => {
+                              const val = e.target.value;
+                              if (val === '' || Number(val) >= 0) {
+                                setFormData({ ...formData, price: val });
+                              }
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Row 7: Publish Immediately */}
+                  <div className="pt-1">
+                    <label className="flex items-center gap-2 cursor-pointer select-none w-fit">
+                      <input
+                        type="checkbox"
+                        checked={formData.isPublished}
+                        onChange={e => setFormData({ ...formData, isPublished: e.target.checked })}
+                        className="w-4 h-4 rounded accent-purple-500"
+                      />
+                      <span className="text-sm text-gray-300">Publish immediately</span>
                     </label>
                   </div>
-                </div>
-                <div className="flex justify-end gap-3 mt-6">
-                  <button type="button" onClick={() => setIsModalOpen(false)} className="btn-secondary">Cancel</button>
-                  <button type="submit" className="btn-primary">Save Course</button>
-                </div>
-              </form>
+                </form>
+              </div>
+
+              {/* Sticky Footer */}
+              <div className="flex justify-end gap-2 px-5 py-3 border-t border-white/5 flex-shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="btn-secondary text-sm px-4 py-2"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  form="course-form"
+                  className="btn-primary text-sm px-5 py-2"
+                >
+                  {selectedCourse ? 'Update Course' : 'Save Course'}
+                </button>
+              </div>
             </motion.div>
           </motion.div>
         )}
