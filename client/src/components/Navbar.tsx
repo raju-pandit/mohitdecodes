@@ -137,17 +137,15 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
           <div className={`flex items-center gap-2 sm:gap-4 transition-all duration-300 ${scrolled ? 'lg:opacity-0 lg:w-0 lg:overflow-hidden lg:pointer-events-none' : 'opacity-100'}`}>
             <button 
               onClick={onOpenSearch}
-              className="flex items-center gap-2 sm:gap-2.5 bg-white/[0.05] hover:bg-white/[0.10] border border-white/10 hover:border-primary-500/40 px-3 py-1.5 rounded-full text-xs text-slate-400 hover:text-white transition-all shadow-inner cursor-pointer group"
-              aria-label="Open Search Box"
+              className="flex items-center gap-1.5 bg-white/[0.05] hover:bg-white/[0.12] border border-white/10 hover:border-primary-500/40 px-2.5 py-1.5 rounded-full text-slate-300 hover:text-white transition-all shadow-inner cursor-pointer group shrink-0"
+              aria-label="Open Search"
             >
-              <Search className="w-3.5 h-3.5 text-slate-400 group-hover:text-primary-400 transition-colors shrink-0" />
-              <span className="hidden sm:inline-block text-xs font-medium text-slate-400 group-hover:text-slate-200 truncate max-w-[130px] md:max-w-[170px]">
-                Search courses, blogs...
-              </span>
-              <span className="hidden md:inline-flex items-center gap-0.5 text-[10px] font-mono text-slate-400 bg-white/10 px-1.5 py-0.5 rounded border border-white/10 shrink-0">
+              <Search className="w-3.5 h-3.5 text-slate-400 group-hover:text-primary-400 transition-colors" />
+              <span className="hidden sm:inline-block text-[10px] font-mono text-slate-400 bg-white/10 px-1.5 py-0.5 rounded border border-white/10">
                 Ctrl K
               </span>
             </button>
+
 
 
             {user ? (

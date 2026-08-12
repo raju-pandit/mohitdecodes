@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Search, MonitorPlay, FileText, CodeSquare, BookOpen, ChevronRight, Loader2, Map } from 'lucide-react';
 import { Modal } from './ui/Modal';
 import { Badge } from './ui/Badge';
@@ -12,6 +11,16 @@ export const SearchModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Close modal on location change
+  useEffect(() => {
+    if (isOpen) {
+      onClose();
+      setQuery('');
+      setResults([]);
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     if (isOpen) {
@@ -20,6 +29,7 @@ export const SearchModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
       setResults([]);
     }
   }, [isOpen]);
+
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -96,9 +106,14 @@ export const SearchModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
   }, [isOpen, results, selectedIndex]);
 
   const handleSelect = (item: any) => {
-    navigate(item.url);
     onClose();
+    setQuery('');
+    setResults([]);
+    if (item?.url) {
+      navigate(item.url);
+    }
   };
+
 
   const getIcon = (type: string) => {
     switch (type) {
