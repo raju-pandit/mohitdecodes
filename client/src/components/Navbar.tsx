@@ -19,33 +19,22 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Scroll direction detection: Scroll Down -> Hide (-140%), Scroll Up -> Show (0), Top (<=10) -> Always Show
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      if (currentScrollY <= 10) {
-        setShowNavbar(true);
-      } else if (currentScrollY > lastScrollY.current) {
-        // scrolling down
-        setShowNavbar(false);
-      } else {
-        // scrolling up
-        setShowNavbar(true);
-      }
-
-      lastScrollY.current = currentScrollY;
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
+  // Bulletproof Framer Motion Scroll Listener (Works on all browsers & mobile devices)
   useMotionValueEvent(scrollY, "change", (latest) => {
-    const isScrolled = latest > 20;
-    if (isScrolled !== scrolled) {
-      setScrolled(isScrolled);
+    const currentScrollY = latest;
+    setScrolled(currentScrollY > 20);
+
+    if (currentScrollY <= 15) {
+      setShowNavbar(true);
+    } else if (currentScrollY > lastScrollY.current + 8) {
+      // scrolling down
+      setShowNavbar(false);
+    } else if (currentScrollY < lastScrollY.current - 8) {
+      // scrolling up
+      setShowNavbar(true);
     }
+
+    lastScrollY.current = currentScrollY;
   });
 
   useEffect(() => {
@@ -79,8 +68,9 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
   return (
     <header 
       style={{
-        transform: showNavbar ? 'translate(-50%, 0)' : 'translate(-50%, -140%)',
-        transition: 'transform 0.35s ease',
+        transform: showNavbar ? 'translate3d(-50%, 0, 0)' : 'translate3d(-50%, -160%, 0)',
+        transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+        willChange: 'transform',
       }}
       className="fixed top-[10px] left-1/2 z-[9999] w-[95%] max-w-7xl pointer-events-none"
     >
