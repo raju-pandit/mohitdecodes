@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-// Strip trailing /api if already present in env var to avoid /api/api doubling
-const _base = import.meta.env.VITE_API_URL || 'https://mohitdecodes.onrender.com';
-const baseURL = _base.replace(/\/api\/?$/, '');
+// Strip trailing /api from baseURL if present to avoid /api/api/... double prefix
+const rawBase = import.meta.env.VITE_API_URL || 'https://mohitdecodes.onrender.com';
+const baseURL = rawBase.replace(/\/api\/?$/, '');
 
 const api = axios.create({
   baseURL,
