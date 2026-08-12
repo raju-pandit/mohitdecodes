@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   LayoutDashboard, BookOpen, FileText, GraduationCap, Download,
   Folder, Map, Star, Users, MessageSquare, Mail, Menu, X,
-  LogOut, ExternalLink
+  ChevronRight, LogOut, ExternalLink
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { getInitials, hasCustomAvatar } from '../utils/formatters'
@@ -12,17 +12,17 @@ import BrandLogo from '../components/Logo'
 
 
 const adminNavItems = [
-  { label: 'Dashboard',    path: '/admin',              icon: LayoutDashboard },
-  { label: 'Courses',      path: '/admin/courses',      icon: BookOpen        },
-  { label: 'Blogs',        path: '/admin/blogs',        icon: FileText        },
-  { label: 'Tutorials',    path: '/admin/tutorials',    icon: GraduationCap   },
-  { label: 'Resources',    path: '/admin/resources',    icon: Download        },
-  { label: 'Projects',     path: '/admin/projects',     icon: Folder          },
-  { label: 'Roadmaps',     path: '/admin/roadmaps',     icon: Map             },
-  { label: 'Testimonials', path: '/admin/testimonials', icon: Star            },
-  { label: 'Users',        path: '/admin/users',        icon: Users           },
-  { label: 'Messages',     path: '/admin/messages',     icon: MessageSquare   },
-  { label: 'Newsletter',   path: '/admin/newsletter',   icon: Mail            },
+  { label: 'Dashboard', path: '/admin', icon: LayoutDashboard },
+  { label: 'Courses', path: '/admin/courses', icon: BookOpen },
+  { label: 'Blogs', path: '/admin/blogs', icon: FileText },
+  { label: 'Tutorials', path: '/admin/tutorials', icon: GraduationCap },
+  { label: 'Resources', path: '/admin/resources', icon: Download },
+  { label: 'Projects', path: '/admin/projects', icon: Folder },
+  { label: 'Roadmaps', path: '/admin/roadmaps', icon: Map },
+  { label: 'Testimonials', path: '/admin/testimonials', icon: Star },
+  { label: 'Users', path: '/admin/users', icon: Users },
+  { label: 'Messages', path: '/admin/messages', icon: MessageSquare },
+  { label: 'Newsletter', path: '/admin/newsletter', icon: Mail },
 ]
 
 const AdminLayout: React.FC = () => {
@@ -60,22 +60,16 @@ const AdminLayout: React.FC = () => {
               key={item.path}
               to={item.path}
               onClick={() => setSidebarOpen(false)}
-              style={active ? {
-                background: 'rgba(109,40,217,0.12)',
-                borderLeft: '2px solid rgba(139,92,246,0.8)',
-                paddingLeft: '10px',
-              } : { borderLeft: '2px solid transparent', paddingLeft: '10px' }}
-              className={`flex items-center gap-2.5 pr-3 py-2 rounded-r-lg rounded-l-sm text-[13px] font-medium transition-all duration-150 ${
+              className={`flex items-center gap-[10px] px-2.5 py-[7px] rounded-[7px] text-[13px] font-medium transition-all duration-150 ${
                 active
-                  ? 'text-violet-300'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
+                  ? 'bg-violet-600/15 text-violet-300 border border-violet-600/25 shadow-[inset_0_0_0_1px_rgba(139,92,246,0.1)]'
+                  : 'text-slate-400 hover:text-slate-100 hover:bg-white/5'
               }`}
             >
               <Icon
-                strokeWidth={active ? 1.75 : 1.5}
-                className={`flex-shrink-0 ${
-                  active ? 'text-violet-400 w-[15px] h-[15px]' : 'text-slate-500 w-[15px] h-[15px]'
-                }`}
+                strokeWidth={1.6}
+                style={{ width: 15, height: 15, flexShrink: 0 }}
+                className={active ? 'text-violet-300' : 'text-slate-500'}
               />
               <span className="leading-none">{item.label}</span>
             </Link>
