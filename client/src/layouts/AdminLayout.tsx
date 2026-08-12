@@ -3,8 +3,8 @@ import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   LayoutDashboard, BookOpen, FileText, GraduationCap, Download,
-  FolderKanban, Map, Star, Users, MessageSquare, Mail, Menu, X,
-  ChevronRight, LogOut, ExternalLink, Code2
+  Folder, Map, Star, Users, MessageSquare, Mail, Menu, X,
+  LogOut, ExternalLink
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { getInitials, hasCustomAvatar } from '../utils/formatters'
@@ -12,17 +12,17 @@ import BrandLogo from '../components/Logo'
 
 
 const adminNavItems = [
-  { label: 'Dashboard', path: '/admin', icon: LayoutDashboard },
-  { label: 'Courses', path: '/admin/courses', icon: BookOpen },
-  { label: 'Blogs', path: '/admin/blogs', icon: FileText },
-  { label: 'Tutorials', path: '/admin/tutorials', icon: GraduationCap },
-  { label: 'Resources', path: '/admin/resources', icon: Download },
-  { label: 'Projects', path: '/admin/projects', icon: FolderKanban },
-  { label: 'Roadmaps', path: '/admin/roadmaps', icon: Map },
-  { label: 'Testimonials', path: '/admin/testimonials', icon: Star },
-  { label: 'Users', path: '/admin/users', icon: Users },
-  { label: 'Messages', path: '/admin/messages', icon: MessageSquare },
-  { label: 'Newsletter', path: '/admin/newsletter', icon: Mail },
+  { label: 'Dashboard',    path: '/admin',              icon: LayoutDashboard },
+  { label: 'Courses',      path: '/admin/courses',      icon: BookOpen        },
+  { label: 'Blogs',        path: '/admin/blogs',        icon: FileText        },
+  { label: 'Tutorials',    path: '/admin/tutorials',    icon: GraduationCap   },
+  { label: 'Resources',    path: '/admin/resources',    icon: Download        },
+  { label: 'Projects',     path: '/admin/projects',     icon: Folder          },
+  { label: 'Roadmaps',     path: '/admin/roadmaps',     icon: Map             },
+  { label: 'Testimonials', path: '/admin/testimonials', icon: Star            },
+  { label: 'Users',        path: '/admin/users',        icon: Users           },
+  { label: 'Messages',     path: '/admin/messages',     icon: MessageSquare   },
+  { label: 'Newsletter',   path: '/admin/newsletter',   icon: Mail            },
 ]
 
 const AdminLayout: React.FC = () => {
@@ -51,7 +51,7 @@ const AdminLayout: React.FC = () => {
 
 
       {/* Nav */}
-      <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+      <nav className="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto">
         {adminNavItems.map((item) => {
           const Icon = item.icon
           const active = isActive(item.path)
@@ -60,15 +60,24 @@ const AdminLayout: React.FC = () => {
               key={item.path}
               to={item.path}
               onClick={() => setSidebarOpen(false)}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+              style={active ? {
+                background: 'rgba(109,40,217,0.12)',
+                borderLeft: '2px solid rgba(139,92,246,0.8)',
+                paddingLeft: '10px',
+              } : { borderLeft: '2px solid transparent', paddingLeft: '10px' }}
+              className={`flex items-center gap-2.5 pr-3 py-2 rounded-r-lg rounded-l-sm text-[13px] font-medium transition-all duration-150 ${
                 active
-                  ? 'bg-primary-700/20 text-primary-400 border border-primary-700/30'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-dark-700'
+                  ? 'text-violet-300'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
               }`}
             >
-              <Icon className={`w-4 h-4 ${active ? 'text-primary-400' : ''}`} />
-              {item.label}
-              {active && <ChevronRight className="w-3 h-3 ml-auto" />}
+              <Icon
+                strokeWidth={active ? 1.75 : 1.5}
+                className={`flex-shrink-0 ${
+                  active ? 'text-violet-400 w-[15px] h-[15px]' : 'text-slate-500 w-[15px] h-[15px]'
+                }`}
+              />
+              <span className="leading-none">{item.label}</span>
             </Link>
           )
         })}
