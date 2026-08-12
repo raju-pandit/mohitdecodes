@@ -15,7 +15,7 @@ export const SearchModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
 
   useEffect(() => {
     if (isOpen) {
-      setTimeout(() => inputRef.current?.focus(), 100);
+      requestAnimationFrame(() => inputRef.current?.focus());
       setQuery('');
       setResults([]);
     }
@@ -32,7 +32,7 @@ export const SearchModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  // Real Search Effect
+  // Ultra-Fast Real Search Effect (120ms snappy debounce)
   useEffect(() => {
     if (!query.trim()) {
       setResults([]);
@@ -70,10 +70,11 @@ export const SearchModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
       } finally {
         setLoading(false);
       }
-    }, 300);
+    }, 120);
 
     return () => clearTimeout(timer);
   }, [query]);
+
 
   // Handle keyboard navigation
   useEffect(() => {
