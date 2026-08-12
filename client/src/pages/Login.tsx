@@ -45,13 +45,15 @@ const Login: React.FC = () => {
 
   const onSubmit = async (data: LoginForm) => {
     try {
-      await login(data.email, data.password)
-      toast.success('Welcome back!')
-      navigate('/dashboard')
+      await login(data.email, data.password);
+      toast.success('Welcome back!');
+      navigate('/dashboard');
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Login failed. Please try again.')
+      const errorMsg = err?.error || err?.message || err?.response?.data?.message || 'Login failed. Please try again.';
+      toast.error(errorMsg);
     }
-  }
+  };
+
 
   return (
     <div className="min-h-screen bg-dark-950 flex items-center justify-center px-4 py-20">

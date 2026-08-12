@@ -90,10 +90,12 @@ UserSchema.pre('save', async function (next) {
 
 // Sign JWT and return
 UserSchema.methods.getSignedJwtToken = function () {
-  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+  const secret = process.env.JWT_SECRET || 'mohitdecodes_default_jwt_secret_2026';
+  return jwt.sign({ id: this._id }, secret, {
     expiresIn: process.env.JWT_EXPIRE || '30d',
   });
 };
+
 
 UserSchema.methods.generateAuthToken = function () {
   return this.getSignedJwtToken();

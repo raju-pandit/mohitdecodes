@@ -54,12 +54,15 @@ const Register: React.FC = () => {
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      await registerUser(data.name, data.email, data.password)
-      navigate('/dashboard')
+      await registerUser(data.name, data.email, data.password);
+      toast.success('Account created successfully!');
+      navigate('/dashboard');
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Registration failed. Please try again.')
+      const errorMsg = err?.error || err?.message || err?.response?.data?.message || 'Registration failed. Please try again.';
+      toast.error(errorMsg);
     }
-  }
+  };
+
 
   const passwordChecks = [
     { label: 'At least 6 characters', valid: password.length >= 6 },
