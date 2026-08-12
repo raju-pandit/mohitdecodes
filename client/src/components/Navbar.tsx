@@ -12,7 +12,6 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
   const { user, logout } = useAuth();
   const location = useLocation();
   const { scrollY } = useScroll();
-  const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
@@ -46,15 +45,6 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
   ];
 
   useMotionValueEvent(scrollY, "change", (latest) => {
-    if (mobileMenuOpen) {
-      if (hidden) setHidden(false);
-      return;
-    }
-    const previous = scrollY.getPrevious() ?? 0;
-    const shouldHide = latest > previous && latest > 150;
-    if (shouldHide !== hidden) {
-      setHidden(shouldHide);
-    }
     const isScrolled = latest > 20;
     if (isScrolled !== scrolled) {
       setScrolled(isScrolled);
@@ -62,42 +52,40 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
   });
 
   return (
-    <motion.header
-      variants={{
-        visible: { y: 0 },
-        hidden: { y: "-100%" },
-      }}
-      animate={hidden ? "hidden" : "visible"}
-      transition={{ duration: 0.35, ease: "easeInOut" }}
-      className={`fixed top-0 inset-x-0 transition-colors duration-300 ${
-        mobileMenuOpen ? 'z-50 bg-dark-950' : 'z-40'
-      } ${
-        scrolled ? 'bg-dark-950/90 backdrop-blur-md border-b border-dark-800' : 'bg-transparent border-b border-transparent'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+    <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-2.5 sm:mt-3 pointer-events-auto">
+        <div 
+          style={{ 
+            backdropFilter: 'blur(16px)', 
+            WebkitBackdropFilter: 'blur(16px)',
+            backgroundColor: scrolled ? 'rgba(10, 10, 25, 0.85)' : 'rgba(10, 10, 25, 0.55)'
+          }}
+          className={`flex items-center justify-between h-16 px-4 sm:px-6 rounded-2xl border transition-all duration-300 ${
+            scrolled 
+              ? 'border-primary-500/30 shadow-[0_8px_32px_rgba(0,0,0,0.45)] shadow-primary-950/30' 
+              : 'border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.25)]'
+          }`}
+        >
           {/* Logo */}
           <BrandLogo size="md" />
 
-
           {/* Desktop Navigation — Pill Styled */}
-          <nav className="hidden md:flex items-center gap-1 bg-dark-900/80 backdrop-blur-md px-3 py-1.5 border border-dark-700/50 rounded-full shadow-inner-glow">
+          <nav className="hidden lg:flex items-center gap-1 bg-dark-900/40 px-3 py-1.5 border border-white/5 rounded-full shadow-inner">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 to={link.path}
-                className={`relative px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-200 z-10 ${
+                className={`relative px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-200 z-10 ${
                   location.pathname === link.path 
                     ? 'text-white' 
-                    : 'text-gray-400 hover:text-white'
+                    : 'text-slate-300 hover:text-white'
                 }`}
               >
                 <span className="relative z-10">{link.name}</span>
                 {location.pathname === link.path && (
                   <motion.div
                     layoutId="navbar-indicator"
-                    className="absolute inset-0 bg-primary-600 rounded-full z-0 shadow-glow"
+                    className="absolute inset-0 bg-primary-600 rounded-full z-0 shadow-[0_0_12px_rgba(147,51,234,0.5)]"
                     transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
                   />
                 )}
@@ -107,22 +95,22 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
 
           {/* Right Actions */}
           <div className="flex items-center gap-2 sm:gap-4">
-            <Button variant="ghost" size="sm" className="!px-2 text-gray-400" onClick={onOpenSearch}>
-              <Search className="w-5 h-5" />
-              <span className="hidden sm:inline-block ml-2 text-sm border border-dark-700 bg-dark-900 rounded px-1.5 py-0.5 text-gray-500 font-mono">Ctrl K</span>
+            <Button variant="ghost" size="sm" className="!px-2.5 text-slate-300 hover:text-white" onClick={onOpenSearch}>
+              <Search className="w-4 h-4" />
+              <span className="hidden sm:inline-block ml-2 text-xs border border-white/10 bg-white/5 rounded px-1.5 py-0.5 text-slate-400 font-mono">Ctrl K</span>
             </Button>
 
             {user ? (
               <div className="relative" ref={dropdownRef}>
                 <button 
                   onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                  className="flex items-center gap-1.5 md:gap-2.5 bg-dark-900/90 p-1 md:px-3 md:py-1.5 border border-primary-500/35 rounded-full cursor-pointer hover:bg-dark-850 transition-all shadow-inner-glow"
+                  className="flex items-center gap-1.5 md:gap-2.5 bg-dark-900/60 p-1 md:px-3 md:py-1.5 border border-primary-500/35 rounded-full cursor-pointer hover:bg-dark-800/80 transition-all shadow-inner-glow"
                 >
                   <div className="w-6 h-6 rounded-full bg-primary-600/30 border border-primary-500/40 flex items-center justify-center text-white text-xs font-extrabold overflow-hidden shrink-0">
                     {hasCustomAvatar(user?.avatar) ? <img src={user.avatar} className="w-full h-full object-cover" /> : getInitials(user?.name || '')}
                   </div>
                   <span className="hidden md:inline text-xs font-semibold text-white tracking-wide ml-1">{user?.name}</span>
-                  <span className="hidden md:inline text-gray-400 text-[9px] ml-0.5">{profileDropdownOpen ? '▲' : '▼'}</span>
+                  <span className="hidden md:inline text-slate-400 text-[9px] ml-0.5">{profileDropdownOpen ? '▲' : '▼'}</span>
                 </button>
                 
                 <AnimatePresence>
@@ -132,7 +120,7 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.95 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute right-0 mt-3 w-64 bg-dark-900 border border-dark-800 rounded-2xl shadow-2xl p-4 z-50 overflow-hidden text-left"
+                      className="absolute right-0 mt-3 w-64 bg-dark-900/95 border border-white/10 rounded-2xl shadow-2xl p-4 z-50 overflow-hidden text-left backdrop-blur-xl"
                     >
                       {/* Dropdown Header Info Card */}
                       <div className="flex items-start mb-3">
@@ -147,7 +135,7 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
                               Live Coding
                             </span>
                           </div>
-                          <p className="text-[10px] text-gray-400 truncate mt-0.5">{user?.email}</p>
+                          <p className="text-[10px] text-slate-400 truncate mt-0.5">{user?.email}</p>
                           <div className="mt-1">
                             <span className="inline-block px-2.5 py-0.5 rounded-full text-[9px] font-extrabold uppercase bg-primary-600 text-white tracking-wider">
                               {user?.role === 'admin' ? 'ADMIN' : 'STUDENT'}
@@ -156,23 +144,23 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
                         </div>
                       </div>
 
-                      <div className="border-t border-dark-800/80 my-3" />
+                      <div className="border-t border-white/10 my-3" />
 
                       {/* Dropdown Options */}
                       <div className="space-y-1">
-                        <Link to="/dashboard" className="flex items-center px-3 py-2 text-sm text-gray-300 font-semibold hover:bg-dark-800/60 hover:text-white rounded-lg transition-colors" onClick={() => setProfileDropdownOpen(false)}>
-                          <User className="w-4 h-4 mr-3 text-gray-400" /> Profile
+                        <Link to="/dashboard" className="flex items-center px-3 py-2 text-sm text-slate-300 font-semibold hover:bg-white/10 hover:text-white rounded-lg transition-colors" onClick={() => setProfileDropdownOpen(false)}>
+                          <User className="w-4 h-4 mr-3 text-slate-400" /> Profile
                         </Link>
                         {user?.role === 'admin' && (
-                          <Link to="/admin" className="flex items-center px-3 py-2 text-sm text-primary-400 font-semibold hover:bg-dark-800/60 rounded-lg transition-colors" onClick={() => setProfileDropdownOpen(false)}>
+                          <Link to="/admin" className="flex items-center px-3 py-2 text-sm text-primary-400 font-semibold hover:bg-white/10 rounded-lg transition-colors" onClick={() => setProfileDropdownOpen(false)}>
                             <Settings className="w-4 h-4 mr-3 text-primary-500" /> Admin Panel
                           </Link>
                         )}
                         <button 
                           onClick={() => { logout(); setProfileDropdownOpen(false); }}
-                          className="w-full flex items-center px-3 py-2.5 text-sm text-red-500 font-bold hover:bg-red-500/10 rounded-lg transition-colors mt-1"
+                          className="w-full flex items-center px-3 py-2.5 text-sm text-red-400 font-bold hover:bg-red-500/10 rounded-lg transition-colors mt-1"
                         >
-                          <LogOut className="w-4 h-4 mr-3 text-red-500" /> Sign Out
+                          <LogOut className="w-4 h-4 mr-3 text-red-400" /> Sign Out
                         </button>
                       </div>
                     </motion.div>
@@ -180,9 +168,9 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
                 </AnimatePresence>
               </div>
             ) : (
-              <div className="hidden md:flex items-center gap-2">
+              <div className="hidden lg:flex items-center gap-2">
                 <Link to="/login">
-                  <Button variant="ghost" size="sm">Login</Button>
+                  <Button variant="ghost" size="sm" className="text-slate-200 hover:text-white">Login</Button>
                 </Link>
                 <Link to="/register">
                   <Button variant="primary" size="sm">Sign Up</Button>
@@ -192,7 +180,7 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
 
             {/* Mobile Menu Toggle */}
             <button 
-              className="md:hidden p-2 text-gray-400 hover:text-white rounded-xl hover:bg-dark-800 border border-dark-800 bg-dark-900/60 transition-all select-none shrink-0"
+              className="lg:hidden p-2 text-slate-300 hover:text-white rounded-xl hover:bg-white/10 border border-white/10 bg-white/5 transition-all select-none shrink-0"
               onClick={() => setMobileMenuOpen(true)}
             >
               <Menu className="w-5 h-5" />
@@ -210,33 +198,33 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
                animate={{ opacity: 1 }}
                exit={{ opacity: 0 }}
                transition={{ duration: 0.15 }}
-               className="fixed inset-0 bg-black/75 z-50 md:hidden"
+               className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 lg:hidden pointer-events-auto"
                onClick={() => setMobileMenuOpen(false)}
              />
              <motion.div
                initial={{ x: '100%' }}
                animate={{ x: 0 }}
                exit={{ x: '100%' }}
-               transition={{ ease: 'easeOut', duration: 0.18 }}
-               className="fixed top-0 right-0 bottom-0 w-[80%] max-w-sm bg-dark-900 border-l border-dark-800 z-50 p-6 flex flex-col md:hidden"
+               transition={{ ease: 'easeOut', duration: 0.2 }}
+               className="fixed top-0 right-0 bottom-0 w-[82%] max-w-sm bg-[#0a0a19]/95 border-l border-white/10 z-50 p-6 flex flex-col lg:hidden pointer-events-auto backdrop-blur-2xl"
              >
                <div className="flex justify-between items-center mb-8">
                  <BrandLogo size="sm" />
-                 <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-gray-400 hover:text-white rounded-full bg-dark-800/50">
+                 <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-slate-400 hover:text-white rounded-full bg-white/5 border border-white/10">
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <nav className="flex flex-col gap-2 flex-grow overflow-y-auto">
+              <nav className="flex flex-col gap-1.5 flex-grow overflow-y-auto">
                 {navLinks.map((link) => (
                   <Link
                     key={link.name}
                     to={link.path}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`px-4 py-3 rounded-xl text-base font-medium transition-colors ${
+                    className={`px-4 py-3 rounded-xl text-base font-medium transition-all ${
                       location.pathname === link.path 
-                        ? 'bg-primary-500/10 text-primary-400' 
-                        : 'text-gray-300 hover:bg-dark-800 hover:text-white'
+                        ? 'bg-primary-600/20 text-primary-300 border border-primary-500/30' 
+                        : 'text-slate-300 hover:bg-white/5 hover:text-white'
                     }`}
                   >
                     {link.name}
@@ -245,19 +233,19 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
               </nav>
 
               {user ? (
-                <div className="flex flex-col gap-3 mt-auto pt-6 border-t border-dark-800">
+                <div className="flex flex-col gap-3 mt-auto pt-6 border-t border-white/10">
                   <div className="flex items-center gap-3 px-2 mb-2">
                     <div className="w-9 h-9 rounded-full bg-primary-600/30 border border-primary-500/40 flex items-center justify-center text-white text-xs font-extrabold overflow-hidden shrink-0">
                       {hasCustomAvatar(user.avatar) ? <img src={user.avatar} className="w-full h-full object-cover" /> : getInitials(user.name || '')}
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-bold text-white truncate">{user.name}</p>
-                      <p className="text-[10px] text-gray-400 truncate mt-0.5">{user.email}</p>
+                      <p className="text-[10px] text-slate-400 truncate mt-0.5">{user.email}</p>
                     </div>
                   </div>
                   <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
                     <Button variant="outline" className="w-full flex justify-center items-center gap-2">
-                      <User className="w-4 h-4 text-gray-400" /> Profile Dashboard
+                      <User className="w-4 h-4 text-slate-400" /> Profile Dashboard
                     </Button>
                   </Link>
                   {user.role === 'admin' && (
@@ -269,14 +257,14 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
                   )}
                   <Button 
                     variant="ghost" 
-                    className="w-full flex justify-center items-center gap-2 text-red-500 hover:bg-red-500/10 font-bold"
+                    className="w-full flex justify-center items-center gap-2 text-red-400 hover:bg-red-500/10 font-bold"
                     onClick={() => { logout(); setMobileMenuOpen(false); }}
                   >
-                    <LogOut className="w-4 h-4 text-red-500" /> Sign Out
+                    <LogOut className="w-4 h-4 text-red-400" /> Sign Out
                   </Button>
                 </div>
               ) : (
-                <div className="flex flex-col gap-3 mt-auto pt-6 border-t border-dark-800">
+                <div className="flex flex-col gap-3 mt-auto pt-6 border-t border-white/10">
                   <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
                     <Button variant="outline" className="w-full">Login</Button>
                   </Link>
@@ -289,7 +277,7 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
           </>
         )}
       </AnimatePresence>
-    </motion.header>
+    </header>
   );
 };
 
