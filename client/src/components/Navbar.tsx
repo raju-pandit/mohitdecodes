@@ -19,16 +19,17 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Bulletproof Framer Motion Scroll Listener (Works on all browsers & mobile devices)
+  // Framer Motion Scroll Listener
   useMotionValueEvent(scrollY, "change", (latest) => {
     const currentScrollY = latest;
-    setScrolled(currentScrollY > 20);
+    const isScrolled = currentScrollY > 30;
+    setScrolled(isScrolled);
 
     if (currentScrollY <= 15) {
       setShowNavbar(true);
     } else if (currentScrollY > lastScrollY.current + 8) {
       // scrolling down
-      setShowNavbar(false);
+      setShowNavbar(true); // Keep navbar active (collapsing into center pill)
     } else if (currentScrollY < lastScrollY.current - 8) {
       // scrolling up
       setShowNavbar(true);
@@ -69,35 +70,40 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
     <header 
       style={{
         transform: showNavbar ? 'translate3d(-50%, 0, 0)' : 'translate3d(-50%, -160%, 0)',
-        transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-        willChange: 'transform',
+        transition: 'transform 0.35s ease',
       }}
       className="fixed top-[10px] left-1/2 z-[9999] w-[95%] max-w-7xl pointer-events-none"
     >
       <div className="w-full flex flex-col items-center">
-        {/* Floating Navbar Container */}
+        {/* Outer Header Bar (When scrolled, outer container becomes transparent so ONLY center pill remains) */}
         <div 
           style={{ 
-            backgroundColor: scrolled ? 'rgba(8, 8, 20, 0.75)' : 'rgba(10, 10, 22, 0.45)',
-            backdropFilter: scrolled ? 'blur(18px)' : 'blur(14px)', 
-            WebkitBackdropFilter: scrolled ? 'blur(18px)' : 'blur(14px)',
-            border: '1px solid rgba(255, 255, 255, 0.10)',
+            backgroundColor: scrolled ? 'transparent' : 'rgba(10, 10, 22, 0.45)',
+            backdropFilter: scrolled ? 'none' : 'blur(14px)', 
+            WebkitBackdropFilter: scrolled ? 'none' : 'blur(14px)',
+            border: scrolled ? '1px solid transparent' : '1px solid rgba(255, 255, 255, 0.10)',
           }}
-          className={`w-full pointer-events-auto flex items-center justify-between h-14 sm:h-16 px-3.5 sm:px-6 rounded-2xl sm:rounded-[999px] shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] transition-all duration-300 ${
-            scrolled ? 'border-primary-500/25 shadow-purple-950/30' : 'border-white/10 shadow-purple-950/15'
+          className={`w-full pointer-events-auto flex items-center justify-between h-14 sm:h-16 px-3.5 sm:px-6 rounded-2xl sm:rounded-[999px] transition-all duration-300 ${
+            scrolled ? 'shadow-none' : 'shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] shadow-purple-950/15'
           }`}
         >
-          {/* Left: MD Logo + MohitDecodes */}
-          <BrandLogo size="md" />
+          {/* Left: MD Logo + MohitDecodes (hides on desktop when scrolled so only center menu pill remains) */}
+          <div className={`transition-all duration-300 shrink-0 ${scrolled ? 'lg:opacity-0 lg:w-0 lg:overflow-hidden lg:pointer-events-none' : 'opacity-100'}`}>
+            <BrandLogo size="md" />
+          </div>
 
-          {/* Center: Floating Glass Pill Navigation (Coder Army style) */}
+          {/* Center: Floating Glass Pill Navigation (Matching User Screenshot Exactly) */}
           <nav 
             style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.04)',
-              backdropFilter: 'blur(12px)',
-              WebkitBackdropFilter: 'blur(12px)',
+              backgroundColor: scrolled ? 'rgba(10, 10, 25, 0.85)' : 'rgba(255, 255, 255, 0.04)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
             }}
-            className="hidden lg:flex items-center gap-1 px-3 py-1.5 border border-white/10 border-primary-500/20 rounded-[999px] shadow-[0_0_15px_rgba(124,58,237,0.15)]"
+            className={`hidden lg:flex items-center gap-1 px-3.5 py-1.5 border rounded-[999px] transition-all duration-300 ${
+              scrolled 
+                ? 'border-primary-500/40 shadow-[0_0_24px_rgba(168,85,247,0.3)] border-white/15' 
+                : 'border-white/10 border-primary-500/20 shadow-[0_0_15px_rgba(124,58,237,0.15)]'
+            }`}
           >
             {navLinks.map((link) => {
               const isActive = location.pathname === link.path;
@@ -115,7 +121,7 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
                   {isActive && (
                     <motion.div
                       layoutId="navbar-indicator"
-                      className="absolute inset-0 bg-gradient-to-r from-primary-600 to-purple-600 rounded-[999px] z-0 shadow-[0_0_14px_rgba(168,85,247,0.5)]"
+                      className="absolute inset-0 bg-gradient-to-r from-primary-600 to-purple-600 rounded-[999px] z-0 shadow-[0_0_14px_rgba(168,85,247,0.6)]"
                       transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
                     />
                   )}
@@ -124,8 +130,8 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
             })}
           </nav>
 
-          {/* Right: Search / Ctrl K + Profile / Auth */}
-          <div className="flex items-center gap-2 sm:gap-4">
+          {/* Right: Search / Ctrl K + Profile (hides on desktop when scrolled so only center menu pill remains) */}
+          <div className={`flex items-center gap-2 sm:gap-4 transition-all duration-300 ${scrolled ? 'lg:opacity-0 lg:w-0 lg:overflow-hidden lg:pointer-events-none' : 'opacity-100'}`}>
             <Button variant="ghost" size="sm" className="!px-2 sm:!px-2.5 text-slate-300 hover:text-white" onClick={onOpenSearch}>
               <Search className="w-4 h-4" />
               <span className="hidden sm:inline-block ml-2 text-xs border border-white/10 bg-white/5 rounded px-1.5 py-0.5 text-slate-400 font-mono">Ctrl K</span>
