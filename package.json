@@ -2,6 +2,7 @@
   "name": "mohitdecodes-monorepo",
   "private": true,
   "scripts": {
-    "build": "cd client && npm install && npm run build"
+    "build": "cd client && npm install && npm run build",
+    "install": "cd client && npm install"
   }
 }
