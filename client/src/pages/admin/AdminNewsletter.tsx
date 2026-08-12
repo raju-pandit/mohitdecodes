@@ -20,8 +20,8 @@ const AdminNewsletter = () => {
 
   const fetchSubscribers = async () => {
     try {
-      const { data } = await api.get('/api/newsletter/subscribers');
-      setSubscribers(data);
+      const data = await api.get('/api/newsletter/subscribers');
+      setSubscribers(data?.data || []);
     } catch (error) {
       toast.error('Failed to fetch subscribers');
     } finally {

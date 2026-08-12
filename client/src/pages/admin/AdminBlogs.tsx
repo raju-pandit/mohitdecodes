@@ -34,8 +34,8 @@ const AdminBlogs = () => {
 
   const fetchBlogs = async () => {
     try {
-      const { data } = await api.get('/api/blogs/admin/all');
-      setBlogs(data);
+      const data = await api.get('/api/blogs/admin/all');
+      setBlogs(data?.data || []);
     } catch (error) {
       toast.error('Failed to fetch blogs');
     } finally {
