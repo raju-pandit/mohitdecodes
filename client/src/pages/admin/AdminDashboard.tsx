@@ -60,7 +60,19 @@ const AdminDashboard: React.FC = () => {
   const fetchStats = async () => {
     try {
       const response = await api.get('/api/admin/stats');
-      setStats(response.data);
+      
+      let statsData = null;
+      if (response) {
+        if (response.data && response.data.totalUsers !== undefined) {
+          statsData = response.data;
+        } else if (response.totalUsers !== undefined) {
+          statsData = response;
+        } else if (response.data && (response.data as any).data && (response.data as any).data.totalUsers !== undefined) {
+          statsData = (response.data as any).data;
+        }
+      }
+      
+      setStats(statsData);
     } catch (error) {
       toast.error('Failed to fetch dashboard stats');
     } finally {
