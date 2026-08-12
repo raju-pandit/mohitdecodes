@@ -44,6 +44,10 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
   ];
 
   useMotionValueEvent(scrollY, "change", (latest) => {
+    if (mobileMenuOpen) {
+      setHidden(false);
+      return;
+    }
     const previous = scrollY.getPrevious() ?? 0;
     if (latest > previous && latest > 150) {
       setHidden(true);
@@ -61,23 +65,21 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
       }}
       animate={hidden ? "hidden" : "visible"}
       transition={{ duration: 0.35, ease: "easeInOut" }}
-      className={`fixed top-0 inset-x-0 z-40 transition-colors duration-300 ${
+      className={`fixed top-0 inset-x-0 transition-colors duration-300 ${
+        mobileMenuOpen ? 'z-50 bg-dark-950' : 'z-40'
+      } ${
         scrolled ? 'bg-dark-950/90 backdrop-blur-md border-b border-dark-800' : 'bg-transparent border-b border-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 rounded-full border border-primary-500/25 bg-dark-900 overflow-hidden flex items-center justify-center group-hover:scale-105 group-hover:border-primary-500/50 group-hover:shadow-[0_0_12px_rgba(124,58,237,0.4)] transition-all duration-300 shrink-0">
-              <img 
-                src="/logo.png" 
-                alt="Mohit Decodes Logo" 
-                className="w-full h-full object-cover shrink-0" 
-              />
+          <Link to="/" className="flex items-center gap-2 group">
+            <div className="bg-primary-500/20 p-2 rounded-lg group-hover:bg-primary-500/30 transition-colors">
+              <Code2 className="w-6 h-6 text-primary-400" />
             </div>
             <span className="font-extrabold text-xl tracking-tight text-white group-hover:text-primary-400 transition-colors">
-              Mohit Decodes
+              MohitDecodes
             </span>
           </Link>
 
@@ -180,7 +182,7 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
                 </AnimatePresence>
               </div>
             ) : (
-              <div className="flex items-center gap-2">
+              <div className="hidden sm:flex items-center gap-2">
                 <Link to="/login">
                   <Button variant="ghost" size="sm">Login</Button>
                 </Link>
@@ -220,15 +222,9 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
               className="fixed top-0 right-0 bottom-0 w-[80%] max-w-sm bg-dark-900 border-l border-dark-800 z-50 p-6 flex flex-col md:hidden"
             >
               <div className="flex justify-between items-center mb-8">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-full border border-primary-500/25 bg-dark-900 overflow-hidden flex items-center justify-center shrink-0">
-                    <img 
-                      src="/logo.png" 
-                      alt="Mohit Decodes Logo" 
-                      className="w-full h-full object-cover shrink-0" 
-                    />
-                  </div>
-                  <span className="font-bold text-lg text-slate-100">Mohit Decodes</span>
+                <div className="flex items-center gap-2">
+                  <Code2 className="w-6 h-6 text-primary-400" />
+                  <span className="font-bold text-lg text-slate-100">Menu</span>
                 </div>
                 <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-gray-400 hover:text-white rounded-full bg-dark-800/50">
                   <X className="w-5 h-5" />
@@ -252,7 +248,38 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
                 ))}
               </nav>
 
-              {!user && (
+              {user ? (
+                <div className="flex flex-col gap-3 mt-auto pt-6 border-t border-dark-800">
+                  <div className="flex items-center gap-3 px-2 mb-2">
+                    <div className="w-9 h-9 rounded-full bg-primary-600/30 border border-primary-500/40 flex items-center justify-center text-white text-xs font-extrabold overflow-hidden shrink-0">
+                      {hasCustomAvatar(user.avatar) ? <img src={user.avatar} className="w-full h-full object-cover" /> : getInitials(user.name || '')}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-bold text-white truncate">{user.name}</p>
+                      <p className="text-[10px] text-gray-400 truncate mt-0.5">{user.email}</p>
+                    </div>
+                  </div>
+                  <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
+                    <Button variant="outline" className="w-full flex justify-center items-center gap-2">
+                      <User className="w-4 h-4 text-gray-400" /> Profile Dashboard
+                    </Button>
+                  </Link>
+                  {user.role === 'admin' && (
+                    <Link to="/admin" onClick={() => setMobileMenuOpen(false)}>
+                      <Button variant="outline" className="w-full flex justify-center items-center gap-2 text-primary-400">
+                        <Settings className="w-4 h-4 text-primary-500" /> Admin Panel
+                      </Button>
+                    </Link>
+                  )}
+                  <Button 
+                    variant="ghost" 
+                    className="w-full flex justify-center items-center gap-2 text-red-500 hover:bg-red-500/10 font-bold"
+                    onClick={() => { logout(); setMobileMenuOpen(false); }}
+                  >
+                    <LogOut className="w-4 h-4 text-red-500" /> Sign Out
+                  </Button>
+                </div>
+              ) : (
                 <div className="flex flex-col gap-3 mt-auto pt-6 border-t border-dark-800">
                   <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
                     <Button variant="outline" className="w-full">Login</Button>
