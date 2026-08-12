@@ -33,7 +33,7 @@ const AdminProjects = () => {
   const fetchProjects = async () => {
     try {
       const { data } = await api.get('/api/projects');
-      setProjects(data);
+      setProjects(data.data);
     } catch (error) {
       toast.error('Failed to fetch projects');
     } finally {

@@ -34,7 +34,7 @@ const AdminTutorials = () => {
   const fetchTutorials = async () => {
     try {
       const { data } = await api.get('/api/tutorials/admin/all');
-      setTutorials(data);
+      setTutorials(data.data);
     } catch (error) {
       toast.error('Failed to fetch tutorials');
     } finally {

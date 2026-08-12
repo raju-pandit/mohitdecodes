@@ -8,9 +8,15 @@ interface AdminStats {
   totalUsers: number;
   totalCourses: number;
   totalBlogs: number;
+  totalTutorials: number;
   totalResources: number;
-  totalSubscribers: number;
+  totalProjects: number;
+  totalRoadmaps: number;
+  newsletterSubscribers: number;
+  totalStudents: number;
+  totalDownloads: number;
   newMessages: number;
+  totalContacts: number;
 }
 
 const CountUp = ({ to }: { to: number }) => {
@@ -54,7 +60,7 @@ const AdminDashboard: React.FC = () => {
   const fetchStats = async () => {
     try {
       const response = await api.get('/api/admin/stats');
-      setStats(response.data);
+      setStats(response.data.data);
     } catch (error) {
       toast.error('Failed to fetch dashboard stats');
     } finally {
@@ -75,7 +81,7 @@ const AdminDashboard: React.FC = () => {
     { title: 'Total Courses', value: stats?.totalCourses || 0, icon: BookOpen, color: 'text-purple-500', bg: 'bg-purple-500/10' },
     { title: 'Total Blogs', value: stats?.totalBlogs || 0, icon: FileText, color: 'text-green-500', bg: 'bg-green-500/10' },
     { title: 'Total Resources', value: stats?.totalResources || 0, icon: Download, color: 'text-orange-500', bg: 'bg-orange-500/10' },
-    { title: 'Subscribers', value: stats?.totalSubscribers || 0, icon: Mail, color: 'text-cyan-500', bg: 'bg-cyan-500/10' },
+    { title: 'Subscribers', value: stats?.newsletterSubscribers || 0, icon: Mail, color: 'text-cyan-500', bg: 'bg-cyan-500/10' },
     { title: 'New Messages', value: stats?.newMessages || 0, icon: MessageSquare, color: 'text-red-500', bg: 'bg-red-500/10' },
   ];
 

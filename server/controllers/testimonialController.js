@@ -16,11 +16,11 @@ exports.createTestimonial = async (req, res, next) => {
 
 exports.approveTestimonial = async (req, res, next) => {
   try {
-    const testimonial = await Testimonial.findByIdAndUpdate(
-      req.params.id, { approved: true }, { new: true }
-    );
+    const testimonial = await Testimonial.findById(req.params.id);
     if (!testimonial) return res.status(404).json({ success: false, message: 'Testimonial not found' });
-    res.status(200).json({ success: true, message: 'Testimonial approved', data: testimonial });
+    testimonial.approved = !testimonial.approved;
+    await testimonial.save();
+    res.status(200).json({ success: true, message: testimonial.approved ? 'Testimonial approved' : 'Testimonial hidden', data: testimonial });
   } catch (err) { next(err); }
 };
 

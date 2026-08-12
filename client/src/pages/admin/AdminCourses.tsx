@@ -39,7 +39,7 @@ const AdminCourses = () => {
   const fetchCourses = async () => {
     try {
       const { data } = await api.get('/api/courses/admin/all');
-      setCourses(data);
+      setCourses(data.data);
     } catch (error) {
       toast.error('Failed to fetch courses');
     } finally {

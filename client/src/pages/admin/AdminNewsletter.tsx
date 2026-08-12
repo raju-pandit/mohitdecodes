@@ -7,7 +7,7 @@ import api from '../../services/api';
 interface Subscriber {
   _id: string;
   email: string;
-  isSubscribed: boolean;
+  subscribed: boolean;
   createdAt: string;
 }
 
@@ -21,7 +21,7 @@ const AdminNewsletter = () => {
   const fetchSubscribers = async () => {
     try {
       const { data } = await api.get('/api/newsletter/subscribers');
-      setSubscribers(data);
+      setSubscribers(data.data);
     } catch (error) {
       toast.error('Failed to fetch subscribers');
     } finally {
@@ -35,7 +35,7 @@ const AdminNewsletter = () => {
       return;
     }
     const headers = ['Email,Status,Subscribed Date'];
-    const csvData = subscribers.map(s => `${s.email},${s.isSubscribed ? 'Active' : 'Unsubscribed'},${new Date(s.createdAt).toISOString()}`);
+    const csvData = subscribers.map(s => `${s.email},${s.subscribed ? 'Active' : 'Unsubscribed'},${new Date(s.createdAt).toISOString()}`);
     const blob = new Blob([headers.concat(csvData).join('\n')], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -56,7 +56,7 @@ const AdminNewsletter = () => {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-card p-6 flex items-center justify-between col-span-1 md:col-span-1">
           <div>
             <p className="text-gray-400 mb-1">Total Subscribers</p>
-            <h3 className="text-3xl font-bold text-white">{subscribers.filter(s => s.isSubscribed).length}</h3>
+            <h3 className="text-3xl font-bold text-white">{subscribers.filter(s => s.subscribed).length}</h3>
           </div>
           <div className="p-4 rounded-full bg-cyan-500/10 text-cyan-500">
             <Mail size={24} />
@@ -101,7 +101,7 @@ const AdminNewsletter = () => {
                 <tr key={sub._id} className="hover:bg-gray-800/30">
                   <td className="p-4 font-medium text-white">{sub.email}</td>
                   <td className="p-4">
-                    {sub.isSubscribed ? <span className="badge-primary">Active</span> : <span className="badge-red">Unsubscribed</span>}
+                    {sub.subscribed ? <span className="badge-primary">Active</span> : <span className="badge-red">Unsubscribed</span>}
                   </td>
                   <td className="p-4">{new Date(sub.createdAt).toLocaleDateString()}</td>
                 </tr>

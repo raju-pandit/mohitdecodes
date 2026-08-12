@@ -31,7 +31,7 @@ const AdminRoadmaps = () => {
   const fetchRoadmaps = async () => {
     try {
       const { data } = await api.get('/api/roadmaps');
-      setRoadmaps(data);
+      setRoadmaps(data.data);
     } catch (error) {
       toast.error('Failed to fetch roadmaps');
     } finally {

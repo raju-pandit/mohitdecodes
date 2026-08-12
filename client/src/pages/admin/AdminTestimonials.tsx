@@ -11,7 +11,7 @@ interface Testimonial {
   rating: number;
   message: string;
   avatar: string;
-  isApproved: boolean;
+  approved: boolean;
 }
 
 const AdminTestimonials = () => {
@@ -26,7 +26,7 @@ const AdminTestimonials = () => {
   const fetchTestimonials = async () => {
     try {
       const { data } = await api.get('/api/testimonials/admin/all');
-      setTestimonials(data);
+      setTestimonials(data.data);
     } catch (error) {
       toast.error('Failed to fetch testimonials');
     } finally {
@@ -34,10 +34,10 @@ const AdminTestimonials = () => {
     }
   };
 
-  const handleApproveToggle = async (id: string, currentStatus: boolean) => {
+  const handleApproveToggle = async (id: string) => {
     try {
-      await api.put(`/api/testimonials/${id}/approve`, { isApproved: !currentStatus });
-      toast.success(currentStatus ? 'Testimonial hidden' : 'Testimonial approved');
+      await api.put(`/api/testimonials/${id}/approve`);
+      toast.success('Status updated');
       fetchTestimonials();
     } catch (error) {
       toast.error('Failed to update status');
@@ -58,8 +58,8 @@ const AdminTestimonials = () => {
 
   const filteredTestimonials = testimonials.filter(t => {
     if (filter === 'All') return true;
-    if (filter === 'Approved') return t.isApproved;
-    if (filter === 'Pending') return !t.isApproved;
+    if (filter === 'Approved') return t.approved;
+    if (filter === 'Pending') return !t.approved;
     return true;
   });
 
@@ -107,13 +107,13 @@ const AdminTestimonials = () => {
                   <td className="p-4 text-yellow-400">{'★'.repeat(testimonial.rating)}{'☆'.repeat(5 - testimonial.rating)}</td>
                   <td className="p-4 max-w-xs truncate">{testimonial.message}</td>
                   <td className="p-4">
-                    <span className={testimonial.isApproved ? 'badge-primary' : 'badge-orange'}>
-                      {testimonial.isApproved ? 'Approved' : 'Pending'}
+                    <span className={testimonial.approved ? 'badge-primary' : 'badge-orange'}>
+                      {testimonial.approved ? 'Approved' : 'Pending'}
                     </span>
                   </td>
                   <td className="p-4 flex gap-2">
-                    <button onClick={() => handleApproveToggle(testimonial._id, testimonial.isApproved)} className={`p-2 rounded ${testimonial.isApproved ? 'text-orange-400 hover:bg-orange-400/10' : 'text-green-400 hover:bg-green-400/10'}`} title={testimonial.isApproved ? "Revoke Approval" : "Approve"}>
-                      {testimonial.isApproved ? <XCircle size={18} /> : <CheckCircle size={18} />}
+                    <button onClick={() => handleApproveToggle(testimonial._id)} className={`p-2 rounded ${testimonial.approved ? 'text-orange-400 hover:bg-orange-400/10' : 'text-green-400 hover:bg-green-400/10'}`} title={testimonial.approved ? "Revoke Approval" : "Approve"}>
+                      {testimonial.approved ? <XCircle size={18} /> : <CheckCircle size={18} />}
                     </button>
                     <button onClick={() => { setSelectedTestimonial(testimonial); setIsDeleteModalOpen(true); }} className="p-2 text-red-400 hover:bg-red-400/10 rounded">
                       <Trash2 size={18} />
