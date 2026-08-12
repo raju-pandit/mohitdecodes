@@ -43,12 +43,16 @@ const AdminLayout: React.FC = () => {
     <div className="flex flex-col h-full">
       {/* Logo */}
       <div className="p-6 border-b border-dark-700">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-primary-700 rounded-lg flex items-center justify-center">
-            <Code2 className="w-4 h-4 text-white" />
+        <Link to="/" className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full border border-primary-500/25 bg-dark-900 overflow-hidden flex items-center justify-center shrink-0">
+            <img 
+              src="/logo.png" 
+              alt="Mohit Decodes Logo" 
+              className="w-full h-full object-cover shrink-0" 
+            />
           </div>
           <div>
-            <span className="font-bold text-slate-100 text-sm">MohitDecodes</span>
+            <span className="font-bold text-slate-100 text-sm">Mohit Decodes</span>
             <p className="text-xs text-slate-500">Admin Panel</p>
           </div>
         </Link>

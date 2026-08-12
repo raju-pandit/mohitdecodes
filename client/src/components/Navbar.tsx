@@ -68,12 +68,16 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="bg-primary-500/20 p-2 rounded-lg group-hover:bg-primary-500/30 transition-colors">
-              <Code2 className="w-6 h-6 text-primary-400" />
+          <Link to="/" className="flex items-center gap-3 group">
+            <div className="w-9 h-9 rounded-full border border-primary-500/25 bg-dark-900 overflow-hidden flex items-center justify-center group-hover:scale-105 group-hover:border-primary-500/50 group-hover:shadow-[0_0_12px_rgba(124,58,237,0.4)] transition-all duration-300 shrink-0">
+              <img 
+                src="/logo.png" 
+                alt="Mohit Decodes Logo" 
+                className="w-full h-full object-cover shrink-0" 
+              />
             </div>
             <span className="font-extrabold text-xl tracking-tight text-white group-hover:text-primary-400 transition-colors">
-              MohitDecodes
+              Mohit Decodes
             </span>
           </Link>
 
@@ -216,9 +220,15 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
               className="fixed top-0 right-0 bottom-0 w-[80%] max-w-sm bg-dark-900 border-l border-dark-800 z-50 p-6 flex flex-col md:hidden"
             >
               <div className="flex justify-between items-center mb-8">
-                <div className="flex items-center gap-2">
-                  <Code2 className="w-6 h-6 text-primary-400" />
-                  <span className="font-bold text-lg text-slate-100">Menu</span>
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-full border border-primary-500/25 bg-dark-900 overflow-hidden flex items-center justify-center shrink-0">
+                    <img 
+                      src="/logo.png" 
+                      alt="Mohit Decodes Logo" 
+                      className="w-full h-full object-cover shrink-0" 
+                    />
+                  </div>
+                  <span className="font-bold text-lg text-slate-100">Mohit Decodes</span>
                 </div>
                 <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-gray-400 hover:text-white rounded-full bg-dark-800/50">
                   <X className="w-5 h-5" />

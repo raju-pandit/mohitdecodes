@@ -31,12 +31,16 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* Brand Col */}
           <div className="lg:col-span-1">
-            <Link to="/" className="flex items-center gap-2 mb-4 group">
-              <div className="bg-primary-500/20 p-2 rounded-lg group-hover:bg-primary-500/30 transition-colors">
-                <Code2 className="w-6 h-6 text-primary-400" />
+            <Link to="/" className="flex items-center gap-3 mb-4 group">
+              <div className="w-9 h-9 rounded-full border border-primary-500/25 bg-dark-900 overflow-hidden flex items-center justify-center group-hover:scale-105 group-hover:border-primary-500/50 group-hover:shadow-[0_0_12px_rgba(124,58,237,0.4)] transition-all duration-300 shrink-0">
+                <img 
+                  src="/logo.png" 
+                  alt="Mohit Decodes Logo" 
+                  className="w-full h-full object-cover shrink-0" 
+                />
               </div>
               <span className="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-cyan-400">
-                MohitDecodes
+                Mohit Decodes
               </span>
             </Link>
             <p className="text-slate-400 text-sm mb-6 leading-relaxed">

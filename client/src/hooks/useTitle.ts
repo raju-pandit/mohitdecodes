@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 export function useTitle(title: string, description?: string) {
   useEffect(() => {
     const previousTitle = document.title;
-    document.title = `${title} | MohitDecodes`;
+    document.title = `${title} | Mohit Decodes`;
 
     let metaDesc = document.querySelector('meta[name="description"]');
     const previousDesc = metaDesc ? metaDesc.getAttribute('content') || '' : '';
