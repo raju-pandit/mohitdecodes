@@ -29,7 +29,7 @@ const AdminCourses = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [formData, setFormData] = useState({
-    title: '', shortDescription: '', description: '', category: 'Web Development',
+    title: '', shortDescription: '', description: '', category: 'React',
     difficulty: 'Beginner', price: 0, isFree: true, thumbnail: '',
     instructorName: '', instructorBio: '', isPublished: false
   });
@@ -60,7 +60,7 @@ const AdminCourses = () => {
     } else {
       setSelectedCourse(null);
       setFormData({
-        title: '', shortDescription: '', description: '', category: 'Web Development',
+        title: '', shortDescription: '', description: '', category: 'React',
         difficulty: 'Beginner', price: 0, isFree: true, thumbnail: '',
         instructorName: '', instructorBio: '', isPublished: false
       });
@@ -179,10 +179,16 @@ const AdminCourses = () => {
                   <div>
                     <label className="block text-sm mb-1 text-gray-300">Category</label>
                     <select className="input w-full" value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})}>
-                      <option>Web Development</option>
-                      <option>Mobile App</option>
-                      <option>Design</option>
-                      <option>Data Science</option>
+                      <option value="React">React</option>
+                      <option value="JavaScript">JavaScript</option>
+                      <option value="Node.js">Node.js</option>
+                      <option value="MongoDB">MongoDB</option>
+                      <option value="MERN">MERN</option>
+                      <option value="Backend">Backend</option>
+                      <option value="Frontend">Frontend</option>
+                      <option value="DSA">DSA</option>
+                      <option value="Full Stack">Full Stack</option>
+                      <option value="Other">Other</option>
                     </select>
                   </div>
                   <div className="md:col-span-2">

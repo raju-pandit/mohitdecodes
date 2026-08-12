@@ -23,7 +23,7 @@ const AdminResources = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
   const [formData, setFormData] = useState({
-    title: '', description: '', category: 'Cheatsheet', fileUrl: '',
+    title: '', description: '', category: 'Cheat Sheet', fileUrl: '',
     fileType: 'PDF', fileSize: '', published: false
   });
 
@@ -52,7 +52,7 @@ const AdminResources = () => {
     } else {
       setSelectedResource(null);
       setFormData({
-        title: '', description: '', category: 'Cheatsheet', fileUrl: '',
+        title: '', description: '', category: 'Cheat Sheet', fileUrl: '',
         fileType: 'PDF', fileSize: '', published: false
       });
     }
@@ -168,7 +168,14 @@ const AdminResources = () => {
                   <div>
                     <label className="block text-sm mb-1 text-gray-300">Category</label>
                     <select className="input w-full" value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})}>
-                      <option>Cheatsheet</option><option>E-Book</option><option>Template</option><option>Other</option>
+                      <option value="PDF">PDF</option>
+                      <option value="Cheat Sheet">Cheat Sheet</option>
+                      <option value="Notes">Notes</option>
+                      <option value="Interview Questions">Interview Questions</option>
+                      <option value="Roadmap">Roadmap</option>
+                      <option value="Template">Template</option>
+                      <option value="Coding Problems">Coding Problems</option>
+                      <option value="Other">Other</option>
                     </select>
                   </div>
                   <div>
