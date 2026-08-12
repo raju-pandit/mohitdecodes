@@ -118,13 +118,13 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
               <div className="relative" ref={dropdownRef}>
                 <button 
                   onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                  className="flex items-center gap-2.5 bg-dark-900/90 px-3 py-1.5 border border-primary-500/35 rounded-full cursor-pointer hover:bg-dark-850 transition-all shadow-inner-glow"
+                  className="flex items-center gap-1.5 md:gap-2.5 bg-dark-900/90 p-1 md:px-3 md:py-1.5 border border-primary-500/35 rounded-full cursor-pointer hover:bg-dark-850 transition-all shadow-inner-glow"
                 >
                   <div className="w-6 h-6 rounded-full bg-primary-600/30 border border-primary-500/40 flex items-center justify-center text-white text-xs font-extrabold overflow-hidden shrink-0">
                     {hasCustomAvatar(user?.avatar) ? <img src={user.avatar} className="w-full h-full object-cover" /> : getInitials(user?.name || '')}
                   </div>
-                  <span className="text-xs font-semibold text-white tracking-wide">{user?.name}</span>
-                  <span className="text-gray-400 text-[9px] ml-0.5">{profileDropdownOpen ? '▲' : '▼'}</span>
+                  <span className="hidden md:inline text-xs font-semibold text-white tracking-wide ml-1">{user?.name}</span>
+                  <span className="hidden md:inline text-gray-400 text-[9px] ml-0.5">{profileDropdownOpen ? '▲' : '▼'}</span>
                 </button>
                 
                 <AnimatePresence>
