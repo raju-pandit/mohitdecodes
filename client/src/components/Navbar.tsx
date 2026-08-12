@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
 import { Search, Menu, X, LogOut, Settings, User } from 'lucide-react';
 import { Button } from './ui/Button';
@@ -10,8 +10,10 @@ import { getInitials, hasCustomAvatar } from '../utils/formatters';
 export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
   const { user, logout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const { scrollY } = useScroll();
   const [scrolled, setScrolled] = useState(false);
+
   const [showNavbar, setShowNavbar] = useState(true);
   const lastScrollY = useRef(0);
 
@@ -108,10 +110,10 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
             {navLinks.map((link) => {
               const isActive = location.pathname === link.path;
               return (
-                <Link
+                <button
                   key={link.name}
-                  to={link.path}
-                  className={`relative px-3.5 py-1.5 rounded-[999px] text-xs font-semibold tracking-wide transition-all duration-200 z-10 ${
+                  onClick={() => navigate(link.path)}
+                  className={`relative px-3.5 py-1.5 rounded-[999px] text-xs font-semibold tracking-wide transition-all duration-200 z-10 cursor-pointer ${
                     isActive 
                       ? 'text-white font-bold' 
                       : 'text-slate-300 hover:text-white'
@@ -125,10 +127,11 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
                       transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
                     />
                   )}
-                </Link>
+                </button>
               );
             })}
           </nav>
+
 
           {/* Right: Search / Ctrl K + Profile (hides on desktop when scrolled so only center menu pill remains) */}
           <div className={`flex items-center gap-2 sm:gap-4 transition-all duration-300 ${scrolled ? 'lg:opacity-0 lg:w-0 lg:overflow-hidden lg:pointer-events-none' : 'opacity-100'}`}>
@@ -248,18 +251,17 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
               className="mt-2.5 w-full pointer-events-auto rounded-2xl p-4 shadow-2xl lg:hidden flex flex-col gap-1 max-h-[80vh] overflow-y-auto"
             >
               {navLinks.map((link) => (
-                <Link
+                <button
                   key={link.name}
-                  to={link.path}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`px-4 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                  onClick={() => { navigate(link.path); setMobileMenuOpen(false); }}
+                  className={`w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
                     location.pathname === link.path 
                       ? 'bg-primary-600/20 text-primary-300 border border-primary-500/30' 
                       : 'text-slate-200 hover:bg-white/5 hover:text-white'
                   }`}
                 >
                   {link.name}
-                </Link>
+                </button>
               ))}
 
               <div className="border-t border-white/10 my-2 pt-2">
