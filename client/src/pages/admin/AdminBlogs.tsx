@@ -75,7 +75,6 @@ const AdminBlogs = () => {
         ...formData,
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean)
       };
-      
       if (selectedBlog) {
         await api.put(`/blogs/${selectedBlog._id}`, payload);
         toast.success('Blog updated successfully');
@@ -161,71 +160,158 @@ const AdminBlogs = () => {
         </div>
       )}
 
-      {/* Form Modal */}
+      {/* ── WRITE / EDIT BLOG MODAL ── */}
       <AnimatePresence>
         {isModalOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 overflow-y-auto">
-            <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }} className="glass-card w-full max-w-4xl my-8 p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold text-white">{selectedBlog ? 'Edit Blog' : 'Write Blog'}</h2>
-                <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-white"><X size={24} /></button>
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-3"
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
+              className="relative w-full max-w-2xl flex flex-col rounded-2xl border border-purple-700/30 shadow-[0_0_40px_rgba(139,92,246,0.15)]"
+              style={{ background: 'linear-gradient(135deg,#0f0f1a 0%,#13111f 100%)', maxHeight: '85vh' }}
+            >
+              {/* Sticky Header */}
+              <div className="flex justify-between items-center px-5 py-3.5 border-b border-white/5 flex-shrink-0">
+                <h2 className="text-base font-bold text-white">
+                  {selectedBlog ? 'Edit Blog' : 'Write Blog'}
+                </h2>
+                <button onClick={() => setIsModalOpen(false)}
+                  className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-white/5 transition">
+                  <X size={18} />
+                </button>
               </div>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="md:col-span-2">
-                    <label className="block text-sm mb-1 text-gray-300">Title</label>
-                    <input required type="text" className="input w-full" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} />
-                  </div>
-                  <div className="md:col-span-2">
-                    <label className="block text-sm mb-1 text-gray-300">Excerpt</label>
-                    <textarea required className="input w-full h-20" value={formData.excerpt} onChange={e => setFormData({...formData, excerpt: e.target.value})}></textarea>
-                  </div>
-                  <div className="md:col-span-2">
-                    <label className="block text-sm mb-1 text-gray-300">Content (Markdown/HTML)</label>
-                    <textarea required className="input w-full h-48 font-mono text-sm" value={formData.content} onChange={e => setFormData({...formData, content: e.target.value})}></textarea>
-                  </div>
+
+              {/* Scrollable Body */}
+              <div className="overflow-y-auto flex-1 px-5 py-4">
+                <form id="blog-form" onSubmit={handleSubmit} className="space-y-3">
+
+                  {/* Title */}
                   <div>
-                    <label className="block text-sm mb-1 text-gray-300">Cover Image URL</label>
-                    <input required type="text" className="input w-full" value={formData.coverImage} onChange={e => setFormData({...formData, coverImage: e.target.value})} />
-                  </div>
-                  <div>
-                    <label className="block text-sm mb-1 text-gray-300">Category</label>
-                    <input required type="text" className="input w-full" value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} />
-                  </div>
-                  <div>
-                    <label className="block text-sm mb-1 text-gray-300">Tags (comma separated)</label>
-                    <input type="text" className="input w-full" value={formData.tags} onChange={e => setFormData({...formData, tags: e.target.value})} />
-                  </div>
-                  <div>
-                    <label className="block text-sm mb-1 text-gray-300">SEO Title</label>
-                    <input type="text" className="input w-full" value={formData.seoTitle} onChange={e => setFormData({...formData, seoTitle: e.target.value})} />
-                  </div>
-                  <div className="md:col-span-2">
-                    <label className="block text-sm mb-1 text-gray-300">SEO Description</label>
-                    <input type="text" className="input w-full" value={formData.seoDescription} onChange={e => setFormData({...formData, seoDescription: e.target.value})} />
-                  </div>
-                  <div className="md:col-span-2">
-                    <label className="flex items-center space-x-2 text-sm text-gray-300 mt-2">
-                      <input type="checkbox" checked={formData.published} onChange={e => setFormData({...formData, published: e.target.checked})} className="rounded bg-gray-700 border-gray-600 text-blue-500" />
-                      <span>Published</span>
+                    <label className="block text-xs font-medium mb-1 text-gray-400">
+                      Title <span className="text-red-400">*</span>
                     </label>
+                    <input required type="text"
+                      className="input w-full text-sm" style={{ height: '40px' }}
+                      placeholder="Blog title..."
+                      value={formData.title}
+                      onChange={e => setFormData({ ...formData, title: e.target.value })} />
                   </div>
-                </div>
-                <div className="flex justify-end gap-3 mt-6">
-                  <button type="button" onClick={() => setIsModalOpen(false)} className="btn-secondary">Cancel</button>
-                  <button type="submit" className="btn-primary">Save Blog</button>
-                </div>
-              </form>
+
+                  {/* Excerpt */}
+                  <div>
+                    <label className="block text-xs font-medium mb-1 text-gray-400">
+                      Excerpt <span className="text-red-400">*</span>
+                    </label>
+                    <textarea required
+                      className="input w-full text-sm resize-none"
+                      style={{ height: '72px' }}
+                      placeholder="Short description of the blog..."
+                      value={formData.excerpt}
+                      onChange={e => setFormData({ ...formData, excerpt: e.target.value })} />
+                  </div>
+
+                  {/* Content */}
+                  <div>
+                    <label className="block text-xs font-medium mb-1 text-gray-400">
+                      Content (Markdown/HTML) <span className="text-red-400">*</span>
+                    </label>
+                    <textarea required
+                      className="input w-full font-mono text-sm resize-none"
+                      style={{ height: '190px' }}
+                      placeholder="Write your blog content in markdown or HTML..."
+                      value={formData.content}
+                      onChange={e => setFormData({ ...formData, content: e.target.value })} />
+                  </div>
+
+                  {/* Row: Cover Image | Category */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium mb-1 text-gray-400">Cover Image URL</label>
+                      <input type="text"
+                        className="input w-full text-sm" style={{ height: '40px' }}
+                        placeholder="https://..."
+                        value={formData.coverImage}
+                        onChange={e => setFormData({ ...formData, coverImage: e.target.value })} />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium mb-1 text-gray-400">Category</label>
+                      <input type="text"
+                        className="input w-full text-sm" style={{ height: '40px' }}
+                        placeholder="e.g. Tech, React, Career..."
+                        value={formData.category}
+                        onChange={e => setFormData({ ...formData, category: e.target.value })} />
+                    </div>
+                  </div>
+
+                  {/* Row: Tags | SEO Title */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium mb-1 text-gray-400">
+                        Tags <span className="text-gray-600">(comma separated)</span>
+                      </label>
+                      <input type="text"
+                        className="input w-full text-sm" style={{ height: '40px' }}
+                        placeholder="react, javascript, web..."
+                        value={formData.tags}
+                        onChange={e => setFormData({ ...formData, tags: e.target.value })} />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium mb-1 text-gray-400">SEO Title</label>
+                      <input type="text"
+                        className="input w-full text-sm" style={{ height: '40px' }}
+                        placeholder="SEO optimized title..."
+                        value={formData.seoTitle}
+                        onChange={e => setFormData({ ...formData, seoTitle: e.target.value })} />
+                    </div>
+                  </div>
+
+                  {/* SEO Description */}
+                  <div>
+                    <label className="block text-xs font-medium mb-1 text-gray-400">SEO Description</label>
+                    <input type="text"
+                      className="input w-full text-sm" style={{ height: '40px' }}
+                      placeholder="Meta description for search engines..."
+                      value={formData.seoDescription}
+                      onChange={e => setFormData({ ...formData, seoDescription: e.target.value })} />
+                  </div>
+
+                  {/* Published */}
+                  <label className="flex items-center gap-2 cursor-pointer select-none w-fit py-1">
+                    <input type="checkbox"
+                      checked={formData.published}
+                      onChange={e => setFormData({ ...formData, published: e.target.checked })}
+                      className="w-4 h-4 rounded accent-purple-500" />
+                    <span className="text-sm text-gray-300">Publish immediately</span>
+                  </label>
+
+                </form>
+              </div>
+
+              {/* Sticky Footer */}
+              <div className="flex justify-end gap-2 px-5 py-3 border-t border-white/5 flex-shrink-0">
+                <button type="button" onClick={() => setIsModalOpen(false)}
+                  className="btn-secondary text-sm px-4 py-2">
+                  Cancel
+                </button>
+                <button type="submit" form="blog-form"
+                  className="btn-primary text-sm px-5 py-2">
+                  {selectedBlog ? 'Update Blog' : 'Save Blog'}
+                </button>
+              </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Delete Confirm Modal */}
+      {/* ── DELETE CONFIRM MODAL ── */}
       <AnimatePresence>
         {isDeleteModalOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-            <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }} className="glass-card w-full max-w-md p-6 text-center">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+            <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }}
+              className="glass-card w-full max-w-md p-6 text-center">
               <AlertTriangle size={48} className="mx-auto text-red-500 mb-4" />
               <h2 className="text-xl font-bold text-white mb-2">Delete Blog?</h2>
               <p className="text-gray-400 mb-6">Are you sure you want to delete "{selectedBlog?.title}"? This action cannot be undone.</p>
