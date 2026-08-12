@@ -4,6 +4,8 @@ import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-
 import { Code2, Search, Menu, X, LogOut, LayoutDashboard, Settings, User } from 'lucide-react';
 import { Button } from './ui/Button';
 import { useAuth } from '../context/AuthContext';
+import SearchModal from './SearchModal';
+import BrandLogo from './Logo';
 import { getInitials, hasCustomAvatar } from '../utils/formatters';
 
 export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
@@ -76,14 +78,8 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="bg-primary-500/20 p-2 rounded-lg group-hover:bg-primary-500/30 transition-colors">
-              <Code2 className="w-6 h-6 text-primary-400" />
-            </div>
-            <span className="font-extrabold text-xl tracking-tight text-white group-hover:text-primary-400 transition-colors">
-              MohitDecodes
-            </span>
-          </Link>
+          <BrandLogo size="md" />
+
 
           {/* Desktop Navigation — Pill Styled */}
           <nav className="hidden md:flex items-center gap-1 bg-dark-900/80 backdrop-blur-md px-3 py-1.5 border border-dark-700/50 rounded-full shadow-inner-glow">
@@ -224,12 +220,9 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
                transition={{ ease: 'easeOut', duration: 0.18 }}
                className="fixed top-0 right-0 bottom-0 w-[80%] max-w-sm bg-dark-900 border-l border-dark-800 z-50 p-6 flex flex-col md:hidden"
              >
-              <div className="flex justify-between items-center mb-8">
-                <div className="flex items-center gap-2">
-                  <Code2 className="w-6 h-6 text-primary-400" />
-                  <span className="font-bold text-lg text-slate-100">Menu</span>
-                </div>
-                <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-gray-400 hover:text-white rounded-full bg-dark-800/50">
+               <div className="flex justify-between items-center mb-8">
+                 <BrandLogo size="sm" />
+                 <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-gray-400 hover:text-white rounded-full bg-dark-800/50">
                   <X className="w-5 h-5" />
                 </button>
               </div>

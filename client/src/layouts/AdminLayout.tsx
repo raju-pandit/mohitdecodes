@@ -8,6 +8,8 @@ import {
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { getInitials, hasCustomAvatar } from '../utils/formatters'
+import BrandLogo from '../components/Logo'
+
 
 const adminNavItems = [
   { label: 'Dashboard', path: '/admin', icon: LayoutDashboard },
@@ -42,17 +44,11 @@ const AdminLayout: React.FC = () => {
   const Sidebar = () => (
     <div className="flex flex-col h-full">
       {/* Logo */}
-      <div className="p-6 border-b border-dark-700">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-primary-700 rounded-lg flex items-center justify-center">
-            <Code2 className="w-4 h-4 text-white" />
-          </div>
-          <div>
-            <span className="font-bold text-slate-100 text-sm">MohitDecodes</span>
-            <p className="text-xs text-slate-500">Admin Panel</p>
-          </div>
-        </Link>
+      <div className="p-5 border-b border-dark-700">
+        <BrandLogo size="sm" />
+        <p className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1 ml-8">Admin Panel</p>
       </div>
+
 
       {/* Nav */}
       <nav className="flex-1 p-4 space-y-1 overflow-y-auto">

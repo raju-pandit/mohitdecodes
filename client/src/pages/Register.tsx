@@ -7,8 +7,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Eye, EyeOff, UserPlus, Code2, Loader2, Check } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
-
 import OAuthOverlay from '../components/OAuthOverlay'
+import BrandLogo from '../components/Logo'
 
 const registerSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -81,12 +81,10 @@ const Register: React.FC = () => {
         className="w-full max-w-md relative z-10"
       >
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="w-10 h-10 bg-primary-700 rounded-xl flex items-center justify-center">
-              <Code2 className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-bold gradient-text">MohitDecodes</span>
-          </Link>
+          <div className="flex justify-center mb-6">
+            <BrandLogo size="lg" />
+          </div>
+
           <h1 className="text-3xl font-bold text-slate-100 mb-2">Create your account 🚀</h1>
           <p className="text-slate-400">Join thousands of developers learning with MohitDecodes</p>
         </div>

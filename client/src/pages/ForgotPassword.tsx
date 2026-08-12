@@ -4,6 +4,8 @@ import { motion } from 'framer-motion'
 import { Mail, Key, Loader2, ArrowLeft, Code2, Check } from 'lucide-react'
 import toast from 'react-hot-toast'
 import api from '../services/api'
+import BrandLogo from '../components/Logo'
+
 
 const ForgotPassword: React.FC = () => {
   const { token } = useParams()
@@ -44,12 +46,10 @@ const ForgotPassword: React.FC = () => {
     <div className="min-h-screen bg-dark-950 flex items-center justify-center px-4 py-20">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="w-10 h-10 bg-primary-700 rounded-xl flex items-center justify-center">
-              <Code2 className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-bold gradient-text">MohitDecodes</span>
-          </Link>
+          <div className="flex justify-center mb-6">
+            <BrandLogo size="lg" />
+          </div>
+
           <h1 className="text-3xl font-bold text-slate-100 mb-2">
             {token ? 'Reset Password' : 'Forgot Password'}
           </h1>

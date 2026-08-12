@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import { Code2, Github, Twitter, Linkedin, Youtube, Mail, ArrowRight, Loader2, Instagram } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../services/api';
+import BrandLogo from './Logo';
+
+
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -31,14 +34,10 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* Brand Col */}
           <div className="lg:col-span-1">
-            <Link to="/" className="flex items-center gap-2 mb-4 group">
-              <div className="bg-primary-500/20 p-2 rounded-lg group-hover:bg-primary-500/30 transition-colors">
-                <Code2 className="w-6 h-6 text-primary-400" />
-              </div>
-              <span className="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-cyan-400">
-                MohitDecodes
-              </span>
-            </Link>
+            <div className="mb-4">
+              <BrandLogo size="lg" />
+            </div>
+
             <p className="text-slate-400 text-sm mb-6 leading-relaxed">
               Learn. Build. Decode. Your ultimate destination to master MERN full-stack development, roadmaps, and systems with practical real-world projects.
             </p>
