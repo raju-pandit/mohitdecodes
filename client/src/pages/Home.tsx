@@ -176,13 +176,13 @@ const Home: React.FC = () => {
   return (
     <div className="overflow-hidden bg-grid particles-bg">
       {/* HERO SECTION */}
-      <section className="relative min-h-[90vh] flex items-center pt-24 pb-16">
+      <section className="relative min-h-[85vh] lg:min-h-[88vh] flex items-center pt-16 lg:pt-20 pb-8">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-700/10 rounded-full blur-[120px]" />
           <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-accent-600/10 rounded-full blur-[150px]" />
         </div>
         
-        <div className="container-max grid lg:grid-cols-2 gap-12 items-center lg:items-start pt-8 lg:pt-12 relative z-10">
+        <div className="container-max grid lg:grid-cols-2 gap-12 items-center relative z-10">
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -250,7 +250,7 @@ const Home: React.FC = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="w-full flex justify-center lg:justify-end lg:-translate-y-16 relative z-10 px-4 sm:px-0 lg:pr-8"
+            className="w-full flex justify-center lg:justify-end lg:-translate-y-8 relative z-10 px-4 sm:px-0 lg:pr-8"
           >
             <div className="relative">
               {/* Outer Glowing Radial Orb Background */}
@@ -275,9 +275,9 @@ const Home: React.FC = () => {
               </motion.div>
 
               {/* Card Container with Gradient Ring and Glowing Shadow */}
-              <div className="relative p-[1.5px] bg-gradient-to-tr from-primary-600 via-purple-500 to-cyan-400 rounded-[50px] sm:rounded-[60px] lg:rounded-[70px] shadow-[0_0_60px_rgba(124,58,237,0.35),0_0_100px_rgba(6,182,212,0.12)] hover:shadow-[0_0_80px_rgba(124,58,237,0.5),0_0_120px_rgba(6,182,212,0.2)] transition-shadow duration-500 select-none">
+              <div className="relative p-[1.5px] bg-gradient-to-tr from-primary-600 via-purple-500 to-cyan-400 rounded-[50px] sm:rounded-[60px] lg:rounded-[72px] shadow-[0_0_60px_rgba(124,58,237,0.35),0_0_100px_rgba(6,182,212,0.12)] hover:shadow-[0_0_80px_rgba(124,58,237,0.5),0_0_120px_rgba(6,182,212,0.2)] transition-shadow duration-500 select-none">
                 {/* Inner Frame */}
-                <div className="w-[280px] h-[360px] sm:w-[340px] h-[440px] lg:w-[420px] lg:h-[540px] rounded-[48px] sm:rounded-[58px] lg:rounded-[68px] overflow-hidden border-[6px] border-[#060814] bg-[#0c0f24] flex items-center justify-center">
+                <div className="w-[280px] h-[360px] sm:w-[340px] h-[440px] lg:w-[440px] lg:h-[565px] rounded-[48px] sm:rounded-[58px] lg:rounded-[70px] overflow-hidden border-[6px] border-[#060814] bg-[#0c0f24] flex items-center justify-center">
                   <img 
                     src="/mohit.png" 
                     alt="Mohit Decodes" 
