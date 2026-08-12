@@ -274,17 +274,25 @@ const Home: React.FC = () => {
             <h2 className="section-title mb-4">Loved by <span className="gradient-text">Learners</span></h2>
             <p className="section-subtitle mb-16 mx-auto">Here is what our students have to say about their learning experience.</p>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
-              {testimonials.map((testimonial, i) => (
-                <motion.div
-                  key={testimonial._id}
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                >
-                  <TestimonialCard testimonial={testimonial} />
-                </motion.div>
-              ))}
+            <div className="marquee-container py-4 relative">
+              {/* Side fades */}
+              <div className="absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-[#060a12] to-transparent z-10 pointer-events-none" />
+              <div className="absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-[#060a12] to-transparent z-10 pointer-events-none" />
+
+              <div className="marquee-content">
+                {testimonials.map((testimonial, i) => (
+                  <div key={`marquee-1-${testimonial._id}-${i}`} className="w-[320px] md:w-[380px] flex-shrink-0 text-left">
+                    <TestimonialCard testimonial={testimonial} />
+                  </div>
+                ))}
+              </div>
+              <div className="marquee-content" aria-hidden="true">
+                {testimonials.map((testimonial, i) => (
+                  <div key={`marquee-2-${testimonial._id}-${i}`} className="w-[320px] md:w-[380px] flex-shrink-0 text-left">
+                    <TestimonialCard testimonial={testimonial} />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
