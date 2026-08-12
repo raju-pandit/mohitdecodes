@@ -242,48 +242,25 @@ const Home: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* Right C++ Terminal visual */}
+          {/* Right Profile Photo visual */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative w-full max-w-full overflow-hidden animate-float"
+            className="flex justify-center items-center relative z-10"
           >
-            {/* Glowing borders around card */}
-            <div className="absolute inset-0 bg-gradient-to-r from-primary-500 to-accent-500 rounded-2xl blur-[12px] opacity-40 pointer-events-none" />
+            {/* Outer Glowing Radial Orb Background */}
+            <div className="absolute w-[110%] h-[110%] bg-primary-600/10 rounded-full blur-[70px] pointer-events-none select-none" />
             
-            <div className="relative bg-[#08080f] rounded-2xl border border-dark-700/50 shadow-2xl relative z-10 w-full overflow-hidden font-mono">
-              {/* Header bar */}
-              <div className="flex items-center justify-between px-4 py-3 bg-[#0d0d16] border-b border-dark-800">
-                <div className="flex gap-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                  <div className="w-3 h-3 rounded-full bg-green-500" />
-                </div>
-                <span className="text-xs text-gray-400 font-semibold select-none">CoderArmy.cpp</span>
-                <span className="flex items-center gap-1.5 text-[10px] text-green-400 font-semibold bg-green-500/10 px-2 py-0.5 rounded-full select-none">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                  Live Coding
-                </span>
-              </div>
-              
-              {/* C++ IDE visual code editor style */}
-              <div className="p-5 text-left text-xs sm:text-sm text-slate-300 space-y-1 overflow-x-auto leading-relaxed select-none">
-                <div><span className="text-gray-600 mr-4 inline-block w-4">22</span><span className="text-slate-400">cout &lt;&lt; </span><span className="text-emerald-400">"[SYSTEM] \"CoderArmy"</span></div>
-                <div><span className="text-gray-600 mr-4 inline-block w-4">23</span><span className="text-slate-400">initialized successfully.\"" &lt;&lt; endl;</span></div>
-                <div><span className="text-gray-600 mr-4 inline-block w-4">24</span><span className="text-slate-400">{'}'}</span></div>
-                <div><span className="text-gray-600 mr-4 inline-block w-4">25</span></div>
-                <div><span className="text-gray-600 mr-4 inline-block w-4">26</span><span className="text-primary-400">void</span><span className="text-slate-300"> addMember(</span><span className="text-primary-400">const</span><span className="text-slate-300"> string& name) {'{'}</span></div>
-                <div><span className="text-gray-600 mr-4 inline-block w-4">27</span><span className="text-slate-400">    members.push_back(name);</span></div>
-                <div><span className="text-gray-600 mr-4 inline-block w-4">28</span><span className="text-slate-400">    cout &lt;&lt; </span><span className="text-emerald-400">"[NEW MEMBER] \""</span><span className="text-slate-400"> &lt;&lt; name</span></div>
-                <div><span className="text-gray-600 mr-4 inline-block w-4">29</span><span className="text-slate-400">    &lt;&lt; </span><span className="text-emerald-400">" has joined the team.\""</span><span className="text-slate-400"> &lt;&lt; endl;</span></div>
-                <div><span className="text-gray-600 mr-4 inline-block w-4">30</span><span className="text-slate-400">    cout &lt;&lt; </span><span className="text-emerald-400">"[INFO] \"Total members: \""</span></div>
-                <div><span className="text-gray-600 mr-4 inline-block w-4">31</span><span className="text-slate-400">    &lt;&lt; members.size() &lt;&lt; </span><span className="text-emerald-400">"\""</span><span className="text-slate-400"> &lt;&lt; endl;</span></div>
-                <div><span className="text-gray-600 mr-4 inline-block w-4">32</span><span className="text-slate-400">{'}'}</span></div>
-                <div><span className="text-gray-600 mr-4 inline-block w-4">33</span></div>
-                <div><span className="text-gray-600 mr-4 inline-block w-4">34</span><span className="text-primary-400">void</span><span className="text-slate-300"> startCoding() {'{'}</span></div>
-                <div><span className="text-gray-600 mr-4 inline-block w-4">35</span><span className="text-primary-400">    if</span><span className="text-slate-300"> (!isActive) {'{'}</span></div>
-                <div><span className="text-gray-600 mr-4 inline-block w-4">36</span><span className="text-slate-400">        cout &lt;&lt; </span><span className="text-emerald-400">"[WARNING] \"Army i...</span></div>
+            {/* Circular Image Container with Gradient Ring and Glowing Shadow */}
+            <div className="relative p-1 bg-gradient-to-tr from-primary-600 via-purple-500 to-cyan-400 rounded-full shadow-[0_0_50px_rgba(124,58,237,0.45),0_0_90px_rgba(6,182,212,0.15)] transition-all hover:scale-[1.02] duration-500 select-none">
+              {/* Inner Circle Frame */}
+              <div className="w-64 h-64 sm:w-80 sm:h-80 lg:w-[410px] lg:h-[410px] rounded-full overflow-hidden border-[6px] border-[#060814] bg-dark-900 flex items-center justify-center">
+                <img 
+                  src="/mohit.png" 
+                  alt="Mohit Decodes" 
+                  className="w-full h-full object-cover object-top hover:scale-[1.08] transition-transform duration-500"
+                />
               </div>
             </div>
           </motion.div>
