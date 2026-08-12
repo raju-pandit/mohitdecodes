@@ -45,16 +45,18 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     if (mobileMenuOpen) {
-      setHidden(false);
+      if (hidden) setHidden(false);
       return;
     }
     const previous = scrollY.getPrevious() ?? 0;
-    if (latest > previous && latest > 150) {
-      setHidden(true);
-    } else {
-      setHidden(false);
+    const shouldHide = latest > previous && latest > 150;
+    if (shouldHide !== hidden) {
+      setHidden(shouldHide);
     }
-    setScrolled(latest > 20);
+    const isScrolled = latest > 20;
+    if (isScrolled !== scrolled) {
+      setScrolled(isScrolled);
+    }
   });
 
   return (
