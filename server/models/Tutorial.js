@@ -35,7 +35,6 @@ tutorialSchema.pre('save', function (next) {
   next();
 });
 
-tutorialSchema.index({ slug: 1 });
 tutorialSchema.index({ category: 1 });
 tutorialSchema.index({ title: 'text', content: 'text', tags: 'text' });
 

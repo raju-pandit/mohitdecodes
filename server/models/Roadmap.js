@@ -39,7 +39,6 @@ roadmapSchema.pre('save', function (next) {
   next();
 });
 
-roadmapSchema.index({ slug: 1 });
 roadmapSchema.index({ title: 'text', description: 'text' });
 
 module.exports = mongoose.model('Roadmap', roadmapSchema);

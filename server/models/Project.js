@@ -27,7 +27,6 @@ projectSchema.pre('save', function (next) {
   next();
 });
 
-projectSchema.index({ slug: 1 });
 projectSchema.index({ technologies: 1 });
 projectSchema.index({ title: 'text', description: 'text', tags: 'text' });
 
