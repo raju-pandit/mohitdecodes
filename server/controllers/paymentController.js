@@ -1,8 +1,8 @@
-const Razorpay = require('razorpay');
-const crypto = require('crypto');
-const Course = require('../models/Course');
-const User = require('../models/User');
-const Payment = require('../models/Payment');
+import Razorpay from 'razorpay';
+import crypto from 'crypto';
+import Course from '../models/Course.js';
+import User from '../models/User.js';
+import Payment from '../models/Payment.js';
 
 // Initialize Razorpay
 const razorpay = new Razorpay({
@@ -13,7 +13,7 @@ const razorpay = new Razorpay({
 // @desc    Create Razorpay Order
 // @route   POST /api/payments/order
 // @access  Private
-exports.createOrder = async (req, res, next) => {
+export const createOrder = async (req, res, next) => {
   try {
     const { courseId } = req.body;
     if (!courseId) {
@@ -63,7 +63,7 @@ exports.createOrder = async (req, res, next) => {
 // @desc    Verify Razorpay Signature and Enroll
 // @route   POST /api/payments/verify
 // @access  Private
-exports.verifyPayment = async (req, res, next) => {
+export const verifyPayment = async (req, res, next) => {
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature, courseId } = req.body;
     

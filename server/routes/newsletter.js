@@ -1,10 +1,10 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { subscribe, getSubscribers, unsubscribe } = require('../controllers/newsletterController');
-const { protect, authorize } = require('../middleware/auth');
+import { subscribe, getSubscribers, unsubscribe } from '../controllers/newsletterController.js';
+import { protect, authorize } from '../middleware/auth.js';
 
 router.post('/subscribe', subscribe);
 router.post('/unsubscribe', unsubscribe);
 router.get('/subscribers', protect, authorize('admin'), getSubscribers);
 
-module.exports = router;
+export default router;

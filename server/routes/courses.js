@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { getCourses, getCourse, createCourse, updateCourse, deleteCourse, enrollCourse, getAdminCourses, toggleLessonComplete } = require('../controllers/courseController');
-const { protect, authorize } = require('../middleware/auth');
+import { getCourses, getCourse, createCourse, updateCourse, deleteCourse, enrollCourse, getAdminCourses, toggleLessonComplete } from '../controllers/courseController.js';
+import { protect, authorize } from '../middleware/auth.js';
 
 router.get('/', getCourses);
 router.get('/admin/all', protect, authorize('admin'), getAdminCourses);
@@ -12,4 +12,4 @@ router.put('/:id', protect, authorize('admin'), updateCourse);
 router.delete('/:id', protect, authorize('admin'), deleteCourse);
 router.post('/:id/enroll', protect, enrollCourse);
 
-module.exports = router;
+export default router;

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const testimonialSchema = new mongoose.Schema({
   name: { type: String, required: [true, 'Name is required'], trim: true },
@@ -11,4 +11,4 @@ const testimonialSchema = new mongoose.Schema({
   featured: { type: Boolean, default: false }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Testimonial', testimonialSchema);
+export default mongoose.model('Testimonial', testimonialSchema);

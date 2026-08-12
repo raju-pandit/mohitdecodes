@@ -1,6 +1,6 @@
-const Newsletter = require('../models/Newsletter');
+import Newsletter from '../models/Newsletter.js';
 
-exports.subscribe = async (req, res, next) => {
+export const subscribe = async (req, res, next) => {
   try {
     const { email } = req.body;
     if (!email) return res.status(400).json({ success: false, message: 'Email is required' });
@@ -20,14 +20,14 @@ exports.subscribe = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
-exports.getSubscribers = async (req, res, next) => {
+export const getSubscribers = async (req, res, next) => {
   try {
     const subscribers = await Newsletter.find({ subscribed: true }).sort({ createdAt: -1 });
     res.status(200).json({ success: true, data: subscribers, total: subscribers.length });
   } catch (err) { next(err); }
 };
 
-exports.unsubscribe = async (req, res, next) => {
+export const unsubscribe = async (req, res, next) => {
   try {
     const { email } = req.body;
     const subscriber = await Newsletter.findOneAndUpdate(

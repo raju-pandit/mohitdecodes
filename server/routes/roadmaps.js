@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { getRoadmaps, getRoadmap, createRoadmap, updateRoadmap, deleteRoadmap, updateProgress } = require('../controllers/roadmapController');
-const { protect, authorize } = require('../middleware/auth');
+import { getRoadmaps, getRoadmap, createRoadmap, updateRoadmap, deleteRoadmap, updateProgress } from '../controllers/roadmapController.js';
+import { protect, authorize } from '../middleware/auth.js';
 
 router.get('/', getRoadmaps);
 router.get('/:slug', (req, res, next) => {
@@ -19,4 +19,4 @@ router.put('/:id', protect, authorize('admin'), updateRoadmap);
 router.delete('/:id', protect, authorize('admin'), deleteRoadmap);
 router.put('/:id/progress', protect, updateProgress);
 
-module.exports = router;
+export default router;

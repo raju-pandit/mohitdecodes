@@ -1,11 +1,11 @@
-const Course = require('../models/Course');
-const Tutorial = require('../models/Tutorial');
-const Blog = require('../models/Blog');
-const Resource = require('../models/Resource');
-const Project = require('../models/Project');
-const Roadmap = require('../models/Roadmap');
+import Course from '../models/Course.js';
+import Tutorial from '../models/Tutorial.js';
+import Blog from '../models/Blog.js';
+import Resource from '../models/Resource.js';
+import Project from '../models/Project.js';
+import Roadmap from '../models/Roadmap.js';
 
-exports.globalSearch = async (req, res, next) => {
+export const globalSearch = async (req, res, next) => {
   try {
     const { q } = req.query;
     if (!q || q.trim().length < 2) {

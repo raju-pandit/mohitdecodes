@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { getStats, getAllUsers, updateUserRole, deleteUser } = require('../controllers/adminController');
-const { protect, authorize } = require('../middleware/auth');
+import { getStats, getAllUsers, updateUserRole, deleteUser } from '../controllers/adminController.js';
+import { protect, authorize } from '../middleware/auth.js';
 
 // All admin routes protected
 router.use(protect, authorize('admin'));
@@ -11,4 +11,4 @@ router.get('/users', getAllUsers);
 router.put('/users/:id/role', updateUserRole);
 router.delete('/users/:id', deleteUser);
 
-module.exports = router;
+export default router;

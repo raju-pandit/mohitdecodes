@@ -2,6 +2,7 @@
   "name": "mohitdecodes-server",
   "version": "1.0.0",
   "description": "MohitDecodes - Full Stack Developer Education Platform - Backend API",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

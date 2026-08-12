@@ -1,12 +1,12 @@
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
 
 const createDirIfNotExists = (dir) => {
-    if (!fs.existsSync(dir)){
-        fs.mkdirSync(dir, { recursive: true });
-    }
-}
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+};
 
 // Storage for images
 const imageStorage = multer.diskStorage({
@@ -16,10 +16,7 @@ const imageStorage = multer.diskStorage({
     cb(null, dir);
   },
   filename: function (req, file, cb) {
-    cb(
-      null,
-      `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`
-    );
+    cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
   },
 });
 
@@ -31,10 +28,7 @@ const fileStorage = multer.diskStorage({
     cb(null, dir);
   },
   filename: function (req, file, cb) {
-    cb(
-      null,
-      `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`
-    );
+    cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
   },
 });
 
@@ -49,7 +43,11 @@ const imageFilter = (req, file, cb) => {
 
 // Filter for docs
 const docFilter = (req, file, cb) => {
-  const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+  const allowedTypes = [
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  ];
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
@@ -57,14 +55,5 @@ const docFilter = (req, file, cb) => {
   }
 };
 
-const uploadImage = multer({
-  storage: imageStorage,
-  fileFilter: imageFilter,
-});
-
-const uploadFile = multer({
-  storage: fileStorage,
-  fileFilter: docFilter,
-});
-
-module.exports = { uploadImage, uploadFile };
+export const uploadImage = multer({ storage: imageStorage, fileFilter: imageFilter });
+export const uploadFile = multer({ storage: fileStorage, fileFilter: docFilter });

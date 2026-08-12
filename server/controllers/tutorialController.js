@@ -1,6 +1,6 @@
-const Tutorial = require('../models/Tutorial');
+import Tutorial from '../models/Tutorial.js';
 
-exports.getTutorials = async (req, res, next) => {
+export const getTutorials = async (req, res, next) => {
     try {
         const page = parseInt(req.query.page, 10) || 1;
         const limit = parseInt(req.query.limit, 10) || 10;
@@ -13,7 +13,7 @@ exports.getTutorials = async (req, res, next) => {
     } catch (err) { next(err); }
 };
 
-exports.getTutorial = async (req, res, next) => {
+export const getTutorial = async (req, res, next) => {
     try {
         const tutorial = await Tutorial.findOneAndUpdate(
             { slug: req.params.slug },
@@ -25,28 +25,28 @@ exports.getTutorial = async (req, res, next) => {
     } catch (err) { next(err); }
 };
 
-exports.createTutorial = async (req, res, next) => {
+export const createTutorial = async (req, res, next) => {
     try {
         const tutorial = await Tutorial.create(req.body);
         res.status(201).json({ success: true, data: tutorial });
     } catch (err) { next(err); }
 };
 
-exports.updateTutorial = async (req, res, next) => {
+export const updateTutorial = async (req, res, next) => {
     try {
         const tutorial = await Tutorial.findByIdAndUpdate(req.params.id, req.body, { new: true });
         res.status(200).json({ success: true, data: tutorial });
     } catch (err) { next(err); }
 };
 
-exports.deleteTutorial = async (req, res, next) => {
+export const deleteTutorial = async (req, res, next) => {
     try {
         await Tutorial.findByIdAndDelete(req.params.id);
         res.status(200).json({ success: true, data: {} });
     } catch (err) { next(err); }
 };
 
-exports.getAdminTutorials = async (req, res, next) => {
+export const getAdminTutorials = async (req, res, next) => {
     try {
         const tutorials = await Tutorial.find();
         res.status(200).json({ success: true, count: tutorials.length, data: tutorials });

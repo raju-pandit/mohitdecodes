@@ -1,17 +1,17 @@
-const User = require('../models/User');
-const Course = require('../models/Course');
-const Blog = require('../models/Blog');
-const Tutorial = require('../models/Tutorial');
-const Resource = require('../models/Resource');
-const Project = require('../models/Project');
-const Roadmap = require('../models/Roadmap');
-const Testimonial = require('../models/Testimonial');
-const Newsletter = require('../models/Newsletter');
-const Contact = require('../models/Contact');
+import User from '../models/User.js';
+import Course from '../models/Course.js';
+import Blog from '../models/Blog.js';
+import Tutorial from '../models/Tutorial.js';
+import Resource from '../models/Resource.js';
+import Project from '../models/Project.js';
+import Roadmap from '../models/Roadmap.js';
+import Testimonial from '../models/Testimonial.js';
+import Newsletter from '../models/Newsletter.js';
+import Contact from '../models/Contact.js';
 
 // @desc   Get admin stats
 // @route  GET /api/admin/stats
-exports.getStats = async (req, res, next) => {
+export const getStats = async (req, res, next) => {
   try {
     const [
       totalUsers, totalCourses, totalBlogs, totalTutorials, totalResources,
@@ -51,7 +51,7 @@ exports.getStats = async (req, res, next) => {
 
 // @desc   Get all users (admin)
 // @route  GET /api/admin/users
-exports.getAllUsers = async (req, res, next) => {
+export const getAllUsers = async (req, res, next) => {
   try {
     const { page = 1, limit = 20, search } = req.query;
     const query = {};
@@ -73,7 +73,7 @@ exports.getAllUsers = async (req, res, next) => {
 
 // @desc   Update user role (admin)
 // @route  PUT /api/admin/users/:id/role
-exports.updateUserRole = async (req, res, next) => {
+export const updateUserRole = async (req, res, next) => {
   try {
     const { role } = req.body;
     if (!['user', 'admin'].includes(role)) {
@@ -87,7 +87,7 @@ exports.updateUserRole = async (req, res, next) => {
 
 // @desc   Delete user (admin)
 // @route  DELETE /api/admin/users/:id
-exports.deleteUser = async (req, res, next) => {
+export const deleteUser = async (req, res, next) => {
   try {
     if (req.params.id === req.user.id.toString()) {
       return res.status(400).json({ success: false, message: 'You cannot delete your own account' });

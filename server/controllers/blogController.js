@@ -1,7 +1,7 @@
-const Blog = require('../models/Blog');
-const User = require('../models/User');
+import Blog from '../models/Blog.js';
+import User from '../models/User.js';
 
-exports.getBlogs = async (req, res, next) => {
+export const getBlogs = async (req, res, next) => {
     try {
         const page = parseInt(req.query.page, 10) || 1;
         const limit = parseInt(req.query.limit, 10) || 10;
@@ -26,7 +26,7 @@ exports.getBlogs = async (req, res, next) => {
     } catch (err) { next(err); }
 };
 
-exports.getBlog = async (req, res, next) => {
+export const getBlog = async (req, res, next) => {
     try {
         const blog = await Blog.findOneAndUpdate(
             { slug: req.params.slug },
@@ -38,7 +38,7 @@ exports.getBlog = async (req, res, next) => {
     } catch (err) { next(err); }
 };
 
-exports.createBlog = async (req, res, next) => {
+export const createBlog = async (req, res, next) => {
     try {
         const authorInfo = {
             name: req.user.name,
@@ -51,7 +51,7 @@ exports.createBlog = async (req, res, next) => {
     } catch (err) { next(err); }
 };
 
-exports.updateBlog = async (req, res, next) => {
+export const updateBlog = async (req, res, next) => {
     try {
         const blog = await Blog.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
         if (!blog) return res.status(404).json({ success: false, error: 'Blog not found' });
@@ -59,7 +59,7 @@ exports.updateBlog = async (req, res, next) => {
     } catch (err) { next(err); }
 };
 
-exports.deleteBlog = async (req, res, next) => {
+export const deleteBlog = async (req, res, next) => {
     try {
         const blog = await Blog.findByIdAndDelete(req.params.id);
         if (!blog) return res.status(404).json({ success: false, error: 'Blog not found' });
@@ -67,7 +67,7 @@ exports.deleteBlog = async (req, res, next) => {
     } catch (err) { next(err); }
 };
 
-exports.addComment = async (req, res, next) => {
+export const addComment = async (req, res, next) => {
     try {
         const blog = await Blog.findById(req.params.id);
         if (!blog) return res.status(404).json({ success: false, error: 'Blog not found' });
@@ -85,7 +85,7 @@ exports.addComment = async (req, res, next) => {
     } catch (err) { next(err); }
 };
 
-exports.toggleSaveBlog = async (req, res, next) => {
+export const toggleSaveBlog = async (req, res, next) => {
     try {
         const user = await User.findById(req.user.id);
         const index = user.savedBlogs.findIndex(
@@ -101,7 +101,7 @@ exports.toggleSaveBlog = async (req, res, next) => {
     } catch (err) { next(err); }
 };
 
-exports.getAdminBlogs = async (req, res, next) => {
+export const getAdminBlogs = async (req, res, next) => {
     try {
         const blogs = await Blog.find().sort('-createdAt');
         res.status(200).json({ success: true, count: blogs.length, data: blogs });

@@ -1,7 +1,7 @@
-const Course = require('../models/Course');
-const User = require('../models/User');
+import Course from '../models/Course.js';
+import User from '../models/User.js';
 
-exports.getCourses = async (req, res, next) => {
+export const getCourses = async (req, res, next) => {
     try {
         let query;
         const reqQuery = { ...req.query };
@@ -38,7 +38,7 @@ exports.getCourses = async (req, res, next) => {
     } catch (err) { next(err); }
 };
 
-exports.getCourse = async (req, res, next) => {
+export const getCourse = async (req, res, next) => {
     try {
         const course = await Course.findOne({ slug: req.params.slug });
         if (!course) return res.status(404).json({ success: false, error: 'Course not found' });
@@ -46,14 +46,14 @@ exports.getCourse = async (req, res, next) => {
     } catch (err) { next(err); }
 };
 
-exports.createCourse = async (req, res, next) => {
+export const createCourse = async (req, res, next) => {
     try {
         const course = await Course.create(req.body);
         res.status(201).json({ success: true, data: course });
     } catch (err) { next(err); }
 };
 
-exports.updateCourse = async (req, res, next) => {
+export const updateCourse = async (req, res, next) => {
     try {
         const course = await Course.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
         if (!course) return res.status(404).json({ success: false, error: 'Course not found' });
@@ -61,7 +61,7 @@ exports.updateCourse = async (req, res, next) => {
     } catch (err) { next(err); }
 };
 
-exports.deleteCourse = async (req, res, next) => {
+export const deleteCourse = async (req, res, next) => {
     try {
         const course = await Course.findByIdAndDelete(req.params.id);
         if (!course) return res.status(404).json({ success: false, error: 'Course not found' });
@@ -69,7 +69,7 @@ exports.deleteCourse = async (req, res, next) => {
     } catch (err) { next(err); }
 };
 
-exports.enrollCourse = async (req, res, next) => {
+export const enrollCourse = async (req, res, next) => {
     try {
         const course = await Course.findById(req.params.id);
         if (!course) return res.status(404).json({ success: false, error: 'Course not found' });
@@ -93,14 +93,14 @@ exports.enrollCourse = async (req, res, next) => {
     } catch (err) { next(err); }
 };
 
-exports.getAdminCourses = async (req, res, next) => {
+export const getAdminCourses = async (req, res, next) => {
     try {
         const courses = await Course.find();
         res.status(200).json({ success: true, count: courses.length, data: courses });
     } catch (err) { next(err); }
 };
 
-exports.toggleLessonComplete = async (req, res, next) => {
+export const toggleLessonComplete = async (req, res, next) => {
     try {
         const { courseId, moduleIndex, lessonIndex } = req.body;
         if (!courseId) {

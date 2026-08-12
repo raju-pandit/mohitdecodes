@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const slugify = require('slugify');
+import mongoose from 'mongoose';
+import slugify from 'slugify';
 
 const stepSchema = new mongoose.Schema({
   title: { type: String, required: true },
@@ -41,4 +41,4 @@ roadmapSchema.pre('save', function (next) {
 
 roadmapSchema.index({ title: 'text', description: 'text' });
 
-module.exports = mongoose.model('Roadmap', roadmapSchema);
+export default mongoose.model('Roadmap', roadmapSchema);

@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { getYoutubeStats } = require('../controllers/youtubeController');
+import { getYoutubeStats } from '../controllers/youtubeController.js';
 
 router.get('/', getYoutubeStats);
 
-module.exports = router;
+export default router;

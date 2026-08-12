@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { getTutorials, getTutorial, createTutorial, updateTutorial, deleteTutorial, getAdminTutorials } = require('../controllers/tutorialController');
-const { protect, authorize } = require('../middleware/auth');
+import { getTutorials, getTutorial, createTutorial, updateTutorial, deleteTutorial, getAdminTutorials } from '../controllers/tutorialController.js';
+import { protect, authorize } from '../middleware/auth.js';
 
 router.get('/', getTutorials);
 router.get('/admin/all', protect, authorize('admin'), getAdminTutorials);
@@ -10,4 +10,4 @@ router.post('/', protect, authorize('admin'), createTutorial);
 router.put('/:id', protect, authorize('admin'), updateTutorial);
 router.delete('/:id', protect, authorize('admin'), deleteTutorial);
 
-module.exports = router;
+export default router;

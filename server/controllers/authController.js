@@ -1,7 +1,7 @@
-const User = require('../models/User');
-const crypto = require('crypto');
+import User from '../models/User.js';
+import crypto from 'crypto';
 
-exports.register = async (req, res, next) => {
+export const register = async (req, res, next) => {
     try {
         const { name, email, password } = req.body;
         const user = await User.create({ name, email, password });
@@ -9,7 +9,7 @@ exports.register = async (req, res, next) => {
     } catch (err) { next(err); }
 };
 
-exports.login = async (req, res, next) => {
+export const login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email }).select('+password');
@@ -20,19 +20,19 @@ exports.login = async (req, res, next) => {
     } catch (err) { next(err); }
 };
 
-exports.logout = async (req, res, next) => {
+export const logout = async (req, res, next) => {
     res.cookie('token', 'none', { expires: new Date(Date.now() + 10 * 1000), httpOnly: true });
     res.status(200).json({ success: true, data: {} });
 };
 
-exports.getMe = async (req, res, next) => {
+export const getMe = async (req, res, next) => {
     try {
         const user = await User.findById(req.user.id).populate('enrolledCourses savedBlogs');
         res.status(200).json({ success: true, data: { user } });
     } catch (err) { next(err); }
 };
 
-exports.forgotPassword = async (req, res, next) => {
+export const forgotPassword = async (req, res, next) => {
     try {
         const user = await User.findOne({ email: req.body.email });
         if (!user) return res.status(404).json({ success: false, error: 'User not found' });
@@ -42,7 +42,7 @@ exports.forgotPassword = async (req, res, next) => {
     } catch (err) { next(err); }
 };
 
-exports.resetPassword = async (req, res, next) => {
+export const resetPassword = async (req, res, next) => {
     try {
         const resetPasswordToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
         const user = await User.findOne({ resetPasswordToken, resetPasswordExpire: { $gt: Date.now() } });
@@ -55,7 +55,7 @@ exports.resetPassword = async (req, res, next) => {
     } catch (err) { next(err); }
 };
 
-exports.updateProfile = async (req, res, next) => {
+export const updateProfile = async (req, res, next) => {
     try {
         const fieldsToUpdate = {
             name: req.body.name,
@@ -80,7 +80,7 @@ exports.updateProfile = async (req, res, next) => {
     }
 };
 
-exports.socialLogin = async (req, res, next) => {
+export const socialLogin = async (req, res, next) => {
     try {
         const { name, email, avatar, provider } = req.body;
         if (!email) {

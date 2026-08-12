@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const slugify = require('slugify');
+import mongoose from 'mongoose';
+import slugify from 'slugify';
 
 const CourseSchema = new mongoose.Schema(
   {
@@ -114,4 +114,4 @@ CourseSchema.index({ slug: 1 });
 CourseSchema.index({ category: 1 });
 CourseSchema.index({ tags: 1 });
 
-module.exports = mongoose.model('Course', CourseSchema);
+export default mongoose.model('Course', CourseSchema);

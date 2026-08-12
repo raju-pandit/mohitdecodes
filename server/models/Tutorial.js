@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const slugify = require('slugify');
+import mongoose from 'mongoose';
+import slugify from 'slugify';
 
 const tutorialSchema = new mongoose.Schema({
   title: { type: String, required: [true, 'Tutorial title is required'], trim: true },
@@ -38,4 +38,4 @@ tutorialSchema.pre('save', function (next) {
 tutorialSchema.index({ category: 1 });
 tutorialSchema.index({ title: 'text', content: 'text', tags: 'text' });
 
-module.exports = mongoose.model('Tutorial', tutorialSchema);
+export default mongoose.model('Tutorial', tutorialSchema);

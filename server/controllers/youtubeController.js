@@ -1,4 +1,4 @@
-const https = require('https');
+import https from 'https';
 
 // Helper to make HTTPS requests
 const fetchUrl = (url) => {
@@ -91,7 +91,7 @@ const fallbackData = {
 // @desc    Get live YouTube channel stats and recent uploads
 // @route   GET /api/youtube/stats
 // @access  Public
-exports.getYoutubeStats = async (req, res, next) => {
+export const getYoutubeStats = async (req, res, next) => {
   const apiKey = process.env.YOUTUBE_API_KEY;
 
   if (!apiKey) {

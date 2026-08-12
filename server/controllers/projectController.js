@@ -1,6 +1,6 @@
-const Project = require('../models/Project');
+import Project from '../models/Project.js';
 
-exports.getProjects = async (req, res, next) => {
+export const getProjects = async (req, res, next) => {
   try {
     const { technology, difficulty, category, search, page = 1, limit = 12 } = req.query;
     const query = {};
@@ -22,7 +22,7 @@ exports.getProjects = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
-exports.getProject = async (req, res, next) => {
+export const getProject = async (req, res, next) => {
   try {
     const project = await Project.findOne({ slug: req.params.slug });
     if (!project) return res.status(404).json({ success: false, message: 'Project not found' });
@@ -30,14 +30,14 @@ exports.getProject = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
-exports.createProject = async (req, res, next) => {
+export const createProject = async (req, res, next) => {
   try {
     const project = await Project.create(req.body);
     res.status(201).json({ success: true, message: 'Project created', data: project });
   } catch (err) { next(err); }
 };
 
-exports.updateProject = async (req, res, next) => {
+export const updateProject = async (req, res, next) => {
   try {
     const project = await Project.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!project) return res.status(404).json({ success: false, message: 'Project not found' });
@@ -45,7 +45,7 @@ exports.updateProject = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
-exports.deleteProject = async (req, res, next) => {
+export const deleteProject = async (req, res, next) => {
   try {
     await Project.findByIdAndDelete(req.params.id);
     res.status(200).json({ success: true, message: 'Project deleted' });

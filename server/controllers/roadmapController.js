@@ -1,7 +1,7 @@
-const Roadmap = require('../models/Roadmap');
-const User = require('../models/User');
+import Roadmap from '../models/Roadmap.js';
+import User from '../models/User.js';
 
-exports.getRoadmaps = async (req, res, next) => {
+export const getRoadmaps = async (req, res, next) => {
   try {
     const { category, difficulty, search } = req.query;
     const query = { isPublished: true };
@@ -14,7 +14,7 @@ exports.getRoadmaps = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
-exports.getRoadmap = async (req, res, next) => {
+export const getRoadmap = async (req, res, next) => {
   try {
     const roadmap = await Roadmap.findOne({ slug: req.params.slug, isPublished: true });
     if (!roadmap) return res.status(404).json({ success: false, message: 'Roadmap not found' });
@@ -30,14 +30,14 @@ exports.getRoadmap = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
-exports.createRoadmap = async (req, res, next) => {
+export const createRoadmap = async (req, res, next) => {
   try {
     const roadmap = await Roadmap.create(req.body);
     res.status(201).json({ success: true, message: 'Roadmap created', data: roadmap });
   } catch (err) { next(err); }
 };
 
-exports.updateRoadmap = async (req, res, next) => {
+export const updateRoadmap = async (req, res, next) => {
   try {
     const roadmap = await Roadmap.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!roadmap) return res.status(404).json({ success: false, message: 'Roadmap not found' });
@@ -45,14 +45,14 @@ exports.updateRoadmap = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
-exports.deleteRoadmap = async (req, res, next) => {
+export const deleteRoadmap = async (req, res, next) => {
   try {
     await Roadmap.findByIdAndDelete(req.params.id);
     res.status(200).json({ success: true, message: 'Roadmap deleted' });
   } catch (err) { next(err); }
 };
 
-exports.updateProgress = async (req, res, next) => {
+export const updateProgress = async (req, res, next) => {
   try {
     const { stepId, completed } = req.body;
     const roadmapId = req.params.id;

@@ -1,19 +1,41 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const cors = require('cors');
-const helmet = require('helmet');
-const morgan = require('morgan');
-const cookieParser = require('cookie-parser');
-const rateLimit = require('express-rate-limit');
-const mongoSanitize = require('express-mongo-sanitize');
-const path = require('path');
+import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import { rateLimit } from 'express-rate-limit';
+import mongoSanitize from 'express-mongo-sanitize';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
 // Load env vars
 dotenv.config();
 
+// __dirname equivalent for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 // Connect to DB
-const connectDB = require('./config/db');
+import connectDB from './config/db.js';
 connectDB();
+
+// Route imports
+import authRoutes from './routes/auth.js';
+import courseRoutes from './routes/courses.js';
+import tutorialRoutes from './routes/tutorials.js';
+import blogRoutes from './routes/blogs.js';
+import resourceRoutes from './routes/resources.js';
+import projectRoutes from './routes/projects.js';
+import roadmapRoutes from './routes/roadmaps.js';
+import testimonialRoutes from './routes/testimonials.js';
+import newsletterRoutes from './routes/newsletter.js';
+import contactRoutes from './routes/contact.js';
+import searchRoutes from './routes/search.js';
+import adminRoutes from './routes/admin.js';
+import paymentRoutes from './routes/payments.js';
+import youtubeRoutes from './routes/youtube.js';
+import errorHandler from './middleware/errorHandler.js';
 
 const app = express();
 
@@ -75,27 +97,27 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // Static files for uploads
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(join(__dirname, 'uploads')));
 
 // Routes
-app.use('/api/auth', authLimiter, require('./routes/auth'));
-app.use('/api/courses', require('./routes/courses'));
-app.use('/api/tutorials', require('./routes/tutorials'));
-app.use('/api/blogs', require('./routes/blogs'));
-app.use('/api/resources', require('./routes/resources'));
-app.use('/api/projects', require('./routes/projects'));
-app.use('/api/roadmaps', require('./routes/roadmaps'));
-app.use('/api/testimonials', require('./routes/testimonials'));
-app.use('/api/newsletter', require('./routes/newsletter'));
-app.use('/api/contact', require('./routes/contact'));
-app.use('/api/search', require('./routes/search'));
-app.use('/api/admin', require('./routes/admin'));
-app.use('/api/payments', require('./routes/payments'));
-app.use('/api/youtube', require('./routes/youtube'));
+app.use('/api/auth', authLimiter, authRoutes);
+app.use('/api/courses', courseRoutes);
+app.use('/api/tutorials', tutorialRoutes);
+app.use('/api/blogs', blogRoutes);
+app.use('/api/resources', resourceRoutes);
+app.use('/api/projects', projectRoutes);
+app.use('/api/roadmaps', roadmapRoutes);
+app.use('/api/testimonials', testimonialRoutes);
+app.use('/api/newsletter', newsletterRoutes);
+app.use('/api/contact', contactRoutes);
+app.use('/api/search', searchRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/youtube', youtubeRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ success: true, message: 'MohitDecodes API is running! 🚀', env: process.env.NODE_ENV });
+  res.json({ success: true, message: 'MohitDecodes API is running!', env: process.env.NODE_ENV });
 });
 
 // 404 handler
@@ -104,18 +126,18 @@ app.use((req, res, next) => {
 });
 
 // Global error handler
-app.use(require('./middleware/errorHandler'));
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT} in ${process.env.NODE_ENV} mode`);
-  console.log(`📡 API: http://localhost:${PORT}/api`);
+  console.log(`Server running on port ${PORT} in ${process.env.NODE_ENV} mode`);
+  console.log(`API: http://localhost:${PORT}/api`);
 });
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err) => {
-  console.error(`❌ Unhandled Rejection: ${err.message}`);
+  console.error(`Unhandled Rejection: ${err.message}`);
   server.close(() => process.exit(1));
 });
 
-module.exports = app;
+export default app;

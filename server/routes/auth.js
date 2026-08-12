@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { register, login, logout, getMe, forgotPassword, resetPassword, updateProfile, socialLogin } = require('../controllers/authController');
-const { protect } = require('../middleware/auth');
+import { register, login, logout, getMe, forgotPassword, resetPassword, updateProfile, socialLogin } from '../controllers/authController.js';
+import { protect } from '../middleware/auth.js';
 
 router.post('/register', register);
 router.post('/login', login);
@@ -12,4 +12,4 @@ router.post('/forgot-password', forgotPassword);
 router.post('/reset-password/:token', resetPassword);
 router.put('/update-profile', protect, updateProfile);
 
-module.exports = router;
+export default router;

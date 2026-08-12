@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { getBlogs, getBlog, createBlog, updateBlog, deleteBlog, addComment, toggleSaveBlog, getAdminBlogs } = require('../controllers/blogController');
-const { protect, authorize } = require('../middleware/auth');
+import { getBlogs, getBlog, createBlog, updateBlog, deleteBlog, addComment, toggleSaveBlog, getAdminBlogs } from '../controllers/blogController.js';
+import { protect, authorize } from '../middleware/auth.js';
 
 router.get('/', getBlogs);
 router.get('/admin/all', protect, authorize('admin'), getAdminBlogs);
@@ -12,4 +12,4 @@ router.delete('/:id', protect, authorize('admin'), deleteBlog);
 router.post('/:id/comment', addComment);
 router.post('/:id/save', protect, toggleSaveBlog);
 
-module.exports = router;
+export default router;

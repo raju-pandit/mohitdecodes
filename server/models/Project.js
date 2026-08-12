@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const slugify = require('slugify');
+import mongoose from 'mongoose';
+import slugify from 'slugify';
 
 const projectSchema = new mongoose.Schema({
   title: { type: String, required: [true, 'Project title is required'], trim: true },
@@ -30,4 +30,4 @@ projectSchema.pre('save', function (next) {
 projectSchema.index({ technologies: 1 });
 projectSchema.index({ title: 'text', description: 'text', tags: 'text' });
 
-module.exports = mongoose.model('Project', projectSchema);
+export default mongoose.model('Project', projectSchema);

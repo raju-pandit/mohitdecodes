@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const contactSchema = new mongoose.Schema({
   name: { type: String, required: [true, 'Name is required'], trim: true },
@@ -20,4 +20,4 @@ const contactSchema = new mongoose.Schema({
 contactSchema.index({ status: 1 });
 contactSchema.index({ createdAt: -1 });
 
-module.exports = mongoose.model('Contact', contactSchema);
+export default mongoose.model('Contact', contactSchema);

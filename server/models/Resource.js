@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const resourceSchema = new mongoose.Schema({
   title: { type: String, required: [true, 'Resource title is required'], trim: true },
@@ -21,4 +21,4 @@ const resourceSchema = new mongoose.Schema({
 resourceSchema.index({ category: 1 });
 resourceSchema.index({ title: 'text', description: 'text', tags: 'text' });
 
-module.exports = mongoose.model('Resource', resourceSchema);
+export default mongoose.model('Resource', resourceSchema);
