@@ -32,7 +32,7 @@ const AdminResources = () => {
   const fetchResources = async () => {
     try {
       const { data } = await api.get('/api/resources/admin/all');
-      setResources(data.data);
+      setResources(data);
     } catch (error) {
       toast.error('Failed to fetch resources');
     } finally {

@@ -26,7 +26,7 @@ const AdminTestimonials = () => {
   const fetchTestimonials = async () => {
     try {
       const { data } = await api.get('/api/testimonials/admin/all');
-      setTestimonials(data.data);
+      setTestimonials(data);
     } catch (error) {
       toast.error('Failed to fetch testimonials');
     } finally {

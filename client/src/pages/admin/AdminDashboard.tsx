@@ -60,7 +60,7 @@ const AdminDashboard: React.FC = () => {
   const fetchStats = async () => {
     try {
       const response = await api.get('/api/admin/stats');
-      setStats(response.data.data);
+      setStats(response.data);
     } catch (error) {
       toast.error('Failed to fetch dashboard stats');
     } finally {

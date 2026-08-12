@@ -31,7 +31,7 @@ const AdminCourses = () => {
   const [formData, setFormData] = useState({
     title: '', shortDescription: '', description: '', category: 'React',
     difficulty: 'Beginner', price: 0, isFree: true, thumbnail: '',
-    instructorName: '', instructorBio: '', isPublished: false
+    instructorName: '', instructorBio: '', isPublished: false, duration: ''
   });
 
   useEffect(() => { fetchCourses(); }, []);
@@ -39,7 +39,7 @@ const AdminCourses = () => {
   const fetchCourses = async () => {
     try {
       const { data } = await api.get('/api/courses/admin/all');
-      setCourses(data.data);
+      setCourses(data);
     } catch (error) {
       toast.error('Failed to fetch courses');
     } finally {
@@ -53,7 +53,7 @@ const AdminCourses = () => {
       setFormData({
         title: course.title, shortDescription: course.shortDescription, description: course.description,
         category: course.category, difficulty: course.difficulty, price: course.price,
-        isFree: course.isFree, thumbnail: course.thumbnail,
+        isFree: course.isFree, thumbnail: course.thumbnail, duration: (course as any).duration || '',
         instructorName: course.instructor?.name || '', instructorBio: course.instructor?.bio || '',
         isPublished: course.isPublished
       });
@@ -62,7 +62,7 @@ const AdminCourses = () => {
       setFormData({
         title: '', shortDescription: '', description: '', category: 'React',
         difficulty: 'Beginner', price: 0, isFree: true, thumbnail: '',
-        instructorName: '', instructorBio: '', isPublished: false
+        instructorName: '', instructorBio: '', isPublished: false, duration: ''
       });
     }
     setIsModalOpen(true);
@@ -85,8 +85,9 @@ const AdminCourses = () => {
       }
       setIsModalOpen(false);
       fetchCourses();
-    } catch (error) {
-      toast.error('Failed to save course');
+    } catch (error: any) {
+      const msg = error?.message || error?.error || 'Failed to save course';
+      toast.error(msg);
     }
   };
 
@@ -216,6 +217,10 @@ const AdminCourses = () => {
                   <div>
                     <label className="block text-sm mb-1 text-gray-300">Instructor Bio</label>
                     <input type="text" className="input w-full" value={formData.instructorBio} onChange={e => setFormData({...formData, instructorBio: e.target.value})} />
+                  </div>
+                  <div>
+                    <label className="block text-sm mb-1 text-gray-300">Duration (e.g. "12 hours")</label>
+                    <input type="text" className="input w-full" placeholder="e.g. 10 hours" value={formData.duration} onChange={e => setFormData({...formData, duration: e.target.value})} />
                   </div>
                   <div>
                     <label className="flex items-center space-x-2 text-sm text-gray-300 mt-6">

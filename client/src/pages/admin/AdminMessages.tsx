@@ -25,7 +25,7 @@ const AdminMessages = () => {
   const fetchMessages = async () => {
     try {
       const { data } = await api.get('/api/contact');
-      setMessages(data.data);
+      setMessages(data);
     } catch (error) {
       toast.error('Failed to fetch messages');
     } finally {

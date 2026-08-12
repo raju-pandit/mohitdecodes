@@ -59,7 +59,7 @@ const CourseSchema = new mongoose.Schema(
     },
     duration: {
       type: String,
-      required: [true, 'Please specify duration e.g. "12 hours"'],
+      default: '',
     },
     modules: [
       {
