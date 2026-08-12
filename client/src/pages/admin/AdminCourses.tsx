@@ -30,9 +30,13 @@ const AdminCourses = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const location = useLocation();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    title: string; shortDescription: string; description: string; category: string;
+    difficulty: string; price: number | string; isFree: boolean; thumbnail: string;
+    instructorName: string; instructorBio: string; isPublished: boolean; duration: string;
+  }>({
     title: '', shortDescription: '', description: '', category: 'React',
-    difficulty: 'Beginner', price: 0, isFree: true, thumbnail: '',
+    difficulty: 'Beginner', price: '', isFree: true, thumbnail: '',
     instructorName: '', instructorBio: '', isPublished: false, duration: ''
   });
 
@@ -59,7 +63,7 @@ const AdminCourses = () => {
       setSelectedCourse(course);
       setFormData({
         title: course.title, shortDescription: course.shortDescription, description: course.description,
-        category: course.category, difficulty: course.difficulty, price: course.price,
+        category: course.category, difficulty: course.difficulty, price: course.price ? course.price : '',
         isFree: course.isFree, thumbnail: course.thumbnail, duration: (course as any).duration || '',
         instructorName: course.instructor?.name || '', instructorBio: course.instructor?.bio || '',
         isPublished: course.isPublished
@@ -68,7 +72,7 @@ const AdminCourses = () => {
       setSelectedCourse(null);
       setFormData({
         title: '', shortDescription: '', description: '', category: 'React',
-        difficulty: 'Beginner', price: 0, isFree: true, thumbnail: '',
+        difficulty: 'Beginner', price: '', isFree: true, thumbnail: '',
         instructorName: '', instructorBio: '', isPublished: false, duration: ''
       });
     }
@@ -80,6 +84,7 @@ const AdminCourses = () => {
     try {
       const payload = {
         ...formData,
+        price: formData.isFree ? 0 : (Number(formData.price) || 0),
         instructor: { name: formData.instructorName, bio: formData.instructorBio }
       };
       
@@ -97,6 +102,7 @@ const AdminCourses = () => {
       toast.error(msg);
     }
   };
+
 
   const handleDelete = async () => {
     if (!selectedCourse) return;
@@ -240,7 +246,8 @@ const AdminCourses = () => {
                     <div>
                       <label className="block text-sm mb-1 text-gray-300">Price (₹)</label>
 
-                      <input type="number" className="input w-full" value={formData.price} onChange={e => setFormData({...formData, price: Number(e.target.value)})} />
+                      <input type="number" placeholder="e.g. 499" className="input w-full" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} />
+
                     </div>
                   )}
                   <div className="md:col-span-2 mt-2">
