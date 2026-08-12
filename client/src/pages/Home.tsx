@@ -96,7 +96,7 @@ const Home: React.FC = () => {
 };`
 
   return (
-    <div className="overflow-hidden bg-grid">
+    <div className="overflow-hidden bg-grid particles-bg">
       {/* HERO SECTION */}
       <section className="relative min-h-[90vh] flex items-center pt-20 pb-16">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -118,7 +118,7 @@ const Home: React.FC = () => {
 
             <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.1]">
               Decode. Build. <br />
-              <span className="gradient-text">Become a Better Developer.</span>
+              <span className="gradient-text text-glow-blue">Become a Better Developer.</span>
             </h1>
             <p className="text-xl text-slate-400 max-w-lg mx-auto lg:mx-0 leading-relaxed">
               Practical tutorials, courses, roadmaps, projects and resources designed to take your coding skills to the next level.
@@ -153,15 +153,15 @@ const Home: React.FC = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative w-full max-w-full overflow-hidden"
+            className="relative w-full max-w-full overflow-hidden animate-float"
           >
-            <div className="glass-card p-6 rounded-2xl border border-dark-700 shadow-2xl relative z-10 w-full overflow-hidden">
+            <div className="neon-card p-6 rounded-2xl border border-primary-500/30 shadow-2xl relative z-10 w-full overflow-hidden">
               <div className="flex gap-2 mb-4">
                 <div className="w-3 h-3 rounded-full bg-red-500" />
                 <div className="w-3 h-3 rounded-full bg-yellow-500" />
                 <div className="w-3 h-3 rounded-full bg-green-500" />
               </div>
-              <pre className="text-xs md:text-sm font-mono text-cyan-400 overflow-x-auto w-full max-w-full">
+              <pre className="text-xs md:text-sm font-mono text-cyan-400 overflow-x-auto w-full max-w-full !border-none !bg-transparent !p-0">
                 <code>{codeSnippet}</code>
               </pre>
             </div>
