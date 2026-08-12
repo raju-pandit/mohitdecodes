@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Code2, Github, Twitter, Linkedin, Youtube, Mail, ArrowRight, Loader2 } from 'lucide-react';
+import { Code2, Github, Twitter, Linkedin, Youtube, Mail, ArrowRight, Loader2, Instagram } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../services/api';
 
@@ -49,8 +49,11 @@ export const Footer = () => {
               <a href="https://twitter.com/mohitdecodes" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center text-slate-400 hover:bg-blue-400 hover:text-white transition-all duration-300">
                 <Twitter className="w-5 h-5" />
               </a>
-              <a href="https://linkedin.com/in/mohitdecodes" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition-all duration-300">
+              <a href="https://www.linkedin.com/in/mohitdecodes/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition-all duration-300">
                 <Linkedin className="w-5 h-5" />
+              </a>
+              <a href="https://www.instagram.com/mohitdecodes" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center text-slate-400 hover:bg-pink-600 hover:text-white transition-all duration-300">
+                <Instagram className="w-5 h-5" />
               </a>
               <a href="https://youtube.com/@mohitdecodes" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center text-slate-400 hover:bg-red-500 hover:text-white transition-all duration-300">
                 <Youtube className="w-5 h-5" />

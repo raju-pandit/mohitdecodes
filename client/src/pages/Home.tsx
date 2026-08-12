@@ -200,13 +200,13 @@ const Home: React.FC = () => {
 
             {/* Social Icons */}
             <div className="flex gap-4 justify-center lg:justify-start">
-              <a href="https://linkedin.com/in/mohitdjcet" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-blue-500/30 text-blue-400 bg-blue-500/5 hover:bg-blue-500/20 hover:text-white flex items-center justify-center transition-all duration-300">
+              <a href="https://www.linkedin.com/in/mohitdecodes/" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-blue-500/30 text-blue-400 bg-blue-500/5 hover:bg-blue-500/20 hover:text-white flex items-center justify-center transition-all duration-300">
                 <Linkedin size={20} />
               </a>
               <a href="https://youtube.com/@mohitdecodes" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-red-500/30 text-red-500 bg-red-500/5 hover:bg-red-500/20 hover:text-white flex items-center justify-center transition-all duration-300">
                 <Youtube size={20} />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-pink-500/30 text-pink-500 bg-pink-500/5 hover:bg-pink-500/20 hover:text-white flex items-center justify-center transition-all duration-300">
+              <a href="https://www.instagram.com/mohitdecodes" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-pink-500/30 text-pink-500 bg-pink-500/5 hover:bg-pink-500/20 hover:text-white flex items-center justify-center transition-all duration-300">
                 <Instagram size={20} />
               </a>
             </div>

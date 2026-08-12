@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import toast from 'react-hot-toast'
-import { Mail, MessageSquare, Send, Github, Twitter, Linkedin, Youtube } from 'lucide-react'
+import { Mail, MessageSquare, Send, Github, Twitter, Linkedin, Youtube, Instagram } from 'lucide-react'
 import { motion } from 'framer-motion'
 import api from '../services/api'
 
@@ -36,7 +36,8 @@ const Contact: React.FC = () => {
     { icon: Youtube, label: 'YouTube', value: '@MohitDecodes', href: 'https://youtube.com/@mohitdecodes' },
     { icon: Github, label: 'GitHub', value: 'mohitdjcet', href: 'https://github.com/mohitdjcet' },
     { icon: Twitter, label: 'Twitter', value: '@mohitdecodes', href: 'https://twitter.com/mohitdecodes' },
-    { icon: Linkedin, label: 'LinkedIn', value: 'mohitdecodes', href: 'https://linkedin.com/in/mohitdecodes' },
+    { icon: Linkedin, label: 'LinkedIn', value: 'mohitdecodes', href: 'https://www.linkedin.com/in/mohitdecodes/' },
+    { icon: Instagram, label: 'Instagram', value: 'mohitdecodes', href: 'https://www.instagram.com/mohitdecodes' },
   ]
 
   return (
