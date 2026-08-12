@@ -182,7 +182,7 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
                 </AnimatePresence>
               </div>
             ) : (
-              <div className="hidden sm:flex items-center gap-2">
+              <div className="hidden md:flex items-center gap-2">
                 <Link to="/login">
                   <Button variant="ghost" size="sm">Login</Button>
                 </Link>
@@ -194,10 +194,10 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
 
             {/* Mobile Menu Toggle */}
             <button 
-              className="md:hidden p-2 text-gray-400 hover:text-white"
+              className="md:hidden p-2 text-gray-400 hover:text-white rounded-xl hover:bg-dark-800 border border-dark-800 bg-dark-900/60 transition-all select-none shrink-0"
               onClick={() => setMobileMenuOpen(true)}
             >
-              <Menu className="w-6 h-6" />
+              <Menu className="w-5 h-5" />
             </button>
           </div>
         </div>
