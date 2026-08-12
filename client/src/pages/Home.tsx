@@ -182,7 +182,7 @@ const Home: React.FC = () => {
           <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-accent-600/10 rounded-full blur-[150px]" />
         </div>
         
-        <div className="container-max grid lg:grid-cols-2 gap-12 items-center relative z-10">
+        <div className="container-max grid lg:grid-cols-2 gap-12 items-center lg:items-start pt-8 lg:pt-12 relative z-10">
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -244,23 +244,44 @@ const Home: React.FC = () => {
 
           {/* Right Profile Photo visual */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex justify-center items-center relative z-10"
+            className="w-full flex justify-center lg:justify-end lg:-translate-y-16 relative z-10 px-4 sm:px-0 lg:pr-8"
           >
-            {/* Outer Glowing Radial Orb Background */}
-            <div className="absolute w-[110%] h-[110%] bg-primary-600/10 rounded-full blur-[70px] pointer-events-none select-none" />
-            
-            {/* Circular Image Container with Gradient Ring and Glowing Shadow */}
-            <div className="relative p-1 bg-gradient-to-tr from-primary-600 via-purple-500 to-cyan-400 rounded-full shadow-[0_0_50px_rgba(124,58,237,0.45),0_0_90px_rgba(6,182,212,0.15)] transition-all hover:scale-[1.02] duration-500 select-none">
-              {/* Inner Circle Frame */}
-              <div className="w-64 h-64 sm:w-80 sm:h-80 lg:w-[410px] lg:h-[410px] rounded-full overflow-hidden border-[6px] border-[#060814] bg-dark-900 flex items-center justify-center">
-                <img 
-                  src="/mohit.png" 
-                  alt="Mohit Decodes" 
-                  className="w-full h-full object-cover scale-[1.3] origin-[25%_25%] hover:scale-[1.38] transition-transform duration-500"
-                />
+            <div className="relative">
+              {/* Outer Glowing Radial Orb Background */}
+              <div className="absolute inset-0 w-[115%] h-[115%] -translate-x-[7.5%] -translate-y-[7.5%] bg-gradient-to-tr from-primary-600/20 via-purple-500/10 to-cyan-400/20 rounded-full blur-[80px] pointer-events-none select-none animate-pulse" />
+              
+              {/* Floating coding brackets tag (Top-Left) */}
+              <motion.div
+                animate={{ y: [0, -8, 0] }}
+                transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
+                className="absolute -top-3 -left-3 z-20 bg-dark-900/90 border border-primary-500/30 p-2.5 rounded-2xl shadow-[0_0_20px_rgba(124,58,237,0.25)] backdrop-blur-md hidden sm:block"
+              >
+                <Code2 className="w-5 h-5 text-primary-400" />
+              </motion.div>
+
+              {/* Floating object brackets tag (Bottom-Right) */}
+              <motion.div
+                animate={{ y: [0, 8, 0] }}
+                transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 2.5 }}
+                className="absolute -bottom-3 -right-3 z-20 bg-dark-900/90 border border-cyan-500/30 px-3 py-2 rounded-2xl shadow-[0_0_20px_rgba(6,182,212,0.25)] backdrop-blur-md hidden sm:block"
+              >
+                <span className="text-cyan-400 font-mono text-xs font-extrabold select-none">{"{}"}</span>
+              </motion.div>
+
+              {/* Card Container with Gradient Ring and Glowing Shadow */}
+              <div className="relative p-[1.5px] bg-gradient-to-tr from-primary-600 via-purple-500 to-cyan-400 rounded-[50px] sm:rounded-[60px] lg:rounded-[70px] shadow-[0_0_60px_rgba(124,58,237,0.35),0_0_100px_rgba(6,182,212,0.12)] hover:shadow-[0_0_80px_rgba(124,58,237,0.5),0_0_120px_rgba(6,182,212,0.2)] transition-shadow duration-500 select-none">
+                {/* Inner Frame */}
+                <div className="w-[280px] h-[360px] sm:w-[340px] h-[440px] lg:w-[420px] lg:h-[540px] rounded-[48px] sm:rounded-[58px] lg:rounded-[68px] overflow-hidden border-[6px] border-[#060814] bg-[#0c0f24] flex items-center justify-center">
+                  <img 
+                    src="/mohit.png" 
+                    alt="Mohit Decodes" 
+                    className="w-full h-full object-cover hover:scale-[1.04] transition-transform duration-500"
+                    style={{ objectPosition: 'center 10%' }}
+                  />
+                </div>
               </div>
             </div>
           </motion.div>
