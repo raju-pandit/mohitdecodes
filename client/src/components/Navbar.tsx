@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
 import { Search, Menu, X, LogOut, Settings, User } from 'lucide-react';
 import { Button } from './ui/Button';
 import { useAuth } from '../context/AuthContext';
@@ -10,9 +10,18 @@ import { getInitials, hasCustomAvatar } from '../utils/formatters';
 export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
   const { user, logout } = useAuth();
   const location = useLocation();
+  const { scrollY } = useScroll();
+  const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const isScrolled = latest > 20;
+    if (isScrolled !== scrolled) {
+      setScrolled(isScrolled);
+    }
+  });
 
   useEffect(() => {
     if (!profileDropdownOpen) return;
@@ -43,46 +52,58 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
   ];
 
   return (
-    <header className="fixed top-0 inset-x-0 z-[9990] p-2.5 sm:p-3 flex justify-center pointer-events-none">
-      <div className="w-full max-w-7xl flex flex-col items-center">
-        {/* Floating Navbar Bar */}
+    <header className="fixed top-[10px] left-1/2 -translate-x-1/2 z-[9999] w-[95%] max-w-7xl pointer-events-none">
+      <div className="w-full flex flex-col items-center">
+        {/* Floating Navbar Container */}
         <div 
           style={{ 
-            backgroundColor: 'rgba(10, 10, 18, 0.55)',
-            backdropFilter: 'blur(14px)', 
-            WebkitBackdropFilter: 'blur(14px)',
-            border: '1px solid rgba(255, 255, 255, 0.12)',
+            backgroundColor: scrolled ? 'rgba(8, 8, 20, 0.75)' : 'rgba(10, 10, 22, 0.45)',
+            backdropFilter: scrolled ? 'blur(18px)' : 'blur(14px)', 
+            WebkitBackdropFilter: scrolled ? 'blur(18px)' : 'blur(14px)',
+            border: '1px solid rgba(255, 255, 255, 0.10)',
           }}
-          className="w-full pointer-events-auto flex items-center justify-between h-14 sm:h-16 px-3.5 sm:px-6 rounded-2xl sm:rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] shadow-purple-950/20 transition-all duration-300"
+          className={`w-full pointer-events-auto flex items-center justify-between h-14 sm:h-16 px-3.5 sm:px-6 rounded-2xl sm:rounded-[999px] shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] transition-all duration-300 ${
+            scrolled ? 'border-primary-500/25 shadow-purple-950/30' : 'border-white/10 shadow-purple-950/15'
+          }`}
         >
-          {/* Logo */}
+          {/* Left: MD Logo + MohitDecodes */}
           <BrandLogo size="md" />
 
-          {/* Desktop Navigation — Floating Pill */}
-          <nav className="hidden lg:flex items-center gap-1 bg-white/[0.03] px-3 py-1.5 border border-white/5 rounded-full">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.path}
-                className={`relative px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-200 z-10 ${
-                  location.pathname === link.path 
-                    ? 'text-white' 
-                    : 'text-slate-300 hover:text-white'
-                }`}
-              >
-                <span className="relative z-10">{link.name}</span>
-                {location.pathname === link.path && (
-                  <motion.div
-                    layoutId="navbar-indicator"
-                    className="absolute inset-0 bg-primary-600 rounded-full z-0 shadow-[0_0_12px_rgba(147,51,234,0.5)]"
-                    transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
-                  />
-                )}
-              </Link>
-            ))}
+          {/* Center: Floating Glass Pill Navigation (Coder Army style) */}
+          <nav 
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.04)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+            }}
+            className="hidden lg:flex items-center gap-1 px-3 py-1.5 border border-white/10 border-primary-500/20 rounded-[999px] shadow-[0_0_15px_rgba(124,58,237,0.15)]"
+          >
+            {navLinks.map((link) => {
+              const isActive = location.pathname === link.path;
+              return (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  className={`relative px-3.5 py-1.5 rounded-[999px] text-xs font-semibold tracking-wide transition-all duration-200 z-10 ${
+                    isActive 
+                      ? 'text-white font-bold' 
+                      : 'text-slate-300 hover:text-white'
+                  }`}
+                >
+                  <span className="relative z-10">{link.name}</span>
+                  {isActive && (
+                    <motion.div
+                      layoutId="navbar-indicator"
+                      className="absolute inset-0 bg-gradient-to-r from-primary-600 to-purple-600 rounded-[999px] z-0 shadow-[0_0_14px_rgba(168,85,247,0.5)]"
+                      transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
+                    />
+                  )}
+                </Link>
+              );
+            })}
           </nav>
 
-          {/* Right Actions */}
+          {/* Right: Search / Ctrl K + Profile / Auth */}
           <div className="flex items-center gap-2 sm:gap-4">
             <Button variant="ghost" size="sm" className="!px-2 sm:!px-2.5 text-slate-300 hover:text-white" onClick={onOpenSearch}>
               <Search className="w-4 h-4" />
@@ -183,7 +204,7 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
           </div>
         </div>
 
-        {/* Mobile Menu Dropdown (Clean, top-down expansion — NO side sliding drawer) */}
+        {/* Mobile Menu Dropdown (Clean, top-down expansion) */}
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div
