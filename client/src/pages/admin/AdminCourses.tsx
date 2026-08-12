@@ -156,7 +156,8 @@ const AdminCourses = () => {
                   <td className="p-4">{course.category}</td>
                   <td className="p-4">{course.isFree ? <span className="badge-green">Free</span> : `₹${course.price}`}</td>
 
-                  <td className="p-4">{course.studentsCount || 0}</td>
+                  <td className="p-4 font-semibold text-slate-200">{course.students ?? (course as any).studentsCount ?? 0}</td>
+
                   <td className="p-4">
                     <span className={course.isPublished ? 'badge-primary' : 'badge-orange'}>
                       {course.isPublished ? 'Published' : 'Draft'}

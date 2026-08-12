@@ -34,7 +34,16 @@ export const getCourses = async (req, res, next) => {
         query = query.skip(startIndex).limit(limit);
 
         const courses = await query;
-        res.status(200).json({ success: true, count: courses.length, data: courses });
+        const coursesWithCounts = await Promise.all(
+            courses.map(async (c) => {
+                const liveCount = await User.countDocuments({ 'enrolledCourses.courseId': c._id });
+                const cObj = c.toObject();
+                cObj.students = Math.max(cObj.students || 0, liveCount);
+                cObj.studentsCount = cObj.students;
+                return cObj;
+            })
+        );
+        res.status(200).json({ success: true, count: coursesWithCounts.length, data: coursesWithCounts });
     } catch (err) { next(err); }
 };
 
@@ -42,7 +51,11 @@ export const getCourse = async (req, res, next) => {
     try {
         const course = await Course.findOne({ slug: req.params.slug });
         if (!course) return res.status(404).json({ success: false, error: 'Course not found' });
-        res.status(200).json({ success: true, data: course });
+        const liveCount = await User.countDocuments({ 'enrolledCourses.courseId': course._id });
+        const courseObj = course.toObject();
+        courseObj.students = Math.max(courseObj.students || 0, liveCount);
+        courseObj.studentsCount = courseObj.students;
+        res.status(200).json({ success: true, data: courseObj });
     } catch (err) { next(err); }
 };
 
@@ -80,25 +93,42 @@ export const enrollCourse = async (req, res, next) => {
             (item) => item.courseId.toString() === course._id.toString()
         );
         if (alreadyEnrolled) {
-            return res.status(400).json({ success: false, error: 'Already enrolled' });
+            return res.status(400).json({ success: false, error: 'Already enrolled in this course' });
         }
         
         user.enrolledCourses.push({ courseId: course._id });
         await user.save();
         
-        course.students += 1;
+        course.students = (course.students || 0) + 1;
         await course.save();
 
-        res.status(200).json({ success: true, data: course });
+        const liveCount = await User.countDocuments({ 'enrolledCourses.courseId': course._id });
+        const courseObj = course.toObject();
+        courseObj.students = Math.max(courseObj.students || 0, liveCount);
+        courseObj.studentsCount = courseObj.students;
+
+        res.status(200).json({ success: true, data: courseObj });
     } catch (err) { next(err); }
 };
 
 export const getAdminCourses = async (req, res, next) => {
     try {
-        const courses = await Course.find();
-        res.status(200).json({ success: true, count: courses.length, data: courses });
+        const courses = await Course.find().lean();
+        const coursesWithCounts = await Promise.all(
+            courses.map(async (c) => {
+                const liveCount = await User.countDocuments({ 'enrolledCourses.courseId': c._id });
+                const count = Math.max(c.students || 0, liveCount);
+                return {
+                    ...c,
+                    students: count,
+                    studentsCount: count
+                };
+            })
+        );
+        res.status(200).json({ success: true, count: coursesWithCounts.length, data: coursesWithCounts });
     } catch (err) { next(err); }
 };
+
 
 export const toggleLessonComplete = async (req, res, next) => {
     try {
