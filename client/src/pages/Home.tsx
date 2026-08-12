@@ -9,7 +9,10 @@ import {
   Award, 
   Download,
   ArrowRight,
-  Sparkles
+  Sparkles,
+  Linkedin,
+  Youtube,
+  Instagram
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import api from '../services/api'
@@ -98,10 +101,10 @@ const Home: React.FC = () => {
   return (
     <div className="overflow-hidden bg-grid particles-bg">
       {/* HERO SECTION */}
-      <section className="relative min-h-[90vh] flex items-center pt-20 pb-16">
+      <section className="relative min-h-[90vh] flex items-center pt-24 pb-16">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-700/10 rounded-full blur-[120px]" />
-          <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[150px]" />
+          <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-accent-600/10 rounded-full blur-[150px]" />
         </div>
         
         <div className="container-max grid lg:grid-cols-2 gap-12 items-center relative z-10">
@@ -111,59 +114,102 @@ const Home: React.FC = () => {
             transition={{ duration: 0.5 }}
             className="space-y-8 text-center lg:text-left"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary-500/30 bg-primary-950/40 text-primary-400 text-sm font-medium">
-              <Sparkles className="w-4 h-4" />
-              <span>Premium Full-Stack Learning</span>
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] text-white">
+              Be a part of our <br />
+              <span className="gradient-text drop-shadow-[0_0_15px_rgba(124,58,237,0.4)]">Future!</span>
+            </h1>
+            
+            <p className="text-lg md:text-xl text-slate-400 max-w-lg mx-auto lg:mx-0 leading-relaxed font-medium">
+              A community of coders, making the world a better place. Learn, build, and grow with the best developers in the industry.
+            </p>
+
+            {/* Social Icons */}
+            <div className="flex gap-4 justify-center lg:justify-start">
+              <a href="https://linkedin.com/in/mohitdjcet" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-blue-500/30 text-blue-400 bg-blue-500/5 hover:bg-blue-500/20 hover:text-white flex items-center justify-center transition-all duration-300">
+                <Linkedin size={20} />
+              </a>
+              <a href="https://youtube.com/@mohitdecodes" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-red-500/30 text-red-500 bg-red-500/5 hover:bg-red-500/20 hover:text-white flex items-center justify-center transition-all duration-300">
+                <Youtube size={20} />
+              </a>
+              <a href="https://instagram.com" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-pink-500/30 text-pink-500 bg-pink-500/5 hover:bg-pink-500/20 hover:text-white flex items-center justify-center transition-all duration-300">
+                <Instagram size={20} />
+              </a>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.1]">
-              Decode. Build. <br />
-              <span className="gradient-text">Become a Better Developer.</span>
-            </h1>
-            <p className="text-xl text-slate-400 max-w-lg mx-auto lg:mx-0 leading-relaxed">
-              Practical tutorials, courses, roadmaps, projects and resources designed to take your coding skills to the next level.
-            </p>
+            {/* CTA Buttons */}
             <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
-              <Link to="/courses" className="btn-primary py-3 px-6 text-base sm:py-4 sm:px-8 sm:text-lg font-semibold rounded-full flex items-center gap-2 group">
-                Explore Courses
-                <ArrowRight className="group-hover:translate-x-1 transition-transform" size={20} />
+              <Link to="/courses" className="btn-primary py-3 px-6 sm:py-3.5 sm:px-8 font-semibold rounded-xl flex items-center gap-2 group shadow-glow-purple">
+                Start Paid Learning
               </Link>
-              <Link to="/register" className="btn-outline py-3 px-6 text-base sm:py-4 sm:px-8 sm:text-lg font-semibold rounded-full">
-                Start Learning Free
-              </Link>
+              <a href="https://youtube.com/@mohitdecodes" target="_blank" rel="noreferrer" className="btn-secondary py-3 px-6 sm:py-3.5 sm:px-8 font-semibold rounded-xl flex items-center gap-2 border border-dark-700 bg-dark-900/60 hover:bg-dark-800 transition-all">
+                <Youtube className="text-red-500 fill-red-500" size={20} />
+                Watch on YouTube
+              </a>
             </div>
             
-            <div className="pt-8 border-t border-dark-800 flex justify-center lg:justify-start gap-8">
-              <div>
-                <p className="text-3xl font-bold text-white">{(stats.totalUsers || 15420).toLocaleString()}+</p>
-                <p className="text-gray-500 text-sm">Learners</p>
+            {/* Stats Row */}
+            <div className="pt-8 border-t border-dark-800 grid grid-cols-3 gap-4 max-w-md mx-auto lg:mx-0">
+              <div className="text-center lg:text-left flex flex-col items-center lg:items-start">
+                <Award className="w-6 h-6 text-primary-400 mb-2" />
+                <p className="text-2xl font-extrabold text-white">202K+</p>
+                <p className="text-gray-500 text-xs font-semibold">Students</p>
               </div>
-              <div>
-                <p className="text-3xl font-bold text-white">{stats.totalCourses || 8}+</p>
-                <p className="text-gray-500 text-sm">Courses</p>
+              <div className="text-center lg:text-left flex flex-col items-center lg:items-start">
+                <BookOpen className="w-6 h-6 text-primary-400 mb-2" />
+                <p className="text-2xl font-extrabold text-white">5+</p>
+                <p className="text-gray-500 text-xs font-semibold">Courses</p>
               </div>
-              <div>
-                <p className="text-3xl font-bold text-white">{stats.totalResources || 8}+</p>
-                <p className="text-gray-500 text-sm">Resources</p>
+              <div className="text-center lg:text-left flex flex-col items-center lg:items-start">
+                <Users className="w-6 h-6 text-primary-400 mb-2" />
+                <p className="text-2xl font-extrabold text-white">2+</p>
+                <p className="text-gray-500 text-xs font-semibold">Instructors</p>
               </div>
             </div>
           </motion.div>
 
+          {/* Right C++ Terminal visual */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="relative w-full max-w-full overflow-hidden animate-float"
           >
-            <div className="neon-card p-6 rounded-2xl border border-primary-500/30 shadow-2xl relative z-10 w-full overflow-hidden">
-              <div className="flex gap-2 mb-4">
-                <div className="w-3 h-3 rounded-full bg-red-500" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                <div className="w-3 h-3 rounded-full bg-green-500" />
+            {/* Glowing borders around card */}
+            <div className="absolute inset-0 bg-gradient-to-r from-primary-500 to-accent-500 rounded-2xl blur-[12px] opacity-40 pointer-events-none" />
+            
+            <div className="relative bg-[#08080f] rounded-2xl border border-dark-700/50 shadow-2xl relative z-10 w-full overflow-hidden font-mono">
+              {/* Header bar */}
+              <div className="flex items-center justify-between px-4 py-3 bg-[#0d0d16] border-b border-dark-800">
+                <div className="flex gap-2">
+                  <div className="w-3 h-3 rounded-full bg-red-500" />
+                  <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                  <div className="w-3 h-3 rounded-full bg-green-500" />
+                </div>
+                <span className="text-xs text-gray-400 font-semibold select-none">CoderArmy.cpp</span>
+                <span className="flex items-center gap-1.5 text-[10px] text-green-400 font-semibold bg-green-500/10 px-2 py-0.5 rounded-full select-none">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                  Live Coding
+                </span>
               </div>
-              <pre className="text-xs md:text-sm font-mono text-cyan-400 overflow-x-auto w-full max-w-full !border-none !bg-transparent !p-0">
-                <code>{codeSnippet}</code>
-              </pre>
+              
+              {/* C++ IDE visual code editor style */}
+              <div className="p-5 text-left text-xs sm:text-sm text-slate-300 space-y-1 overflow-x-auto leading-relaxed select-none">
+                <div><span className="text-gray-600 mr-4 inline-block w-4">22</span><span className="text-slate-400">cout &lt;&lt; </span><span className="text-emerald-400">"[SYSTEM] \"CoderArmy"</span></div>
+                <div><span className="text-gray-600 mr-4 inline-block w-4">23</span><span className="text-slate-400">initialized successfully.\"" &lt;&lt; endl;</span></div>
+                <div><span className="text-gray-600 mr-4 inline-block w-4">24</span><span className="text-slate-400">{'}'}</span></div>
+                <div><span className="text-gray-600 mr-4 inline-block w-4">25</span></div>
+                <div><span className="text-gray-600 mr-4 inline-block w-4">26</span><span className="text-primary-400">void</span><span className="text-slate-300"> addMember(</span><span className="text-primary-400">const</span><span className="text-slate-300"> string& name) {'{'}</span></div>
+                <div><span className="text-gray-600 mr-4 inline-block w-4">27</span><span className="text-slate-400">    members.push_back(name);</span></div>
+                <div><span className="text-gray-600 mr-4 inline-block w-4">28</span><span className="text-slate-400">    cout &lt;&lt; </span><span className="text-emerald-400">"[NEW MEMBER] \""</span><span className="text-slate-400"> &lt;&lt; name</span></div>
+                <div><span className="text-gray-600 mr-4 inline-block w-4">29</span><span className="text-slate-400">    &lt;&lt; </span><span className="text-emerald-400">" has joined the team.\""</span><span className="text-slate-400"> &lt;&lt; endl;</span></div>
+                <div><span className="text-gray-600 mr-4 inline-block w-4">30</span><span className="text-slate-400">    cout &lt;&lt; </span><span className="text-emerald-400">"[INFO] \"Total members: \""</span></div>
+                <div><span className="text-gray-600 mr-4 inline-block w-4">31</span><span className="text-slate-400">    &lt;&lt; members.size() &lt;&lt; </span><span className="text-emerald-400">"\""</span><span className="text-slate-400"> &lt;&lt; endl;</span></div>
+                <div><span className="text-gray-600 mr-4 inline-block w-4">32</span><span className="text-slate-400">{'}'}</span></div>
+                <div><span className="text-gray-600 mr-4 inline-block w-4">33</span></div>
+                <div><span className="text-gray-600 mr-4 inline-block w-4">34</span><span className="text-primary-400">void</span><span className="text-slate-300"> startCoding() {'{'}</span></div>
+                <div><span className="text-gray-600 mr-4 inline-block w-4">35</span><span className="text-primary-400">    if</span><span className="text-slate-300"> (!isActive) {'{'}</span></div>
+                <div><span className="text-gray-600 mr-4 inline-block w-4">36</span><span className="text-slate-400">        cout &lt;&lt; </span><span className="text-emerald-400">"[WARNING] \"Army i...</span></div>
+              </div>
             </div>
           </motion.div>
         </div>

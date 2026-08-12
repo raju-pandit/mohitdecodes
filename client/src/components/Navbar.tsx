@@ -71,29 +71,29 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
             <div className="bg-primary-500/20 p-2 rounded-lg group-hover:bg-primary-500/30 transition-colors">
               <Code2 className="w-6 h-6 text-primary-400" />
             </div>
-            <span className="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-cyan-400">
+            <span className="font-extrabold text-xl tracking-tight text-white group-hover:text-primary-400 transition-colors">
               MohitDecodes
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
+          {/* Desktop Navigation — Pill Styled */}
+          <nav className="hidden md:flex items-center gap-1 bg-dark-900/80 backdrop-blur-md px-3 py-1.5 border border-dark-700/50 rounded-full shadow-inner-glow">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 to={link.path}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors relative ${
+                className={`relative px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-200 z-10 ${
                   location.pathname === link.path 
                     ? 'text-white' 
-                    : 'text-gray-400 hover:text-white hover:bg-dark-800/50'
+                    : 'text-gray-400 hover:text-white'
                 }`}
               >
-                {link.name}
+                <span className="relative z-10">{link.name}</span>
                 {location.pathname === link.path && (
                   <motion.div
                     layoutId="navbar-indicator"
-                    className="absolute bottom-0 left-2 right-2 h-0.5 bg-primary-500 rounded-full"
-                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                    className="absolute inset-0 bg-primary-600 rounded-full z-0 shadow-glow"
+                    transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
                   />
                 )}
               </Link>
