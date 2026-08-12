@@ -103,15 +103,25 @@ const CourseSchema = new mongoose.Schema(
 
 // Create slug from title
 CourseSchema.pre('save', function (next) {
-  if (this.isModified('title')) {
+  if (this.isModified('title') || !this.slug) {
     this.slug = slugify(this.title, { lower: true, strict: true });
   }
   next();
 });
 
+// Virtual for studentsCount alias
+CourseSchema.virtual('studentsCount').get(function () {
+  return this.students || 0;
+});
+
+CourseSchema.set('toJSON', { virtuals: true });
+CourseSchema.set('toObject', { virtuals: true });
+
 // Indexes
 CourseSchema.index({ slug: 1 });
 CourseSchema.index({ category: 1 });
 CourseSchema.index({ tags: 1 });
+CourseSchema.index({ title: 'text', description: 'text', shortDescription: 'text' });
+
 
 export default mongoose.model('Course', CourseSchema);

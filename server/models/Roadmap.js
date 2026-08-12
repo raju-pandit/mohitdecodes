@@ -33,12 +33,17 @@ const roadmapSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 roadmapSchema.pre('save', function (next) {
-  if (this.isModified('title')) {
+  if (this.isModified('title') || !this.slug) {
     this.slug = slugify(this.title, { lower: true, strict: true });
   }
   next();
 });
 
+roadmapSchema.set('toJSON', { virtuals: true });
+roadmapSchema.set('toObject', { virtuals: true });
+
+roadmapSchema.index({ slug: 1 });
 roadmapSchema.index({ title: 'text', description: 'text' });
+
 
 export default mongoose.model('Roadmap', roadmapSchema);
