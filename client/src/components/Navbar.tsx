@@ -12,9 +12,34 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
   const location = useLocation();
   const { scrollY } = useScroll();
   const [scrolled, setScrolled] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(true);
+  const lastScrollY = useRef(0);
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Scroll direction detection: Scroll Down -> Hide (-140%), Scroll Up -> Show (0), Top (<=10) -> Always Show
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY <= 10) {
+        setShowNavbar(true);
+      } else if (currentScrollY > lastScrollY.current) {
+        // scrolling down
+        setShowNavbar(false);
+      } else {
+        // scrolling up
+        setShowNavbar(true);
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const isScrolled = latest > 20;
@@ -52,7 +77,13 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
   ];
 
   return (
-    <header className="fixed top-[10px] left-1/2 -translate-x-1/2 z-[9999] w-[95%] max-w-7xl pointer-events-none">
+    <header 
+      style={{
+        transform: showNavbar ? 'translate(-50%, 0)' : 'translate(-50%, -140%)',
+        transition: 'transform 0.35s ease',
+      }}
+      className="fixed top-[10px] left-1/2 z-[9999] w-[95%] max-w-7xl pointer-events-none"
+    >
       <div className="w-full flex flex-col items-center">
         {/* Floating Navbar Container */}
         <div 
