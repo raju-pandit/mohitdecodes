@@ -29,6 +29,10 @@ export const updateProfile = async (data: Partial<User>): Promise<ApiResponse<{ 
   return await api.put('/auth/update-profile', data);
 };
 
+export const googleLogin = async (credential: string): Promise<ApiResponse<{ user: User; token: string }>> => {
+  return await api.post('/auth/google', { credential });
+};
+
 export const socialLogin = async (name: string, email: string, avatar: string, provider: string): Promise<ApiResponse<{ user: User; token: string }>> => {
   return await api.post('/auth/social-login', { name, email, avatar, provider });
 };

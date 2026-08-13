@@ -1,5 +1,70 @@
 import User from '../models/User.js';
 import crypto from 'crypto';
+import { OAuth2Client } from 'google-auth-library';
+
+export const googleLogin = async (req, res, next) => {
+  try {
+    const { credential } = req.body;
+    if (!credential) {
+      return res.status(400).json({ success: false, message: 'Google credential/ID Token is required' });
+    }
+
+    const clientId = process.env.GOOGLE_CLIENT_ID;
+    const client = new OAuth2Client(clientId);
+
+    let ticket;
+    try {
+      ticket = await client.verifyIdToken({
+        idToken: credential,
+        audience: clientId ? [clientId] : undefined,
+      });
+    } catch (verifyErr) {
+      console.error('Google token verification failed:', verifyErr.message);
+      return res.status(401).json({ success: false, message: 'Invalid or expired Google token' });
+    }
+
+    const payload = ticket.getPayload();
+    if (!payload || !payload.email) {
+      return res.status(400).json({ success: false, message: 'Google authentication failed: Email missing' });
+    }
+
+    const { sub: googleId, name, email, picture } = payload;
+
+    let user = await User.findOne({
+      $or: [{ googleId }, { email: email.toLowerCase() }]
+    });
+
+    if (user) {
+      user.googleId = googleId;
+      user.provider = 'google';
+      if (picture) {
+        user.profilePicture = picture;
+        if (!user.avatar || user.avatar.includes('ui-avatars.com')) {
+          user.avatar = picture;
+        }
+      }
+      user.lastActive = new Date();
+      await user.save({ validateBeforeSave: false });
+    } else {
+      user = await User.create({
+        name: name || email.split('@')[0],
+        email: email.toLowerCase(),
+        googleId,
+        provider: 'google',
+        avatar: picture || `https://ui-avatars.com/api/?background=7c3aed&color=fff&name=${encodeURIComponent(name || 'User')}&size=200`,
+        profilePicture: picture || '',
+        role: 'user',
+        lastActive: new Date()
+      });
+    }
+
+    sendTokenResponse(user, 200, res);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const socialLogin = async (req, res, next) => {
 
 export const register = async (req, res, next) => {
     try {

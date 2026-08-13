@@ -100,7 +100,8 @@ if (process.env.NODE_ENV === 'development') {
 app.use('/uploads', express.static(join(__dirname, 'uploads')));
 
 // Routes
-app.use('/api/auth', authLimiter, authRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/auth', authRoutes);
 app.use('/api/courses', courseRoutes);
 app.use('/api/tutorials', tutorialRoutes);
 app.use('/api/blogs', blogRoutes);

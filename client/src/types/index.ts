@@ -4,6 +4,9 @@ export interface User {
   email: string;
   avatar: string;
   role: 'user' | 'admin';
+  googleId?: string;
+  provider?: 'local' | 'google';
+  profilePicture?: string;
   enrolledCourses: any[];
   savedBlogs: any[];
   learningStreak: number;

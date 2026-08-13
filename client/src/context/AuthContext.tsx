@@ -9,6 +9,7 @@ interface AuthContextType {
   register: (name: string, email: string, password: string) => Promise<ApiResponse<{ user: User; token: string }>>;
   logout: () => Promise<void>;
   updateUser: (user: User) => void;
+  googleAuth: (credential: string) => Promise<ApiResponse<{ user: User; token: string }>>;
   socialLogin: (name: string, email: string, avatar: string, provider: string) => Promise<ApiResponse<{ user: User; token: string }>>;
 }
 
@@ -77,6 +78,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setUser(updatedUser);
   };
 
+  const googleAuth = async (credential: string) => {
+    const res = await authService.googleLogin(credential);
+    const token = res.token || (res as any).data?.token;
+    const userData = res.data?.user || (res as any).user;
+    if (token) {
+      localStorage.setItem('token', token);
+    }
+    if (userData) {
+      setUser(userData);
+    }
+    return res;
+  };
+
   const socialLogin = async (name: string, email: string, avatar: string, provider: string) => {
     const res = await authService.socialLogin(name, email, avatar, provider);
     const token = res.token || (res as any).data?.token;
@@ -91,7 +105,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, updateUser, socialLogin }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout, updateUser, googleAuth, socialLogin }}>
       {children}
     </AuthContext.Provider>
   );
