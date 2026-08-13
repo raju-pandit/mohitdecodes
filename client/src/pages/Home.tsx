@@ -32,6 +32,7 @@ import { RoadmapCard } from '../components/RoadmapCard'
 import { BlogCard } from '../components/BlogCard'
 import { CourseCardSkeleton } from '../components/ui/SkeletonLoader'
 import { TestimonialCard } from '../components/TestimonialCard'
+import { CompaniesMarquee } from '../components/CompaniesMarquee'
 import { useTitle } from '../hooks/useTitle'
 
 const words = ["Future!", "MohitDecodes", "Family!"];
@@ -396,6 +397,9 @@ const Home: React.FC = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* TRUSTED BY LEADING COMPANIES MARQUEE */}
+      <CompaniesMarquee />
 
       {/* FEATURED COURSES */}
       <section className="py-20 bg-dark-900/40 border-y border-dark-800">
