@@ -49,27 +49,31 @@ export const GoogleSignInButton: React.FC<GoogleSignInButtonProps> = ({ onSucces
     };
 
     const initGsi = () => {
-      if (window.google?.accounts?.id) {
-        setScriptLoaded(true);
-        window.google.accounts.id.initialize({
-          client_id: GOOGLE_CLIENT_ID,
-          callback: handleCredentialResponse,
-          auto_select: false,
-          cancel_on_tap_outside: true,
-        });
-
-        if (buttonContainerRef.current) {
-          buttonContainerRef.current.innerHTML = '';
-          window.google.accounts.id.renderButton(buttonContainerRef.current, {
-            type: 'standard',
-            theme: 'filled_black',
-            size: 'large',
-            text: 'continue_with',
-            shape: 'rectangular',
-            logo_alignment: 'left',
-            width: 380,
+      try {
+        if (window.google?.accounts?.id) {
+          setScriptLoaded(true);
+          window.google.accounts.id.initialize({
+            client_id: GOOGLE_CLIENT_ID,
+            callback: handleCredentialResponse,
+            auto_select: false,
+            cancel_on_tap_outside: true,
           });
+
+          if (buttonContainerRef.current) {
+            buttonContainerRef.current.innerHTML = '';
+            window.google.accounts.id.renderButton(buttonContainerRef.current, {
+              type: 'standard',
+              theme: 'filled_black',
+              size: 'large',
+              text: 'continue_with',
+              shape: 'rectangular',
+              logo_alignment: 'left',
+              width: 380,
+            });
+          }
         }
+      } catch (err) {
+        console.warn('Google Identity Services Initialization warning:', err);
       }
     };
 

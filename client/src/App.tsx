@@ -55,10 +55,13 @@ const PageLoader = () => (
   </div>
 )
 
+import ErrorBoundary from './components/ErrorBoundary'
+
 function App() {
   return (
-    <AuthProvider>
-      <Router>
+    <ErrorBoundary>
+      <AuthProvider>
+        <Router>
         <Toaster
           position="top-right"
           toastOptions={{
@@ -134,6 +137,7 @@ function App() {
         </Suspense>
       </Router>
     </AuthProvider>
+    </ErrorBoundary>
   )
 }
 
