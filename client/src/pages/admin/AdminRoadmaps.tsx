@@ -226,27 +226,27 @@ const AdminRoadmaps = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-2 sm:p-6 space-y-6">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-white">Roadmaps Management</h1>
-          <p className="text-sm text-slate-400">Create, update, and structure developer learning paths & steps</p>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Roadmaps Management</h1>
+          <p className="text-sm text-slate-500 mt-0.5">Create, update, and structure developer learning paths & steps.</p>
         </div>
-        <button onClick={() => handleOpenModal()} className="btn-primary flex items-center gap-2">
+        <button onClick={() => handleOpenModal()} className="btn-primary flex items-center gap-2 cursor-pointer shadow-md text-sm">
           <Plus size={18} /> Add Roadmap
         </button>
       </div>
 
       {loading ? (
         <div className="flex justify-center h-64 items-center">
-          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : roadmaps.length === 0 ? (
-        <div className="glass-card p-10 text-center text-gray-400">No roadmaps found.</div>
+        <div className="p-10 text-center text-slate-500 bg-white dark:bg-dark-900/30 rounded-2xl border border-slate-200 dark:border-dark-700 shadow-sm font-medium">No roadmaps found.</div>
       ) : (
-        <div className="glass-card overflow-x-auto">
-          <table className="w-full text-left text-sm text-gray-300">
-            <thead className="bg-gray-800/50 text-gray-200">
+        <div className="bg-white dark:bg-dark-900 border border-slate-200/90 dark:border-dark-800 rounded-2xl shadow-sm overflow-x-auto">
+          <table className="w-full text-left text-sm text-slate-700 dark:text-gray-300">
+            <thead className="bg-slate-100 dark:bg-gray-800/50 text-slate-800 dark:text-gray-200 font-bold border-b border-slate-200 dark:border-dark-700">
               <tr>
                 <th className="p-4">Title</th>
                 <th className="p-4">Category</th>
@@ -256,14 +256,14 @@ const AdminRoadmaps = () => {
                 <th className="p-4">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-700/50">
+            <tbody className="divide-y divide-slate-100 dark:divide-gray-700/50">
               {roadmaps.map((roadmap) => (
-                <tr key={roadmap._id} className="hover:bg-gray-800/30">
-                  <td className="p-4 font-medium text-white">{roadmap.title}</td>
-                  <td className="p-4">{roadmap.category}</td>
-                  <td className="p-4"><span className="badge-blue">{roadmap.difficulty}</span></td>
+                <tr key={roadmap._id} className="hover:bg-slate-50/80 dark:hover:bg-gray-800/30 transition-colors">
+                  <td className="p-4 font-semibold text-slate-900 dark:text-white">{roadmap.title}</td>
+                  <td className="p-4 font-medium text-slate-600 dark:text-slate-300">{roadmap.category}</td>
+                  <td className="p-4"><span className="badge-blue font-semibold">{roadmap.difficulty}</span></td>
                   <td className="p-4">
-                    <span className="px-2.5 py-1 bg-purple-500/10 border border-purple-500/20 text-purple-300 rounded-full font-mono text-xs font-semibold">
+                    <span className="px-2.5 py-1 bg-purple-50 dark:bg-purple-500/10 border border-purple-200 dark:border-purple-500/20 text-purple-700 dark:text-purple-300 rounded-full font-mono text-xs font-bold">
                       {roadmap.steps?.length || 0} steps
                     </span>
                   </td>
@@ -273,10 +273,10 @@ const AdminRoadmaps = () => {
                     </span>
                   </td>
                   <td className="p-4 flex gap-2">
-                    <button onClick={() => handleOpenModal(roadmap)} className="p-2 text-blue-400 hover:bg-blue-400/10 rounded">
+                    <button onClick={() => handleOpenModal(roadmap)} className="p-2 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-400/10 rounded-lg cursor-pointer transition-colors" title="Edit Roadmap">
                       <Edit2 size={16} />
                     </button>
-                    <button onClick={() => { setSelectedRoadmap(roadmap); setIsDeleteModalOpen(true); }} className="p-2 text-red-400 hover:bg-red-400/10 rounded">
+                    <button onClick={() => { setSelectedRoadmap(roadmap); setIsDeleteModalOpen(true); }} className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-400/10 rounded-lg cursor-pointer transition-colors" title="Delete Roadmap">
                       <Trash2 size={16} />
                     </button>
                   </td>
@@ -292,24 +292,24 @@ const AdminRoadmaps = () => {
         {isModalOpen && (
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-3"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-3"
           >
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
-              className="relative w-full max-w-3xl flex flex-col rounded-2xl border border-purple-700/30 shadow-[0_0_40px_rgba(139,92,246,0.15)]"
-              style={{ background: 'linear-gradient(135deg, #0f0f1a 0%, #13111f 100%)', maxHeight: '88vh' }}
+              className="relative w-full max-w-3xl flex flex-col rounded-2xl bg-white dark:bg-[#13111f] border border-slate-200 dark:border-purple-700/30 shadow-2xl"
+              style={{ maxHeight: '88vh' }}
             >
               {/* Sticky Header */}
-              <div className="flex justify-between items-center px-5 py-3.5 border-b border-white/5 flex-shrink-0">
+              <div className="flex justify-between items-center px-5 py-3.5 border-b border-slate-200 dark:border-white/5 flex-shrink-0">
                 <div>
-                  <h2 className="text-base font-bold text-white">
+                  <h2 className="text-base font-bold text-slate-900 dark:text-white">
                     {selectedRoadmap ? 'Edit Roadmap' : 'Add New Roadmap'}
                   </h2>
-                  <p className="text-[11px] text-slate-400">Structure developer learning paths & add steps</p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Structure developer learning paths & add steps</p>
                 </div>
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-white/5 transition"
+                  className="text-slate-400 hover:text-slate-900 dark:hover:text-white p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 transition cursor-pointer"
                 >
                   <X size={18} />
                 </button>
@@ -575,14 +575,14 @@ const AdminRoadmaps = () => {
       {/* Delete Confirm Modal */}
       <AnimatePresence>
         {isDeleteModalOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-            <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }} className="glass-card w-full max-w-md p-6 text-center">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+            <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }} className="bg-white dark:bg-dark-900 border border-slate-200 dark:border-dark-800 rounded-2xl shadow-2xl w-full max-w-md p-6 text-center">
               <AlertTriangle size={48} className="mx-auto text-red-500 mb-4" />
-              <h2 className="text-xl font-bold text-white mb-2">Delete Roadmap?</h2>
-              <p className="text-gray-400 mb-6">Are you sure you want to delete "{selectedRoadmap?.title}"? This action cannot be undone.</p>
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Delete Roadmap?</h2>
+              <p className="text-slate-600 dark:text-gray-400 mb-6 text-sm">Are you sure you want to delete "{selectedRoadmap?.title}"? This action cannot be undone.</p>
               <div className="flex justify-center gap-3">
-                <button onClick={() => setIsDeleteModalOpen(false)} className="btn-secondary">Cancel</button>
-                <button onClick={handleDelete} className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">Delete</button>
+                <button onClick={() => setIsDeleteModalOpen(false)} className="btn-secondary cursor-pointer">Cancel</button>
+                <button onClick={handleDelete} className="px-5 py-2.5 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition cursor-pointer shadow-md">Delete</button>
               </div>
             </motion.div>
           </motion.div>

@@ -63,15 +63,18 @@ const AdminUsers = () => {
   );
 
   return (
-    <div className="p-6">
+    <div className="p-2 sm:p-6 space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-        <h1 className="text-2xl font-bold text-white">Users</h1>
-        <div className="relative w-full sm:w-64">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Users</h1>
+          <p className="text-slate-500 text-sm mt-0.5">Manage user accounts, roles, and course enrollments.</p>
+        </div>
+        <div className="relative w-full sm:w-72">
+          <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-slate-400" size={18} />
           <input 
             type="text" 
             placeholder="Search users..." 
-            className="input w-full pl-10"
+            className="input w-full pl-10 bg-white dark:bg-dark-900 border-slate-200 dark:border-dark-700 shadow-xs"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -80,12 +83,12 @@ const AdminUsers = () => {
 
       {loading ? (
         <div className="flex justify-center h-64 items-center">
-          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : (
-        <div className="glass-card overflow-x-auto">
-          <table className="w-full text-left text-sm text-gray-300">
-            <thead className="bg-gray-800/50 text-gray-200">
+        <div className="bg-white dark:bg-dark-900 border border-slate-200/90 dark:border-dark-800 rounded-2xl shadow-sm overflow-x-auto">
+          <table className="w-full text-left text-sm text-slate-700 dark:text-gray-300">
+            <thead className="bg-slate-100 dark:bg-gray-800/50 text-slate-800 dark:text-gray-200 font-bold border-b border-slate-200 dark:border-dark-700">
               <tr>
                 <th className="p-4">User</th>
                 <th className="p-4">Role</th>
@@ -94,25 +97,25 @@ const AdminUsers = () => {
                 <th className="p-4">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-700/50">
+            <tbody className="divide-y divide-slate-100 dark:divide-gray-700/50">
               {filteredUsers.length === 0 ? (
-                <tr><td colSpan={5} className="p-8 text-center text-gray-500">No users found.</td></tr>
+                <tr><td colSpan={5} className="p-8 text-center text-slate-500 font-medium">No users found.</td></tr>
               ) : filteredUsers.map((user) => (
-                <tr key={user._id} className="hover:bg-gray-800/30">
+                <tr key={user._id} className="hover:bg-slate-50/80 dark:hover:bg-gray-800/30 transition-colors">
                   <td className="p-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-blue-500/20 text-blue-500 flex items-center justify-center font-bold overflow-hidden">
+                      <div className="w-10 h-10 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-transparent flex items-center justify-center font-bold overflow-hidden shadow-xs">
                         {hasCustomAvatar(user.avatar) ? <img src={user.avatar} className="w-full h-full object-cover" /> : getInitials(user.name || '')}
                       </div>
                       <div>
-                        <p className="font-medium text-white">{user.name}</p>
-                        <p className="text-xs text-gray-500">{user.email}</p>
+                        <p className="font-semibold text-slate-900 dark:text-white">{user.name}</p>
+                        <p className="text-xs text-slate-500">{user.email}</p>
                       </div>
                     </div>
                   </td>
                   <td className="p-4">
                     <select 
-                      className={`px-2 py-1 rounded text-xs outline-none bg-gray-800 border ${user.role === 'admin' ? 'border-purple-500/50 text-purple-400' : 'border-gray-600 text-gray-300'}`}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-semibold outline-none cursor-pointer border ${user.role === 'admin' ? 'bg-purple-50 dark:bg-purple-500/10 border-purple-300 dark:border-purple-500/50 text-purple-700 dark:text-purple-400' : 'bg-slate-100 dark:bg-gray-800 border-slate-200 dark:border-gray-600 text-slate-700 dark:text-gray-300'}`}
                       value={user.role}
                       onChange={(e) => handleRoleChange(user._id, e.target.value)}
                     >
@@ -120,10 +123,10 @@ const AdminUsers = () => {
                       <option value="admin">Admin</option>
                     </select>
                   </td>
-                  <td className="p-4">{user.enrolledCourses?.length || 0} courses</td>
-                  <td className="p-4 text-slate-300 font-medium">{formatDate(user.createdAt)}</td>
+                  <td className="p-4 font-medium text-slate-700 dark:text-slate-300">{user.enrolledCourses?.length || 0} courses</td>
+                  <td className="p-4 text-slate-500 font-medium">{formatDate(user.createdAt)}</td>
                   <td className="p-4">
-                    <button onClick={() => { setSelectedUser(user); setIsDeleteModalOpen(true); }} className="p-2 text-red-400 hover:bg-red-400/10 rounded">
+                    <button onClick={() => { setSelectedUser(user); setIsDeleteModalOpen(true); }} className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-400/10 rounded-lg cursor-pointer transition-colors" title="Delete User">
                       <Trash2 size={16} />
                     </button>
                   </td>
@@ -137,14 +140,14 @@ const AdminUsers = () => {
       {/* Delete Confirm Modal */}
       <AnimatePresence>
         {isDeleteModalOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-            <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }} className="glass-card w-full max-w-md p-6 text-center">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+            <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }} className="bg-white dark:bg-dark-900 border border-slate-200 dark:border-dark-800 rounded-2xl shadow-2xl w-full max-w-md p-6 text-center">
               <AlertTriangle size={48} className="mx-auto text-red-500 mb-4" />
-              <h2 className="text-xl font-bold text-white mb-2">Delete User?</h2>
-              <p className="text-gray-400 mb-6">Are you sure you want to delete {selectedUser?.name}? This will remove all their data and progress.</p>
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Delete User?</h2>
+              <p className="text-slate-600 dark:text-gray-400 mb-6 text-sm">Are you sure you want to delete user "{selectedUser?.name}"? All their course progress will be lost.</p>
               <div className="flex justify-center gap-3">
-                <button onClick={() => setIsDeleteModalOpen(false)} className="btn-secondary">Cancel</button>
-                <button onClick={handleDelete} className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">Delete User</button>
+                <button onClick={() => setIsDeleteModalOpen(false)} className="btn-secondary cursor-pointer">Cancel</button>
+                <button onClick={handleDelete} className="px-5 py-2.5 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition cursor-pointer shadow-md">Delete</button>
               </div>
             </motion.div>
           </motion.div>

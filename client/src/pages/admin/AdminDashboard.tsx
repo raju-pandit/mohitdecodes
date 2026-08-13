@@ -100,35 +100,38 @@ const AdminDashboard: React.FC = () => {
   ];
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-white">Admin Dashboard</h1>
+    <div className="p-2 sm:p-6 space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white">Admin Dashboard</h1>
+          <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Platform overview, metrics, and content management.</p>
+        </div>
         <div className="flex gap-3">
-          <button onClick={() => navigate('/admin/courses', { state: { openModal: true } })} className="btn-primary flex items-center gap-2">
+          <button onClick={() => navigate('/admin/courses', { state: { openModal: true } })} className="btn-primary flex items-center gap-2 text-sm cursor-pointer shadow-md">
             <Plus size={18} /> Create Course
           </button>
-          <button onClick={() => navigate('/admin/blogs', { state: { openModal: true } })} className="btn-secondary flex items-center gap-2">
+          <button onClick={() => navigate('/admin/blogs', { state: { openModal: true } })} className="btn-secondary flex items-center gap-2 text-sm cursor-pointer shadow-sm">
             <Plus size={18} /> Write Blog
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {statCards.map((stat, index) => (
           <motion.div
             key={index}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-            className="glass-card p-6 flex items-center justify-between cursor-pointer hover:border-primary-500/50 transition-colors"
+            transition={{ delay: index * 0.05 }}
+            className="p-6 rounded-2xl bg-white dark:bg-dark-900 border border-slate-200/90 dark:border-dark-700 shadow-sm hover:shadow-xl dark:shadow-none hover:border-purple-500/40 dark:hover:border-primary-500/50 flex items-center justify-between cursor-pointer transition-all duration-300"
           >
             <div>
-              <p className="text-gray-400 mb-1">{stat.title}</p>
-              <h3 className="text-3xl font-bold text-white">
+              <p className="text-slate-500 dark:text-gray-400 font-semibold text-sm mb-1.5">{stat.title}</p>
+              <h3 className="text-3xl font-extrabold text-slate-900 dark:text-white">
                 <CountUp to={stat.value} />
               </h3>
             </div>
-            <div className={`p-4 rounded-full ${stat.bg} ${stat.color}`}>
+            <div className={`p-4 rounded-2xl ${stat.bg} ${stat.color} shadow-xs`}>
               <stat.icon size={24} />
             </div>
           </motion.div>
@@ -136,28 +139,28 @@ const AdminDashboard: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="glass-card p-6">
-          <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+        <div className="p-6 rounded-2xl bg-white dark:bg-dark-900 border border-slate-200/90 dark:border-dark-700 shadow-sm">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
             Recent Activity
           </h2>
-          <div className="space-y-4 text-gray-300">
+          <div className="space-y-4 text-slate-500 dark:text-gray-400 font-medium">
             <p>No recent activity available.</p>
           </div>
         </div>
-        <div className="glass-card p-6">
-          <h2 className="text-xl font-bold text-white mb-4">Quick Actions</h2>
+        <div className="p-6 rounded-2xl bg-white dark:bg-dark-900 border border-slate-200/90 dark:border-dark-700 shadow-sm">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Quick Actions</h2>
           <div className="space-y-3">
-            <button onClick={() => navigate('/admin/courses')} className="w-full flex items-center justify-between p-3 rounded-lg bg-gray-800/50 hover:bg-gray-700/50 transition-colors text-white">
-              <span className="flex items-center gap-3"><BookOpen size={18} className="text-purple-400" /> Manage Courses</span>
-              <ArrowRight size={18} className="text-gray-400" />
+            <button onClick={() => navigate('/admin/courses')} className="w-full flex items-center justify-between p-3.5 rounded-xl bg-slate-50 hover:bg-purple-50 dark:bg-dark-800/50 dark:hover:bg-dark-700/50 border border-slate-200/80 dark:border-dark-700/50 transition-colors text-slate-800 dark:text-white cursor-pointer font-semibold">
+              <span className="flex items-center gap-3"><BookOpen size={18} className="text-purple-600 dark:text-purple-400" /> Manage Courses</span>
+              <ArrowRight size={18} className="text-slate-400" />
             </button>
-            <button onClick={() => navigate('/admin/blogs')} className="w-full flex items-center justify-between p-3 rounded-lg bg-gray-800/50 hover:bg-gray-700/50 transition-colors text-white">
-              <span className="flex items-center gap-3"><FileText size={18} className="text-green-400" /> Manage Blogs</span>
-              <ArrowRight size={18} className="text-gray-400" />
+            <button onClick={() => navigate('/admin/blogs')} className="w-full flex items-center justify-between p-3.5 rounded-xl bg-slate-50 hover:bg-purple-50 dark:bg-dark-800/50 dark:hover:bg-dark-700/50 border border-slate-200/80 dark:border-dark-700/50 transition-colors text-slate-800 dark:text-white cursor-pointer font-semibold">
+              <span className="flex items-center gap-3"><FileText size={18} className="text-green-600 dark:text-green-400" /> Manage Blogs</span>
+              <ArrowRight size={18} className="text-slate-400" />
             </button>
-            <button onClick={() => navigate('/admin/resources')} className="w-full flex items-center justify-between p-3 rounded-lg bg-gray-800/50 hover:bg-gray-700/50 transition-colors text-white">
-              <span className="flex items-center gap-3"><Download size={18} className="text-orange-400" /> Manage Resources</span>
-              <ArrowRight size={18} className="text-gray-400" />
+            <button onClick={() => navigate('/admin/resources')} className="w-full flex items-center justify-between p-3.5 rounded-xl bg-slate-50 hover:bg-purple-50 dark:bg-dark-800/50 dark:hover:bg-dark-700/50 border border-slate-200/80 dark:border-dark-700/50 transition-colors text-slate-800 dark:text-white cursor-pointer font-semibold">
+              <span className="flex items-center gap-3"><Download size={18} className="text-orange-600 dark:text-orange-400" /> Manage Resources</span>
+              <ArrowRight size={18} className="text-slate-400" />
             </button>
           </div>
         </div>
