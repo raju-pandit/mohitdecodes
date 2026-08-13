@@ -8,6 +8,7 @@ import { Eye, EyeOff, LogIn, Code2, Loader2 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
 import { GoogleSignInButton } from '../components/GoogleSignInButton'
+import BrandLogo from '../components/Logo'
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email'),

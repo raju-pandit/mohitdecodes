@@ -8,6 +8,7 @@ import { Eye, EyeOff, UserPlus, Code2, Loader2, Check } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
 import { GoogleSignInButton } from '../components/GoogleSignInButton'
+import BrandLogo from '../components/Logo'
 
 const registerSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
