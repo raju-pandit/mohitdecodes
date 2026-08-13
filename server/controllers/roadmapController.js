@@ -9,8 +9,15 @@ export const getRoadmaps = async (req, res, next) => {
     if (difficulty) query.difficulty = difficulty;
     if (search) query.$text = { $search: search };
 
-    const roadmaps = await Roadmap.find(query).sort({ featured: -1, createdAt: -1 }).select('-steps');
+    const roadmaps = await Roadmap.find(query).sort({ featured: -1, createdAt: -1 });
     res.status(200).json({ success: true, message: 'Roadmaps fetched', data: roadmaps });
+  } catch (err) { next(err); }
+};
+
+export const getAdminRoadmaps = async (req, res, next) => {
+  try {
+    const roadmaps = await Roadmap.find().sort({ createdAt: -1 });
+    res.status(200).json({ success: true, message: 'Admin roadmaps fetched', data: roadmaps });
   } catch (err) { next(err); }
 };
 

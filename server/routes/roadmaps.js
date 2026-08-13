@@ -1,9 +1,10 @@
 import express from 'express';
 const router = express.Router();
-import { getRoadmaps, getRoadmap, createRoadmap, updateRoadmap, deleteRoadmap, updateProgress } from '../controllers/roadmapController.js';
+import { getRoadmaps, getAdminRoadmaps, getRoadmap, createRoadmap, updateRoadmap, deleteRoadmap, updateProgress } from '../controllers/roadmapController.js';
 import { protect, authorize } from '../middleware/auth.js';
 
 router.get('/', getRoadmaps);
+router.get('/admin/all', protect, authorize('admin'), getAdminRoadmaps);
 router.get('/:slug', (req, res, next) => {
   // Optionally pass user if logged in
   const authHeader = req.headers.authorization;

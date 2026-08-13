@@ -58,10 +58,15 @@ const AdminRoadmaps = () => {
 
   const fetchRoadmaps = async () => {
     try {
-      const data = await api.get('/roadmaps');
+      const data = await api.get('/roadmaps/admin/all');
       setRoadmaps(data?.data || []);
     } catch (error) {
-      toast.error('Failed to fetch roadmaps');
+      try {
+        const fallback = await api.get('/roadmaps');
+        setRoadmaps(fallback?.data || []);
+      } catch (err) {
+        toast.error('Failed to fetch roadmaps');
+      }
     } finally {
       setLoading(false);
     }
@@ -257,7 +262,11 @@ const AdminRoadmaps = () => {
                   <td className="p-4 font-medium text-white">{roadmap.title}</td>
                   <td className="p-4">{roadmap.category}</td>
                   <td className="p-4"><span className="badge-blue">{roadmap.difficulty}</span></td>
-                  <td className="p-4"><span className="px-2.5 py-1 bg-dark-800 rounded-full font-mono text-xs">{roadmap.steps?.length || 0} steps</span></td>
+                  <td className="p-4">
+                    <span className="px-2.5 py-1 bg-purple-500/10 border border-purple-500/20 text-purple-300 rounded-full font-mono text-xs font-semibold">
+                      {roadmap.steps?.length || 0} steps
+                    </span>
+                  </td>
                   <td className="p-4">
                     <span className={roadmap.isPublished ? 'badge-primary' : 'badge-orange'}>
                       {roadmap.isPublished ? 'Published' : 'Draft'}
@@ -281,146 +290,283 @@ const AdminRoadmaps = () => {
       {/* Form Modal with Dynamic Steps Builder */}
       <AnimatePresence>
         {isModalOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 overflow-y-auto">
-            <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }} className="glass-card w-full max-w-3xl p-6 my-8 max-h-[90vh] flex flex-col overflow-hidden">
-              {/* Modal Header */}
-              <div className="flex justify-between items-center pb-4 mb-4 border-b border-gray-700/60 shrink-0">
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-3"
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
+              className="relative w-full max-w-3xl flex flex-col rounded-2xl border border-purple-700/30 shadow-[0_0_40px_rgba(139,92,246,0.15)]"
+              style={{ background: 'linear-gradient(135deg, #0f0f1a 0%, #13111f 100%)', maxHeight: '88vh' }}
+            >
+              {/* Sticky Header */}
+              <div className="flex justify-between items-center px-5 py-3.5 border-b border-white/5 flex-shrink-0">
                 <div>
-                  <h2 className="text-xl font-bold text-white">{selectedRoadmap ? 'Edit Roadmap' : 'Add New Roadmap'}</h2>
-                  <p className="text-xs text-slate-400 mt-0.5">Fill details and build learning path steps</p>
+                  <h2 className="text-base font-bold text-white">
+                    {selectedRoadmap ? 'Edit Roadmap' : 'Add New Roadmap'}
+                  </h2>
+                  <p className="text-[11px] text-slate-400">Structure developer learning paths & add steps</p>
                 </div>
-                <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-white p-1 rounded-lg bg-gray-800/40"><X size={20} /></button>
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-white/5 transition"
+                >
+                  <X size={18} />
+                </button>
               </div>
 
-              {/* Form Content - Scrollable */}
-              <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto pr-1 space-y-6">
-                {/* Section 1: Basic Info */}
-                <div className="space-y-4">
-                  <h3 className="text-xs uppercase tracking-wider text-primary-400 font-bold">1. Basic Information</h3>
-                  <div>
-                    <label className="block text-xs font-semibold mb-1 text-gray-300">Roadmap Title *</label>
-                    <input required type="text" placeholder="e.g. Full Stack Developer Complete Roadmap" className="input w-full" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold mb-1 text-gray-300">Description *</label>
-                    <textarea required placeholder="Short summary of what students will learn in this roadmap..." className="input w-full h-20" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})}></textarea>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Scrollable Form Body */}
+              <div className="overflow-y-auto flex-1 px-5 py-4">
+                <form id="roadmap-form" onSubmit={handleSubmit} className="space-y-5">
+                  {/* Section 1: Basic Info */}
+                  <div className="space-y-3">
+                    <h3 className="text-xs uppercase tracking-wider text-purple-400 font-bold">1. Basic Information</h3>
+                    
                     <div>
-                      <label className="block text-xs font-semibold mb-1 text-gray-300">Category *</label>
-                      <input required type="text" placeholder="e.g. Web Development / Full Stack / Backend" className="input w-full" value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} />
+                      <label className="block text-xs font-medium mb-1 text-gray-400">
+                        Roadmap Title <span className="text-red-400">*</span>
+                      </label>
+                      <input
+                        required
+                        type="text"
+                        className="input w-full text-sm"
+                        style={{ height: '40px' }}
+                        placeholder="e.g. Full Stack Developer Complete Roadmap"
+                        value={formData.title}
+                        onChange={e => setFormData({ ...formData, title: e.target.value })}
+                      />
                     </div>
+
                     <div>
-                      <label className="block text-xs font-semibold mb-1 text-gray-300">Difficulty</label>
-                      <select className="input w-full" value={formData.difficulty} onChange={e => setFormData({...formData, difficulty: e.target.value})}>
-                        <option value="Beginner">Beginner</option>
-                        <option value="Intermediate">Intermediate</option>
-                        <option value="Advanced">Advanced</option>
-                      </select>
+                      <label className="block text-xs font-medium mb-1 text-gray-400">
+                        Description <span className="text-red-400">*</span>
+                      </label>
+                      <textarea
+                        required
+                        className="input w-full text-sm resize-none"
+                        style={{ height: '70px' }}
+                        placeholder="Short summary of what students will learn..."
+                        value={formData.description}
+                        onChange={e => setFormData({ ...formData, description: e.target.value })}
+                      />
                     </div>
-                    <div>
-                      <label className="block text-xs font-semibold mb-1 text-gray-300">Est. Duration</label>
-                      <input type="text" placeholder="e.g. 3-6 months" className="input w-full" value={formData.estimatedDuration} onChange={e => setFormData({...formData, estimatedDuration: e.target.value})} />
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div>
+                        <label className="block text-xs font-medium mb-1 text-gray-400">
+                          Category <span className="text-red-400">*</span>
+                        </label>
+                        <input
+                          required
+                          type="text"
+                          className="input w-full text-sm"
+                          style={{ height: '40px' }}
+                          placeholder="e.g. Full Stack, Frontend"
+                          value={formData.category}
+                          onChange={e => setFormData({ ...formData, category: e.target.value })}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium mb-1 text-gray-400">Difficulty</label>
+                        <select
+                          className="input w-full text-sm"
+                          style={{ height: '40px' }}
+                          value={formData.difficulty}
+                          onChange={e => setFormData({ ...formData, difficulty: e.target.value })}
+                        >
+                          <option value="Beginner">Beginner</option>
+                          <option value="Intermediate">Intermediate</option>
+                          <option value="Advanced">Advanced</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium mb-1 text-gray-400">Est. Duration</label>
+                        <input
+                          type="text"
+                          className="input w-full text-sm"
+                          style={{ height: '40px' }}
+                          placeholder="e.g. 3-6 months"
+                          value={formData.estimatedDuration}
+                          onChange={e => setFormData({ ...formData, estimatedDuration: e.target.value })}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="pt-1">
+                      <label className="flex items-center gap-2 cursor-pointer select-none w-fit">
+                        <input
+                          type="checkbox"
+                          checked={formData.isPublished}
+                          onChange={e => setFormData({ ...formData, isPublished: e.target.checked })}
+                          className="w-4 h-4 rounded accent-purple-500"
+                        />
+                        <span className="text-sm text-gray-300">Publish immediately</span>
+                      </label>
                     </div>
                   </div>
-                  <div className="pt-1">
-                    <label className="flex items-center space-x-2 text-sm text-gray-300 cursor-pointer select-none">
-                      <input type="checkbox" checked={formData.isPublished} onChange={e => setFormData({...formData, isPublished: e.target.checked})} className="rounded bg-gray-700 border-gray-600 text-primary-500 w-4 h-4" />
-                      <span>Publish immediately</span>
-                    </label>
-                  </div>
-                </div>
 
-                {/* Section 2: Steps Builder */}
-                <div className="pt-4 border-t border-gray-800">
-                  <div className="flex justify-between items-center mb-4">
-                    <div>
-                      <h3 className="text-xs uppercase tracking-wider text-primary-400 font-bold">2. Learning Path Steps ({formData.steps.length})</h3>
-                      <p className="text-[11px] text-slate-400">Add sequential topics and resources for this roadmap</p>
+                  {/* Section 2: Steps Builder */}
+                  <div className="pt-3 border-t border-white/5 space-y-3">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <h3 className="text-xs uppercase tracking-wider text-purple-400 font-bold flex items-center gap-2">
+                          2. Learning Path Steps
+                          <span className="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 text-[10px] normal-case">
+                            {formData.steps.length} {formData.steps.length === 1 ? 'step' : 'steps'}
+                          </span>
+                        </h3>
+                        <p className="text-[11px] text-slate-400">Add topics and study resources for this roadmap</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleAddStep}
+                        className="px-3 py-1.5 bg-purple-600/20 border border-purple-500/30 text-purple-300 hover:bg-purple-600 hover:text-white rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5"
+                      >
+                        <Plus size={14} /> Add Step
+                      </button>
                     </div>
-                    <button type="button" onClick={handleAddStep} className="px-3 py-1.5 bg-primary-600/30 border border-primary-500/40 text-primary-300 hover:bg-primary-600 hover:text-white rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5">
-                      <Plus size={14} /> Add Step
-                    </button>
-                  </div>
 
-                  {formData.steps.length === 0 ? (
-                    <div className="p-6 border border-dashed border-gray-700 rounded-xl text-center text-slate-400 text-xs">
-                      No steps added yet. Click <strong>"+ Add Step"</strong> above to start building the learning path!
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      {formData.steps.map((step, sIdx) => (
-                        <div key={sIdx} className="p-4 bg-dark-900/80 border border-gray-800 rounded-xl space-y-3 relative group">
-                          {/* Step Header Bar */}
-                          <div className="flex justify-between items-center border-b border-gray-800 pb-2.5">
-                            <div className="flex items-center gap-2">
-                              <span className="w-6 h-6 rounded-full bg-primary-600/30 border border-primary-500/40 text-primary-300 font-mono text-xs flex items-center justify-center font-bold">
-                                {sIdx + 1}
-                              </span>
-                              <span className="text-xs font-bold text-slate-200">Step #{sIdx + 1}</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <button type="button" disabled={sIdx === 0} onClick={() => handleMoveStep(sIdx, 'up')} className="p-1 text-slate-400 hover:text-white disabled:opacity-30">
-                                <ChevronUp size={16} />
-                              </button>
-                              <button type="button" disabled={sIdx === formData.steps.length - 1} onClick={() => handleMoveStep(sIdx, 'down')} className="p-1 text-slate-400 hover:text-white disabled:opacity-30">
-                                <ChevronDown size={16} />
-                              </button>
-                              <button type="button" onClick={() => handleRemoveStep(sIdx)} className="p-1 text-red-400 hover:bg-red-500/10 rounded ml-2">
-                                <Trash2 size={16} />
-                              </button>
-                            </div>
-                          </div>
-
-                          {/* Step Inputs */}
-                          <div className="space-y-3">
-                            <div>
-                              <label className="block text-[11px] text-slate-400 mb-1">Step Title *</label>
-                              <input required type="text" placeholder="e.g. JavaScript ES6+ & Async Programming" className="input w-full text-xs" value={step.title} onChange={e => handleStepChange(sIdx, 'title', e.target.value)} />
-                            </div>
-                            <div>
-                              <label className="block text-[11px] text-slate-400 mb-1">Step Description</label>
-                              <textarea placeholder="e.g. Closures, promises, async/await, DOM manipulation..." className="input w-full text-xs h-16" value={step.description} onChange={e => handleStepChange(sIdx, 'description', e.target.value)}></textarea>
-                            </div>
-                          </div>
-
-                          {/* Nested Recommended Resources */}
-                          <div className="pt-2">
-                            <div className="flex justify-between items-center mb-2">
-                              <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1">
-                                <LinkIcon size={12} className="text-slate-500" /> Recommended Resources ({step.resources?.length || 0})
-                              </span>
-                              <button type="button" onClick={() => handleAddResource(sIdx)} className="text-[11px] text-primary-400 hover:text-primary-300 font-semibold flex items-center gap-1">
-                                <Plus size={12} /> Add Resource
-                              </button>
-                            </div>
-
-                            {step.resources && step.resources.length > 0 && (
-                              <div className="space-y-2">
-                                {step.resources.map((resItem, rIdx) => (
-                                  <div key={rIdx} className="flex gap-2 items-center">
-                                    <input type="text" placeholder="Resource Title (e.g. MDN Docs)" className="input text-xs py-1 px-2.5 flex-1" value={resItem.title} onChange={e => handleResourceChange(sIdx, rIdx, 'title', e.target.value)} />
-                                    <input type="url" placeholder="URL (e.g. https://...)" className="input text-xs py-1 px-2.5 flex-1" value={resItem.url} onChange={e => handleResourceChange(sIdx, rIdx, 'url', e.target.value)} />
-                                    <button type="button" onClick={() => handleRemoveResource(sIdx, rIdx)} className="p-1 text-slate-500 hover:text-red-400">
-                                      <X size={14} />
-                                    </button>
-                                  </div>
-                                ))}
+                    {formData.steps.length === 0 ? (
+                      <div className="p-6 border border-dashed border-white/10 rounded-xl text-center text-slate-400 text-xs">
+                        No steps added yet. Click <strong>"+ Add Step"</strong> above to start building the learning path!
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {formData.steps.map((step, sIdx) => (
+                          <div key={sIdx} className="p-3.5 bg-dark-900/90 border border-purple-500/20 rounded-xl space-y-3 relative">
+                            {/* Step Header */}
+                            <div className="flex justify-between items-center border-b border-white/5 pb-2">
+                              <div className="flex items-center gap-2">
+                                <span className="w-5 h-5 rounded-full bg-purple-600/30 border border-purple-500/40 text-purple-300 font-mono text-[11px] flex items-center justify-center font-bold">
+                                  {sIdx + 1}
+                                </span>
+                                <span className="text-xs font-bold text-slate-200">Step #{sIdx + 1}</span>
                               </div>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                              <div className="flex items-center gap-1">
+                                <button
+                                  type="button"
+                                  disabled={sIdx === 0}
+                                  onClick={() => handleMoveStep(sIdx, 'up')}
+                                  className="p-1 text-slate-400 hover:text-white disabled:opacity-30"
+                                >
+                                  <ChevronUp size={15} />
+                                </button>
+                                <button
+                                  type="button"
+                                  disabled={sIdx === formData.steps.length - 1}
+                                  onClick={() => handleMoveStep(sIdx, 'down')}
+                                  className="p-1 text-slate-400 hover:text-white disabled:opacity-30"
+                                >
+                                  <ChevronDown size={15} />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleRemoveStep(sIdx)}
+                                  className="p-1 text-red-400 hover:bg-red-500/10 rounded ml-1"
+                                >
+                                  <Trash2 size={15} />
+                                </button>
+                              </div>
+                            </div>
 
-                {/* Footer Buttons */}
-                <div className="flex justify-end gap-3 pt-4 border-t border-gray-800 shrink-0">
-                  <button type="button" onClick={() => setIsModalOpen(false)} className="btn-secondary">Cancel</button>
-                  <button type="submit" className="btn-primary">Save Roadmap</button>
-                </div>
-              </form>
+                            {/* Step Inputs */}
+                            <div className="space-y-2">
+                              <div>
+                                <label className="block text-[11px] text-slate-400 mb-1">Step Title <span className="text-red-400">*</span></label>
+                                <input
+                                  required
+                                  type="text"
+                                  placeholder="e.g. HTML5 & Semantic Web"
+                                  className="input w-full text-xs"
+                                  style={{ height: '36px' }}
+                                  value={step.title}
+                                  onChange={e => handleStepChange(sIdx, 'title', e.target.value)}
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-[11px] text-slate-400 mb-1">Step Description</label>
+                                <textarea
+                                  placeholder="e.g. Tags, attributes, forms, accessibility..."
+                                  className="input w-full text-xs resize-none"
+                                  style={{ height: '54px' }}
+                                  value={step.description}
+                                  onChange={e => handleStepChange(sIdx, 'description', e.target.value)}
+                                />
+                              </div>
+                            </div>
+
+                            {/* Nested Resources */}
+                            <div className="pt-1">
+                              <div className="flex justify-between items-center mb-1.5">
+                                <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1">
+                                  <LinkIcon size={12} className="text-purple-400" /> Resources ({step.resources?.length || 0})
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => handleAddResource(sIdx)}
+                                  className="text-[11px] text-purple-400 hover:text-purple-300 font-semibold flex items-center gap-1"
+                                >
+                                  <Plus size={12} /> Add Resource
+                                </button>
+                              </div>
+
+                              {step.resources && step.resources.length > 0 && (
+                                <div className="space-y-1.5">
+                                  {step.resources.map((resItem, rIdx) => (
+                                    <div key={rIdx} className="flex gap-2 items-center">
+                                      <input
+                                        type="text"
+                                        placeholder="Title (e.g. MDN Docs)"
+                                        className="input text-xs py-1 px-2.5 flex-1"
+                                        style={{ height: '32px' }}
+                                        value={resItem.title}
+                                        onChange={e => handleResourceChange(sIdx, rIdx, 'title', e.target.value)}
+                                      />
+                                      <input
+                                        type="url"
+                                        placeholder="URL (https://...)"
+                                        className="input text-xs py-1 px-2.5 flex-1"
+                                        style={{ height: '32px' }}
+                                        value={resItem.url}
+                                        onChange={e => handleResourceChange(sIdx, rIdx, 'url', e.target.value)}
+                                      />
+                                      <button
+                                        type="button"
+                                        onClick={() => handleRemoveResource(sIdx, rIdx)}
+                                        className="p-1 text-slate-500 hover:text-red-400"
+                                      >
+                                        <X size={14} />
+                                      </button>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </form>
+              </div>
+
+              {/* Sticky Footer */}
+              <div className="flex justify-end gap-2 px-5 py-3 border-t border-white/5 flex-shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="btn-secondary text-sm px-4 py-2"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  form="roadmap-form"
+                  className="btn-primary text-sm px-5 py-2"
+                >
+                  {selectedRoadmap ? 'Update Roadmap' : 'Save Roadmap'}
+                </button>
+              </div>
             </motion.div>
           </motion.div>
         )}
