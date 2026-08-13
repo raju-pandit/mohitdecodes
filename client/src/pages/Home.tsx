@@ -305,17 +305,32 @@ const Home: React.FC = () => {
               A community of coders, making the world a better place. Learn, build, and grow with the best developers in the industry.
             </p>
 
-            {/* Social Icons */}
+            {/* Social Icons (using button click to prevent browser bottom-left URL preview on hover) */}
             <div className="flex gap-4 justify-center lg:justify-start">
-              <a href="https://www.linkedin.com/in/mohitdecodes/" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-blue-500/30 text-blue-400 bg-blue-500/5 hover:bg-blue-500/20 hover:text-white flex items-center justify-center transition-all duration-300">
+              <button 
+                type="button"
+                onClick={() => window.open('https://www.linkedin.com/in/mohitdecodes/', '_blank', 'noopener,noreferrer')} 
+                aria-label="LinkedIn"
+                className="w-10 h-10 rounded-full border border-blue-500/30 text-blue-400 bg-blue-500/5 hover:bg-blue-500/20 hover:text-white flex items-center justify-center transition-all duration-300 cursor-pointer"
+              >
                 <Linkedin size={20} />
-              </a>
-              <a href="https://youtube.com/@mohitdecodes" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-red-500/30 text-red-500 bg-red-500/5 hover:bg-red-500/20 hover:text-white flex items-center justify-center transition-all duration-300">
+              </button>
+              <button 
+                type="button"
+                onClick={() => window.open('https://youtube.com/@mohitdecodes', '_blank', 'noopener,noreferrer')} 
+                aria-label="YouTube"
+                className="w-10 h-10 rounded-full border border-red-500/30 text-red-500 bg-red-500/5 hover:bg-red-500/20 hover:text-white flex items-center justify-center transition-all duration-300 cursor-pointer"
+              >
                 <Youtube size={20} />
-              </a>
-              <a href="https://www.instagram.com/mohitdecodes" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-pink-500/30 text-pink-500 bg-pink-500/5 hover:bg-pink-500/20 hover:text-white flex items-center justify-center transition-all duration-300">
+              </button>
+              <button 
+                type="button"
+                onClick={() => window.open('https://www.instagram.com/mohitdecodes', '_blank', 'noopener,noreferrer')} 
+                aria-label="Instagram"
+                className="w-10 h-10 rounded-full border border-pink-500/30 text-pink-500 bg-pink-500/5 hover:bg-pink-500/20 hover:text-white flex items-center justify-center transition-all duration-300 cursor-pointer"
+              >
                 <Instagram size={20} />
-              </a>
+              </button>
             </div>
 
             {/* CTA Buttons */}
@@ -323,13 +338,17 @@ const Home: React.FC = () => {
               <Link to="/courses" className="btn-primary py-3 px-6 sm:py-3.5 sm:px-8 font-semibold rounded-xl flex items-center gap-2 group shadow-glow-purple">
                 Start Paid Learning
               </Link>
-              <a href="https://youtube.com/@mohitdecodes" target="_blank" rel="noreferrer" className="btn-secondary py-3 px-6 sm:py-3.5 sm:px-8 font-semibold rounded-xl flex items-center gap-2 border border-dark-700 bg-dark-900/60 hover:bg-dark-800 transition-all">
+              <button 
+                type="button"
+                onClick={() => window.open('https://youtube.com/@mohitdecodes', '_blank', 'noopener,noreferrer')} 
+                className="btn-secondary py-3 px-6 sm:py-3.5 sm:px-8 font-semibold rounded-xl flex items-center gap-2 border border-dark-700 bg-dark-900/60 hover:bg-dark-800 transition-all cursor-pointer"
+              >
                 <svg viewBox="0 0 24 24" className="w-5 h-5 text-[#FF0000] fill-current shrink-0" xmlns="http://www.w3.org/2000/svg">
                   <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.108C19.524 3.545 12 3.545 12 3.545s-7.525 0-9.387.51a3.003 3.003 0 0 0-2.11 2.108C0 8.025 0 12 0 12s0 3.975.503 5.837a3.003 3.003 0 0 0 2.11 2.108c1.862.51 9.387.51 9.387.51s7.525 0 9.387-.51a3.003 3.003 0 0 0 2.11-2.108C24 15.975 24 12 24 12s0-3.975-.502-5.837z" />
                   <polygon points="9.545 15.568 15.818 12 9.545 8.432" className="fill-white" />
                 </svg>
                 Watch on YouTube
-              </a>
+              </button>
             </div>
             
             {/* Stats Row */}

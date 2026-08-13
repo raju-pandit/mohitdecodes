@@ -42,21 +42,46 @@ export const Footer = () => {
               Learn. Build. Decode. Your ultimate destination to master MERN full-stack development, roadmaps, and systems with practical real-world projects.
             </p>
             <div className="flex items-center gap-4">
-              <a href="https://github.com/mohitdjcet" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center text-slate-400 hover:bg-primary-500 hover:text-white transition-all duration-300">
+              <button 
+                type="button"
+                onClick={() => window.open('https://github.com/mohitdjcet', '_blank', 'noopener,noreferrer')} 
+                aria-label="GitHub"
+                className="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center text-slate-400 hover:bg-primary-500 hover:text-white transition-all duration-300 cursor-pointer"
+              >
                 <Github className="w-5 h-5" />
-              </a>
-              <a href="https://twitter.com/mohitdecodes" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center text-slate-400 hover:bg-blue-400 hover:text-white transition-all duration-300">
+              </button>
+              <button 
+                type="button"
+                onClick={() => window.open('https://twitter.com/mohitdecodes', '_blank', 'noopener,noreferrer')} 
+                aria-label="Twitter"
+                className="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center text-slate-400 hover:bg-blue-400 hover:text-white transition-all duration-300 cursor-pointer"
+              >
                 <Twitter className="w-5 h-5" />
-              </a>
-              <a href="https://www.linkedin.com/in/mohitdecodes/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition-all duration-300">
+              </button>
+              <button 
+                type="button"
+                onClick={() => window.open('https://www.linkedin.com/in/mohitdecodes/', '_blank', 'noopener,noreferrer')} 
+                aria-label="LinkedIn"
+                className="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition-all duration-300 cursor-pointer"
+              >
                 <Linkedin className="w-5 h-5" />
-              </a>
-              <a href="https://www.instagram.com/mohitdecodes" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center text-slate-400 hover:bg-pink-600 hover:text-white transition-all duration-300">
+              </button>
+              <button 
+                type="button"
+                onClick={() => window.open('https://www.instagram.com/mohitdecodes', '_blank', 'noopener,noreferrer')} 
+                aria-label="Instagram"
+                className="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center text-slate-400 hover:bg-pink-600 hover:text-white transition-all duration-300 cursor-pointer"
+              >
                 <Instagram className="w-5 h-5" />
-              </a>
-              <a href="https://youtube.com/@mohitdecodes" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center text-slate-400 hover:bg-red-500 hover:text-white transition-all duration-300">
+              </button>
+              <button 
+                type="button"
+                onClick={() => window.open('https://youtube.com/@mohitdecodes', '_blank', 'noopener,noreferrer')} 
+                aria-label="YouTube"
+                className="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center text-slate-400 hover:bg-red-500 hover:text-white transition-all duration-300 cursor-pointer"
+              >
                 <Youtube className="w-5 h-5" />
-              </a>
+              </button>
             </div>
           </div>
 

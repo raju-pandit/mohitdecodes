@@ -77,12 +77,11 @@ const Contact: React.FC = () => {
                 {contactInfo.map((item) => {
                   const Icon = item.icon
                   return (
-                    <a
+                    <button
+                      type="button"
                       key={item.label}
-                      href={item.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="glass-card-hover flex items-center gap-4 p-4"
+                      onClick={() => window.open(item.href, '_blank', 'noopener,noreferrer')}
+                      className="glass-card-hover w-full flex items-center gap-4 p-4 text-left cursor-pointer"
                     >
                       <div className="w-10 h-10 bg-primary-700/20 rounded-xl flex items-center justify-center flex-shrink-0">
                         <Icon className="w-5 h-5 text-primary-400" />
@@ -91,7 +90,7 @@ const Contact: React.FC = () => {
                         <p className="text-xs text-slate-500">{item.label}</p>
                         <p className="text-slate-200 font-medium text-sm">{item.value}</p>
                       </div>
-                    </a>
+                    </button>
                   )
                 })}
               </div>

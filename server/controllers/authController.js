@@ -44,17 +44,25 @@ export const sendOtp = async (req, res, next) => {
       { upsert: true, new: true }
     );
 
-    // Call SmsHorizon API matching API console parameters exactly
+    // Call SmsHorizon API matching official documentation and API console
     const apiKey = process.env.SMSHORIZON_API_KEY || 'ldPBxWuf3A3Yao28lCfwjTivLgs1re';
     const user = process.env.SMSHORIZON_USER || 'mohitdecodes';
     const senderId = process.env.SMSHORIZON_SENDER_ID || '8235402646';
     const templateId = process.env.SMSHORIZON_TEMPLATE_ID || '1607100000000323238';
     const smsMessage = `OTP for your new user account registration is: ${otpCode}\n\n- SmsHorizon`;
 
+    // Safe debugging logs (only boolean flags)
+    console.log('SmsHorizon Credentials Check:');
+    console.log('API key exists:', Boolean(apiKey));
+    console.log('Username exists:', Boolean(user));
+    console.log('Sender ID exists:', Boolean(senderId));
+    console.log('Template ID exists:', Boolean(templateId));
+
     if (apiKey) {
       try {
         const bodyParams = new URLSearchParams({
           user,
+          apikey: apiKey,
           number: cleanPhone,
           senderid: senderId,
           message: smsMessage,
