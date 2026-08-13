@@ -148,12 +148,9 @@ const FeatureSpotlightCard: React.FC<{
         setIsHovered(false);
         setMousePosition({ x: -500, y: -500 });
       }}
-      className="relative p-6 lg:p-7 rounded-2xl border border-white/10 transition-colors duration-300 group overflow-hidden shadow-lg select-none"
-      style={{
-        background: 'linear-gradient(145deg, rgba(17,17,22,0.95) 0%, rgba(13,13,18,0.98) 100%)',
-      }}
+      className="relative p-6 lg:p-7 rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/90 dark:bg-[#0c0e1e]/95 transition-all duration-300 group overflow-hidden shadow-sm dark:shadow-lg select-none"
     >
-      {/* Cursor Radial Spotlight Glow Effect (NamasteDev / Vercel style) */}
+      {/* Cursor Radial Spotlight Glow Effect */}
       <div
         className="pointer-events-none absolute -inset-px rounded-2xl transition-opacity duration-300 z-0"
         style={{
@@ -175,9 +172,9 @@ const FeatureSpotlightCard: React.FC<{
 
       {/* Subtle Grid Texture Background Overlay */}
       <div 
-        className="absolute inset-0 opacity-[0.14] pointer-events-none group-hover:opacity-[0.25] transition-opacity duration-300 z-0"
+        className="absolute inset-0 opacity-[0.06] dark:opacity-[0.14] pointer-events-none group-hover:opacity-[0.15] dark:group-hover:opacity-[0.25] transition-opacity duration-300 z-0"
         style={{
-          backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.12) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.12) 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(to right, rgba(124,58,237,0.15) 1px, transparent 1px), linear-gradient(to bottom, rgba(124,58,237,0.15) 1px, transparent 1px)`,
           backgroundSize: '24px 24px'
         }}
       />
@@ -185,7 +182,7 @@ const FeatureSpotlightCard: React.FC<{
       {/* Icon */}
       <div className="mb-6 relative z-10">
         <div 
-          className="w-12 h-12 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+          className="w-12 h-12 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 shadow-sm"
           style={{ background: `${feature.iconColor}18`, border: `1px solid ${feature.iconColor}35` }}
         >
           <IconComponent
@@ -198,10 +195,10 @@ const FeatureSpotlightCard: React.FC<{
 
       {/* Title & Desc */}
       <div className="relative z-10">
-        <h3 className="text-lg font-bold text-white leading-snug mb-3 transition-colors">
+        <h3 className="text-lg font-bold text-slate-900 dark:text-white leading-snug mb-3 transition-colors">
           {feature.title}
         </h3>
-        <p className="text-slate-400 text-xs sm:text-sm leading-relaxed font-normal">
+        <p className="text-slate-600 dark:text-slate-400 text-xs sm:text-sm leading-relaxed font-normal">
           {feature.desc}
         </p>
       </div>
@@ -297,22 +294,22 @@ const Home: React.FC = () => {
             transition={{ duration: 0.5 }}
             className="space-y-8 text-center lg:text-left"
           >
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] text-white">
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] text-slate-900 dark:text-white">
               Be a part of our <br />
               <AnimatedWord />
             </h1>
             
-            <p className="text-lg md:text-xl text-slate-400 max-w-lg mx-auto lg:mx-0 leading-relaxed font-medium">
+            <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-lg mx-auto lg:mx-0 leading-relaxed font-medium">
               A community of coders, making the world a better place. Learn, build, and grow with the best developers in the industry.
             </p>
 
-            {/* Social Icons (using button click to prevent browser bottom-left URL preview on hover) */}
+            {/* Social Icons */}
             <div className="flex gap-4 justify-center lg:justify-start">
               <button 
                 type="button"
                 onClick={() => window.open('https://www.linkedin.com/in/mohitdecodes/', '_blank', 'noopener,noreferrer')} 
                 aria-label="LinkedIn"
-                className="w-10 h-10 rounded-full border border-blue-500/30 text-blue-400 bg-blue-500/5 hover:bg-blue-500/20 hover:text-white flex items-center justify-center transition-all duration-300 cursor-pointer"
+                className="w-10 h-10 rounded-full border border-blue-500/30 text-blue-600 dark:text-blue-400 bg-blue-500/5 hover:bg-blue-500/20 hover:text-blue-700 dark:hover:text-white flex items-center justify-center transition-all duration-300 cursor-pointer shadow-sm"
               >
                 <Linkedin size={20} />
               </button>
@@ -320,7 +317,7 @@ const Home: React.FC = () => {
                 type="button"
                 onClick={() => window.open('https://youtube.com/@mohitdecodes', '_blank', 'noopener,noreferrer')} 
                 aria-label="YouTube"
-                className="w-10 h-10 rounded-full border border-red-500/30 text-red-500 bg-red-500/5 hover:bg-red-500/20 hover:text-white flex items-center justify-center transition-all duration-300 cursor-pointer"
+                className="w-10 h-10 rounded-full border border-red-500/30 text-red-600 dark:text-red-500 bg-red-500/5 hover:bg-red-500/20 hover:text-red-700 dark:hover:text-white flex items-center justify-center transition-all duration-300 cursor-pointer shadow-sm"
               >
                 <Youtube size={20} />
               </button>
@@ -328,7 +325,7 @@ const Home: React.FC = () => {
                 type="button"
                 onClick={() => window.open('https://www.instagram.com/mohitdecodes', '_blank', 'noopener,noreferrer')} 
                 aria-label="Instagram"
-                className="w-10 h-10 rounded-full border border-pink-500/30 text-pink-500 bg-pink-500/5 hover:bg-pink-500/20 hover:text-white flex items-center justify-center transition-all duration-300 cursor-pointer"
+                className="w-10 h-10 rounded-full border border-pink-500/30 text-pink-600 dark:text-pink-500 bg-pink-500/5 hover:bg-pink-500/20 hover:text-pink-700 dark:hover:text-white flex items-center justify-center transition-all duration-300 cursor-pointer shadow-sm"
               >
                 <Instagram size={20} />
               </button>
@@ -346,7 +343,7 @@ const Home: React.FC = () => {
               <button 
                 type="button"
                 onClick={() => window.open('https://youtube.com/@mohitdecodes', '_blank', 'noopener,noreferrer')} 
-                className="btn-secondary py-3 px-6 sm:py-3.5 sm:px-8 font-semibold rounded-xl flex items-center gap-2 border border-dark-700 bg-dark-900/60 hover:bg-dark-800 transition-all cursor-pointer"
+                className="btn-secondary py-3 px-6 sm:py-3.5 sm:px-8 font-semibold rounded-xl flex items-center gap-2 border border-slate-300 dark:border-dark-700 bg-white/80 dark:bg-dark-900/60 hover:bg-slate-100 dark:hover:bg-dark-800 transition-all cursor-pointer shadow-sm"
               >
                 <svg viewBox="0 0 24 24" className="w-5 h-5 text-[#FF0000] fill-current shrink-0" xmlns="http://www.w3.org/2000/svg">
                   <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.108C19.524 3.545 12 3.545 12 3.545s-7.525 0-9.387.51a3.003 3.003 0 0 0-2.11 2.108C0 8.025 0 12 0 12s0 3.975.503 5.837a3.003 3.003 0 0 0 2.11 2.108c1.862.51 9.387.51 9.387.51s7.525 0 9.387-.51a3.003 3.003 0 0 0 2.11-2.108C24 15.975 24 12 24 12s0-3.975-.502-5.837z" />
@@ -357,21 +354,21 @@ const Home: React.FC = () => {
             </div>
             
             {/* Stats Row */}
-            <div className="pt-8 border-t border-dark-800 grid grid-cols-3 gap-4 max-w-md mx-auto lg:mx-0">
+            <div className="pt-8 border-t border-slate-200 dark:border-dark-800 grid grid-cols-3 gap-4 max-w-md mx-auto lg:mx-0">
               <div className="text-center lg:text-left flex flex-col items-center lg:items-start">
-                <Award className="w-6 h-6 text-primary-400 mb-2" />
-                <p className="text-2xl font-extrabold text-white">202K+</p>
-                <p className="text-gray-500 text-xs font-semibold">Students</p>
+                <Award className="w-6 h-6 text-purple-600 dark:text-primary-400 mb-2" />
+                <p className="text-2xl font-extrabold text-slate-900 dark:text-white">202K+</p>
+                <p className="text-slate-500 text-xs font-semibold">Students</p>
               </div>
               <div className="text-center lg:text-left flex flex-col items-center lg:items-start">
-                <BookOpen className="w-6 h-6 text-primary-400 mb-2" />
-                <p className="text-2xl font-extrabold text-white">5+</p>
-                <p className="text-gray-500 text-xs font-semibold">Courses</p>
+                <BookOpen className="w-6 h-6 text-purple-600 dark:text-primary-400 mb-2" />
+                <p className="text-2xl font-extrabold text-slate-900 dark:text-white">5+</p>
+                <p className="text-slate-500 text-xs font-semibold">Courses</p>
               </div>
               <div className="text-center lg:text-left flex flex-col items-center lg:items-start">
-                <Users className="w-6 h-6 text-primary-400 mb-2" />
-                <p className="text-2xl font-extrabold text-white">2+</p>
-                <p className="text-gray-500 text-xs font-semibold">Instructors</p>
+                <Users className="w-6 h-6 text-purple-600 dark:text-primary-400 mb-2" />
+                <p className="text-2xl font-extrabold text-slate-900 dark:text-white">2+</p>
+                <p className="text-slate-500 text-xs font-semibold">Instructors</p>
               </div>
             </div>
           </motion.div>
@@ -391,24 +388,24 @@ const Home: React.FC = () => {
               <motion.div
                 animate={{ y: [0, -8, 0] }}
                 transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-                className="absolute -top-3 -left-3 z-20 bg-dark-900/90 border border-primary-500/30 p-2.5 rounded-2xl shadow-[0_0_20px_rgba(124,58,237,0.25)] backdrop-blur-md hidden sm:block"
+                className="absolute -top-3 -left-3 z-20 bg-white/90 dark:bg-dark-900/90 border border-slate-200 dark:border-primary-500/30 p-2.5 rounded-2xl shadow-md dark:shadow-[0_0_20px_rgba(124,58,237,0.25)] backdrop-blur-md hidden sm:block"
               >
-                <Code2 className="w-5 h-5 text-primary-400" />
+                <Code2 className="w-5 h-5 text-purple-600 dark:text-primary-400" />
               </motion.div>
 
               {/* Floating object brackets tag (Bottom-Right) */}
               <motion.div
                 animate={{ y: [0, 8, 0] }}
                 transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 2.5 }}
-                className="absolute -bottom-3 -right-3 z-20 bg-dark-900/90 border border-cyan-500/30 px-3 py-2 rounded-2xl shadow-[0_0_20px_rgba(6,182,212,0.25)] backdrop-blur-md hidden sm:block"
+                className="absolute -bottom-3 -right-3 z-20 bg-white/90 dark:bg-dark-900/90 border border-slate-200 dark:border-cyan-500/30 px-3 py-2 rounded-2xl shadow-md dark:shadow-[0_0_20px_rgba(6,182,212,0.25)] backdrop-blur-md hidden sm:block"
               >
-                <span className="text-cyan-400 font-mono text-xs font-extrabold select-none">{"{}"}</span>
+                <span className="text-cyan-600 dark:text-cyan-400 font-mono text-xs font-extrabold select-none">{"{}"}</span>
               </motion.div>
 
               {/* Card Container with Gradient Ring and Glowing Shadow */}
-              <div className="relative p-[1.5px] bg-gradient-to-tr from-primary-600 via-purple-500 to-cyan-400 rounded-[50px] sm:rounded-[60px] lg:rounded-[72px] shadow-[0_0_60px_rgba(124,58,237,0.35),0_0_100px_rgba(6,182,212,0.12)] hover:shadow-[0_0_80px_rgba(124,58,237,0.5),0_0_120px_rgba(6,182,212,0.2)] transition-shadow duration-500 select-none">
+              <div className="relative p-[1.5px] bg-gradient-to-tr from-primary-600 via-purple-500 to-cyan-400 rounded-[50px] sm:rounded-[60px] lg:rounded-[72px] shadow-[0_0_40px_rgba(124,58,237,0.25)] dark:shadow-[0_0_60px_rgba(124,58,237,0.35),0_0_100px_rgba(6,182,212,0.12)] hover:shadow-[0_0_60px_rgba(124,58,237,0.4)] dark:hover:shadow-[0_0_80px_rgba(124,58,237,0.5),0_0_120px_rgba(6,182,212,0.2)] transition-shadow duration-500 select-none">
                 {/* Inner Frame */}
-                <div className="w-[280px] h-[360px] sm:w-[340px] h-[440px] lg:w-[440px] lg:h-[565px] rounded-[48px] sm:rounded-[58px] lg:rounded-[70px] overflow-hidden border-[6px] border-[#060814] bg-[#0c0f24] flex items-center justify-center">
+                <div className="w-[280px] h-[360px] sm:w-[340px] h-[440px] lg:w-[440px] lg:h-[565px] rounded-[48px] sm:rounded-[58px] lg:rounded-[70px] overflow-hidden border-[6px] border-slate-100 dark:border-[#060814] bg-slate-200 dark:bg-[#0c0f24] flex items-center justify-center">
                   <img 
                     src="/mohit.png" 
                     alt="Mohit Decodes" 
@@ -636,11 +633,11 @@ const Home: React.FC = () => {
       )}
 
       {/* NEWSLETTER */}
-      <section className="py-24 relative border-t border-dark-800">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-950/20 to-cyan-950/20" />
+      <section className="py-24 relative border-t border-slate-200 dark:border-dark-800">
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-blue-500/5 dark:from-primary-950/20 dark:to-cyan-950/20" />
         <div className="container-max relative z-10 text-center max-w-3xl">
-          <h2 className="text-4xl font-bold mb-6">Join 100,000+ Developers</h2>
-          <p className="text-xl text-slate-300 mb-10">Get weekly tips, free resources, and the latest tutorials delivered straight to your inbox.</p>
+          <h2 className="text-4xl font-bold text-slate-900 dark:text-white mb-6">Join 100,000+ Developers</h2>
+          <p className="text-xl text-slate-600 dark:text-slate-300 mb-10">Get weekly tips, free resources, and the latest tutorials delivered straight to your inbox.</p>
           
           <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-4 justify-center max-w-xl mx-auto">
             <input 

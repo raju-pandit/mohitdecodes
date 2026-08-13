@@ -29,7 +29,7 @@ export const Footer = () => {
   };
 
   return (
-    <footer className="bg-dark-950 border-t border-dark-800 pt-16 pb-8">
+    <footer className="bg-slate-100/80 dark:bg-dark-950 border-t border-slate-200 dark:border-dark-800 pt-16 pb-8 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* Brand Col */}
@@ -38,7 +38,7 @@ export const Footer = () => {
               <BrandLogo size="lg" />
             </div>
 
-            <p className="text-slate-400 text-sm mb-6 leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 leading-relaxed">
               Learn. Build. Decode. Your ultimate destination to master MERN full-stack development, roadmaps, and systems with practical real-world projects.
             </p>
             <div className="flex items-center gap-4">
@@ -46,7 +46,7 @@ export const Footer = () => {
                 type="button"
                 onClick={() => window.open('https://github.com/mohitdjcet', '_blank', 'noopener,noreferrer')} 
                 aria-label="GitHub"
-                className="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center text-slate-400 hover:bg-primary-500 hover:text-white transition-all duration-300 cursor-pointer"
+                className="w-10 h-10 rounded-full bg-slate-200/80 dark:bg-dark-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-purple-600 hover:text-white transition-all duration-300 cursor-pointer shadow-sm"
               >
                 <Github className="w-5 h-5" />
               </button>
@@ -54,7 +54,7 @@ export const Footer = () => {
                 type="button"
                 onClick={() => window.open('https://twitter.com/mohitdecodes', '_blank', 'noopener,noreferrer')} 
                 aria-label="Twitter"
-                className="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center text-slate-400 hover:bg-blue-400 hover:text-white transition-all duration-300 cursor-pointer"
+                className="w-10 h-10 rounded-full bg-slate-200/80 dark:bg-dark-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-blue-400 hover:text-white transition-all duration-300 cursor-pointer shadow-sm"
               >
                 <Twitter className="w-5 h-5" />
               </button>
@@ -62,7 +62,7 @@ export const Footer = () => {
                 type="button"
                 onClick={() => window.open('https://www.linkedin.com/in/mohitdecodes/', '_blank', 'noopener,noreferrer')} 
                 aria-label="LinkedIn"
-                className="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition-all duration-300 cursor-pointer"
+                className="w-10 h-10 rounded-full bg-slate-200/80 dark:bg-dark-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-blue-600 hover:text-white transition-all duration-300 cursor-pointer shadow-sm"
               >
                 <Linkedin className="w-5 h-5" />
               </button>
@@ -70,7 +70,7 @@ export const Footer = () => {
                 type="button"
                 onClick={() => window.open('https://www.instagram.com/mohitdecodes', '_blank', 'noopener,noreferrer')} 
                 aria-label="Instagram"
-                className="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center text-slate-400 hover:bg-pink-600 hover:text-white transition-all duration-300 cursor-pointer"
+                className="w-10 h-10 rounded-full bg-slate-200/80 dark:bg-dark-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-pink-600 hover:text-white transition-all duration-300 cursor-pointer shadow-sm"
               >
                 <Instagram className="w-5 h-5" />
               </button>
@@ -78,7 +78,7 @@ export const Footer = () => {
                 type="button"
                 onClick={() => window.open('https://youtube.com/@mohitdecodes', '_blank', 'noopener,noreferrer')} 
                 aria-label="YouTube"
-                className="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center text-slate-400 hover:bg-red-500 hover:text-white transition-all duration-300 cursor-pointer"
+                className="w-10 h-10 rounded-full bg-slate-200/80 dark:bg-dark-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-red-500 hover:text-white transition-all duration-300 cursor-pointer shadow-sm"
               >
                 <Youtube className="w-5 h-5" />
               </button>
@@ -87,12 +87,12 @@ export const Footer = () => {
 
           {/* Links Col 1: Learn */}
           <div>
-            <h3 className="text-white font-semibold mb-6">Learn</h3>
+            <h3 className="text-slate-900 dark:text-white font-semibold mb-6">Learn</h3>
             <ul className="space-y-3">
               {['Courses', 'Tutorials', 'Roadmaps', 'Resources', 'Projects', 'Blogs'].map((item) => (
                 <li key={item}>
-                  <Link to={`/${item.toLowerCase()}`} className="text-slate-400 hover:text-primary-400 transition-colors text-sm flex items-center group">
-                    <span className="w-0 h-0.5 bg-primary-400 mr-0 transition-all duration-300 group-hover:w-2 group-hover:mr-2"></span>
+                  <Link to={`/${item.toLowerCase()}`} className="text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors text-sm flex items-center group">
+                    <span className="w-0 h-0.5 bg-purple-500 mr-0 transition-all duration-300 group-hover:w-2 group-hover:mr-2"></span>
                     {item}
                   </Link>
                 </li>
@@ -102,7 +102,7 @@ export const Footer = () => {
 
           {/* Links Col 2: Company */}
           <div>
-            <h3 className="text-white font-semibold mb-6">Company</h3>
+            <h3 className="text-slate-900 dark:text-white font-semibold mb-6">Company</h3>
             <ul className="space-y-3">
               {[
                 { name: 'About Us', path: '/about' },
@@ -112,8 +112,8 @@ export const Footer = () => {
                 { name: 'Terms of Service', path: '/terms' },
               ].map((item) => (
                 <li key={item.name}>
-                  <Link to={item.path} className="text-slate-400 hover:text-primary-400 transition-colors text-sm flex items-center group">
-                    <span className="w-0 h-0.5 bg-primary-400 mr-0 transition-all duration-300 group-hover:w-2 group-hover:mr-2"></span>
+                  <Link to={item.path} className="text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors text-sm flex items-center group">
+                    <span className="w-0 h-0.5 bg-purple-500 mr-0 transition-all duration-300 group-hover:w-2 group-hover:mr-2"></span>
                     {item.name}
                   </Link>
                 </li>
@@ -123,35 +123,32 @@ export const Footer = () => {
 
           {/* Newsletter Col */}
           <div>
-            <h3 className="text-white font-semibold mb-6">Stay Updated</h3>
-            <p className="text-slate-400 text-sm mb-4">
-              Subscribe to our newsletter for the latest tutorials, courses, and tech updates.
+            <h3 className="text-slate-900 dark:text-white font-semibold mb-6">Stay Ahead</h3>
+            <p className="text-slate-600 dark:text-slate-400 text-sm mb-4">
+              Get hand-picked articles, roadmap updates, and course releases delivered to your inbox.
             </p>
-            <form className="space-y-2" onSubmit={handleSubscribe}>
+            <form onSubmit={handleSubscribe} className="space-y-3">
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-slate-500" />
-                </div>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
-                  className="w-full bg-dark-900 border border-dark-700 rounded-lg py-2.5 pl-10 pr-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                   required
+                  className="input pr-10 text-sm bg-white dark:bg-dark-900"
                 />
+                <Mail className="absolute right-3 top-3.5 w-4 h-4 text-slate-400" />
               </div>
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-primary-600 hover:bg-primary-700 text-white rounded-lg py-2.5 px-4 text-sm font-medium transition-colors flex items-center justify-center gap-2 group disabled:opacity-50"
+                className="btn-primary w-full py-2.5 text-sm flex items-center justify-center gap-2 cursor-pointer"
               >
                 {loading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
                   <>
-                    Subscribe
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    Subscribe Free <ArrowRight className="w-4 h-4" />
                   </>
                 )}
               </button>
@@ -159,14 +156,14 @@ export const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom */}
-        <div className="pt-8 border-t border-dark-800 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-slate-500 text-sm">
-            © {currentYear} MohitDecodes. All rights reserved.
-          </p>
-          <p className="text-slate-500 text-sm flex items-center gap-1">
-            Made with <span className="text-red-500">❤️</span> for developers
-          </p>
+        {/* Bottom Bar */}
+        <div className="border-t border-slate-200 dark:border-dark-800 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+          <p>© {currentYear} MohitDecodes. All rights reserved.</p>
+          <div className="flex items-center gap-6">
+            <Link to="/privacy" className="hover:text-slate-700 dark:hover:text-slate-300 transition-colors">Privacy Policy</Link>
+            <Link to="/terms" className="hover:text-slate-700 dark:hover:text-slate-300 transition-colors">Terms of Service</Link>
+            <Link to="/contact" className="hover:text-slate-700 dark:hover:text-slate-300 transition-colors">Contact</Link>
+          </div>
         </div>
       </div>
     </footer>

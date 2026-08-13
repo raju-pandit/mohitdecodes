@@ -4,11 +4,14 @@ import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-
 import { Search, Menu, X, LogOut, Settings, User } from 'lucide-react';
 import { Button } from './ui/Button';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
+import { ThemeToggle } from './ThemeToggle';
 import BrandLogo from './Logo';
 import { getInitials, hasCustomAvatar } from '../utils/formatters';
 
 export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
   const { user, logout } = useAuth();
+  const { isDark } = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
   const { scrollY } = useScroll();
@@ -94,17 +97,23 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
             <BrandLogo size="md" />
           </div>
 
-          {/* Center: Floating Glass Pill Navigation (Matching User Screenshot Exactly) */}
+          {/* Center: Floating Glass Pill Navigation */}
           <nav 
             style={{
-              backgroundColor: scrolled ? 'rgba(10, 10, 25, 0.85)' : 'rgba(255, 255, 255, 0.04)',
+              backgroundColor: isDark 
+                ? (scrolled ? 'rgba(10, 10, 25, 0.85)' : 'rgba(255, 255, 255, 0.04)')
+                : (scrolled ? 'rgba(255, 255, 255, 0.95)' : 'rgba(255, 255, 255, 0.85)'),
               backdropFilter: 'blur(16px)',
               WebkitBackdropFilter: 'blur(16px)',
             }}
             className={`hidden lg:flex items-center gap-1 px-3.5 py-1.5 border rounded-[999px] transition-all duration-300 ${
-              scrolled 
-                ? 'border-primary-500/40 shadow-[0_0_24px_rgba(168,85,247,0.3)] border-white/15' 
-                : 'border-white/10 border-primary-500/20 shadow-[0_0_15px_rgba(124,58,237,0.15)]'
+              isDark
+                ? (scrolled 
+                    ? 'border-primary-500/40 shadow-[0_0_24px_rgba(168,85,247,0.3)] border-white/15' 
+                    : 'border-white/10 border-primary-500/20 shadow-[0_0_15px_rgba(124,58,237,0.15)]')
+                : (scrolled
+                    ? 'border-primary-500/30 shadow-[0_4px_20px_rgba(124,58,237,0.1)] border-slate-200'
+                    : 'border-slate-200/80 shadow-[0_2px_12px_rgba(0,0,0,0.04)]')
             }`}
           >
             {navLinks.map((link) => {
@@ -116,7 +125,7 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
                   className={`relative px-3.5 py-1.5 rounded-[999px] text-xs font-semibold tracking-wide transition-all duration-200 z-10 cursor-pointer ${
                     isActive 
                       ? 'text-white font-bold' 
-                      : 'text-slate-300 hover:text-white'
+                      : (isDark ? 'text-slate-300 hover:text-white' : 'text-slate-600 hover:text-slate-900')
                   }`}
                 >
                   <span className="relative z-10">{link.name}</span>
@@ -133,31 +142,42 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
           </nav>
 
 
-          {/* Right: Search / Ctrl K + Profile (hides on desktop when scrolled so only center menu pill remains) */}
-          <div className={`flex items-center gap-2 sm:gap-4 transition-all duration-300 ${scrolled ? 'lg:opacity-0 lg:w-0 lg:overflow-hidden lg:pointer-events-none' : 'opacity-100'}`}>
+          {/* Right: Search / Ctrl K + ThemeToggle + Profile */}
+          <div className={`flex items-center gap-2 sm:gap-3 transition-all duration-300 ${scrolled ? 'lg:opacity-0 lg:w-0 lg:overflow-hidden lg:pointer-events-none' : 'opacity-100'}`}>
             <button 
               onClick={onOpenSearch}
-              className="flex items-center gap-1.5 bg-white/[0.05] hover:bg-white/[0.12] border border-white/10 hover:border-primary-500/40 px-2.5 py-1.5 rounded-full text-slate-300 hover:text-white transition-all shadow-inner cursor-pointer group shrink-0"
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full transition-all border cursor-pointer group shrink-0 ${
+                isDark
+                  ? 'bg-white/[0.05] hover:bg-white/[0.12] border-white/10 hover:border-primary-500/40 text-slate-300 hover:text-white'
+                  : 'bg-slate-100 hover:bg-slate-200/80 border-slate-200 hover:border-primary-500/40 text-slate-600 hover:text-slate-900 shadow-sm'
+              }`}
               aria-label="Open Search"
             >
-              <Search className="w-3.5 h-3.5 text-slate-400 group-hover:text-primary-400 transition-colors" />
-              <span className="hidden sm:inline-block text-[10px] font-mono text-slate-400 bg-white/10 px-1.5 py-0.5 rounded border border-white/10">
+              <Search className="w-3.5 h-3.5 text-slate-400 group-hover:text-primary-500 transition-colors" />
+              <span className={`hidden sm:inline-block text-[10px] font-mono px-1.5 py-0.5 rounded border ${
+                isDark ? 'text-slate-400 bg-white/10 border-white/10' : 'text-slate-500 bg-white border-slate-200'
+              }`}>
                 Ctrl K
               </span>
             </button>
 
-
+            {/* Theme Toggle Button */}
+            <ThemeToggle size="sm" />
 
             {user ? (
               <div className="relative" ref={dropdownRef}>
                 <button 
                   onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                  className="flex items-center gap-1.5 md:gap-2.5 bg-white/5 p-1 md:px-3 md:py-1.5 border border-primary-500/35 rounded-full cursor-pointer hover:bg-white/10 transition-all shadow-inner"
+                  className={`flex items-center gap-1.5 md:gap-2.5 p-1 md:px-3 md:py-1.5 border rounded-full cursor-pointer transition-all ${
+                    isDark 
+                      ? 'bg-white/5 border-primary-500/35 hover:bg-white/10' 
+                      : 'bg-slate-100 border-primary-500/30 hover:bg-slate-200'
+                  }`}
                 >
-                  <div className="w-6 h-6 rounded-full bg-primary-600/30 border border-primary-500/40 flex items-center justify-center text-white text-xs font-extrabold overflow-hidden shrink-0">
+                  <div className="w-6 h-6 rounded-full bg-primary-600/30 border border-primary-500/40 flex items-center justify-center text-primary-600 dark:text-white text-xs font-extrabold overflow-hidden shrink-0">
                     {hasCustomAvatar(user?.avatar) ? <img src={user.avatar} className="w-full h-full object-cover" /> : getInitials(user?.name || '')}
                   </div>
-                  <span className="hidden md:inline text-xs font-semibold text-white tracking-wide ml-1">{user?.name}</span>
+                  <span className={`hidden md:inline text-xs font-semibold tracking-wide ml-1 ${isDark ? 'text-white' : 'text-slate-800'}`}>{user?.name}</span>
                   <span className="hidden md:inline text-slate-400 text-[9px] ml-0.5">{profileDropdownOpen ? '▲' : '▼'}</span>
                 </button>
                 
@@ -169,22 +189,24 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
                       exit={{ opacity: 0, y: 10, scale: 0.95 }}
                       transition={{ duration: 0.15 }}
                       style={{
-                        backgroundColor: 'rgba(10, 10, 25, 0.96)',
+                        backgroundColor: isDark ? 'rgba(10, 10, 25, 0.96)' : 'rgba(255, 255, 255, 0.98)',
                         backdropFilter: 'blur(16px)',
                         WebkitBackdropFilter: 'blur(16px)',
                       }}
-                      className="absolute right-0 mt-3 w-64 border border-white/10 rounded-2xl shadow-2xl p-4 z-[9999] overflow-hidden text-left"
+                      className={`absolute right-0 mt-3 w-64 border rounded-2xl p-4 z-[9999] overflow-hidden text-left ${
+                        isDark ? 'border-white/10 shadow-2xl' : 'border-slate-200 shadow-xl'
+                      }`}
                     >
                       {/* Dropdown Header Info Card */}
                       <div className="flex items-start mb-3">
-                        <div className="w-12 h-12 rounded-full bg-primary-600/20 border border-primary-500/30 flex items-center justify-center text-white text-sm font-extrabold overflow-hidden shrink-0 mr-3">
+                        <div className="w-12 h-12 rounded-full bg-primary-600/20 border border-primary-500/30 flex items-center justify-center text-primary-600 dark:text-white text-sm font-extrabold overflow-hidden shrink-0 mr-3">
                           {hasCustomAvatar(user?.avatar) ? <img src={user.avatar} className="w-full h-full object-cover" /> : getInitials(user?.name || '')}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-1.5">
-                            <span className="text-sm font-extrabold text-white truncate max-w-[90px]">{user?.name}</span>
-                            <span className="flex items-center gap-1 text-[8px] text-green-400 font-semibold select-none bg-green-500/10 px-1.5 py-0.5 rounded-full">
-                              <span className="w-1 h-1 rounded-full bg-green-400 animate-pulse" />
+                            <span className={`text-sm font-extrabold truncate max-w-[90px] ${isDark ? 'text-white' : 'text-slate-900'}`}>{user?.name}</span>
+                            <span className="flex items-center gap-1 text-[8px] text-green-500 font-semibold select-none bg-green-500/10 px-1.5 py-0.5 rounded-full">
+                              <span className="w-1 h-1 rounded-full bg-green-500 animate-pulse" />
                               Live Coding
                             </span>
                           </div>
@@ -197,23 +219,27 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
                         </div>
                       </div>
 
-                      <div className="border-t border-white/10 my-3" />
+                      <div className={`border-t my-3 ${isDark ? 'border-white/10' : 'border-slate-200'}`} />
 
                       {/* Dropdown Options */}
                       <div className="space-y-1">
-                        <Link to="/dashboard" className="flex items-center px-3 py-2 text-sm text-slate-300 font-semibold hover:bg-white/10 hover:text-white rounded-lg transition-colors" onClick={() => setProfileDropdownOpen(false)}>
+                        <Link to="/dashboard" className={`flex items-center px-3 py-2 text-sm font-semibold rounded-lg transition-colors ${
+                          isDark ? 'text-slate-300 hover:bg-white/10 hover:text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
+                        }`} onClick={() => setProfileDropdownOpen(false)}>
                           <User className="w-4 h-4 mr-3 text-slate-400" /> Profile
                         </Link>
                         {user?.role === 'admin' && (
-                          <Link to="/admin" className="flex items-center px-3 py-2 text-sm text-primary-400 font-semibold hover:bg-white/10 rounded-lg transition-colors" onClick={() => setProfileDropdownOpen(false)}>
+                          <Link to="/admin" className={`flex items-center px-3 py-2 text-sm font-semibold rounded-lg transition-colors ${
+                            isDark ? 'text-primary-400 hover:bg-white/10' : 'text-primary-600 hover:bg-primary-50'
+                          }`} onClick={() => setProfileDropdownOpen(false)}>
                             <Settings className="w-4 h-4 mr-3 text-primary-500" /> Admin Panel
                           </Link>
                         )}
                         <button 
                           onClick={() => { logout(); setProfileDropdownOpen(false); }}
-                          className="w-full flex items-center px-3 py-2.5 text-sm text-red-400 font-bold hover:bg-red-500/10 rounded-lg transition-colors mt-1"
+                          className="w-full flex items-center px-3 py-2.5 text-sm text-red-500 font-bold hover:bg-red-500/10 rounded-lg transition-colors mt-1 cursor-pointer"
                         >
-                          <LogOut className="w-4 h-4 mr-3 text-red-400" /> Sign Out
+                          <LogOut className="w-4 h-4 mr-3 text-red-500" /> Sign Out
                         </button>
                       </div>
                     </motion.div>
@@ -225,7 +251,7 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="text-slate-200 hover:text-white cursor-pointer"
+                  className={`cursor-pointer ${isDark ? 'text-slate-200 hover:text-white' : 'text-slate-700 hover:text-slate-900'}`}
                   onClick={() => navigate('/login')}
                 >
                   Login
@@ -243,7 +269,11 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
 
             {/* Mobile Menu Toggle Button */}
             <button 
-              className="lg:hidden p-2 text-slate-200 hover:text-white rounded-xl hover:bg-white/10 border border-white/10 bg-white/5 transition-all select-none shrink-0"
+              className={`lg:hidden p-2 rounded-xl border transition-all select-none shrink-0 cursor-pointer ${
+                isDark 
+                  ? 'text-slate-200 hover:text-white bg-white/5 border-white/10 hover:bg-white/10' 
+                  : 'text-slate-700 hover:text-slate-900 bg-slate-100 border-slate-200 hover:bg-slate-200'
+              }`}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle Navigation Menu"
             >
@@ -252,7 +282,7 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
           </div>
         </div>
 
-        {/* Mobile Menu Dropdown (Clean, top-down expansion) */}
+        {/* Mobile Menu Dropdown */}
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div
@@ -261,21 +291,28 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
               exit={{ opacity: 0, y: -10, scale: 0.98 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
               style={{
-                backgroundColor: 'rgba(10, 10, 25, 0.96)',
+                backgroundColor: isDark ? 'rgba(10, 10, 25, 0.96)' : 'rgba(255, 255, 255, 0.98)',
                 backdropFilter: 'blur(20px)',
                 WebkitBackdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
+                border: isDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(0, 0, 0, 0.08)',
               }}
-              className="mt-2.5 w-full pointer-events-auto rounded-2xl p-4 shadow-2xl lg:hidden flex flex-col gap-1 max-h-[80vh] overflow-y-auto"
+              className={`mt-2.5 w-full pointer-events-auto rounded-2xl p-4 shadow-2xl lg:hidden flex flex-col gap-1 max-h-[80vh] overflow-y-auto ${
+                isDark ? 'text-slate-200' : 'text-slate-800'
+              }`}
             >
+              <div className="flex items-center justify-between px-2 pb-2 mb-2 border-b border-slate-500/20">
+                <span className="text-xs font-semibold text-slate-400">Theme</span>
+                <ThemeToggle size="sm" />
+              </div>
+
               {navLinks.map((link) => (
                 <button
                   key={link.name}
                   onClick={() => { navigate(link.path); setMobileMenuOpen(false); }}
                   className={`w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
                     location.pathname === link.path 
-                      ? 'bg-primary-600/20 text-primary-300 border border-primary-500/30' 
-                      : 'text-slate-200 hover:bg-white/5 hover:text-white'
+                      ? 'bg-primary-600/20 text-primary-500 dark:text-primary-300 border border-primary-500/30' 
+                      : (isDark ? 'text-slate-200 hover:bg-white/5 hover:text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900')
                   }`}
                 >
                   {link.name}

@@ -143,28 +143,28 @@ export const SearchModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
     <Modal isOpen={isOpen} onClose={onClose} size="lg">
       <div className="-m-6">
         {/* Search Input */}
-        <div className="relative border-b border-dark-800 p-4">
-          <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-400" />
+        <div className="relative border-b border-slate-200 dark:border-dark-800 p-4">
+          <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-slate-400" />
           <input
             ref={inputRef}
             type="text"
             placeholder="Search courses, tutorials, blogs..."
             value={query}
             onChange={(e) => { setQuery(e.target.value); setSelectedIndex(0); }}
-            className="w-full bg-transparent border-none outline-none text-xl text-white pl-12 pr-4 placeholder-gray-500 font-medium"
+            className="w-full bg-transparent border-none outline-none text-xl text-slate-900 dark:text-white pl-12 pr-4 placeholder-slate-400 font-medium"
           />
-          {loading && <Loader2 className="absolute right-6 top-1/2 -translate-y-1/2 w-5 h-5 text-primary-500 animate-spin" />}
+          {loading && <Loader2 className="absolute right-6 top-1/2 -translate-y-1/2 w-5 h-5 text-purple-600 animate-spin" />}
         </div>
 
         {/* Results */}
         <div className="p-2 max-h-[60vh] overflow-y-auto">
           {query.trim() === '' ? (
-            <div className="p-8 text-center text-gray-500">
+            <div className="p-8 text-center text-slate-400">
               <Search className="w-12 h-12 mx-auto mb-4 opacity-20" />
               <p>Type to start searching...</p>
             </div>
           ) : results.length === 0 && !loading ? (
-            <div className="p-8 text-center text-gray-500">
+            <div className="p-8 text-center text-slate-400">
               <p>No results found for "{query}"</p>
             </div>
           ) : (
@@ -175,22 +175,24 @@ export const SearchModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                   onClick={() => handleSelect(result)}
                   onMouseEnter={() => setSelectedIndex(idx)}
                   className={`flex items-center gap-4 p-3 rounded-xl cursor-pointer transition-colors ${
-                    selectedIndex === idx ? 'bg-dark-800' : 'hover:bg-dark-800/50'
+                    selectedIndex === idx 
+                      ? 'bg-purple-50 dark:bg-dark-800 border border-purple-200 dark:border-transparent' 
+                      : 'hover:bg-slate-100 dark:hover:bg-dark-800/50'
                   }`}
                 >
-                  <div className={`p-2 rounded-lg bg-dark-900 border border-dark-700`}>
+                  <div className={`p-2 rounded-lg bg-slate-100 dark:bg-dark-900 border border-slate-200 dark:border-dark-700`}>
                     {getIcon(result.type)}
                   </div>
                   <div className="flex-grow min-w-0">
-                    <h4 className={`font-medium truncate ${selectedIndex === idx ? 'text-white' : 'text-gray-200'}`}>
+                    <h4 className={`font-medium truncate ${selectedIndex === idx ? 'text-purple-700 dark:text-white' : 'text-slate-800 dark:text-slate-200'}`}>
                       {result.title}
                     </h4>
-                    <p className="text-sm text-gray-500 truncate">{result.category}</p>
+                    <p className="text-sm text-slate-500 truncate">{result.category}</p>
                   </div>
                   <Badge variant={getBadgeVariant(result.type) as any} className="capitalize hidden sm:inline-flex">
                     {result.type}
                   </Badge>
-                  <ChevronRight className={`w-5 h-5 transition-colors ${selectedIndex === idx ? 'text-gray-300' : 'text-transparent'}`} />
+                  <ChevronRight className={`w-5 h-5 transition-colors ${selectedIndex === idx ? 'text-purple-600 dark:text-gray-300' : 'text-transparent'}`} />
                 </div>
               ))}
             </div>
@@ -198,12 +200,12 @@ export const SearchModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
         </div>
         
         {/* Footer */}
-        <div className="border-t border-dark-800 p-3 bg-dark-900/50 flex items-center justify-between text-xs text-gray-500">
+        <div className="border-t border-slate-200 dark:border-dark-800 p-3 bg-slate-50 dark:bg-dark-900/50 flex items-center justify-between text-xs text-slate-500">
           <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1"><kbd className="bg-dark-800 px-1.5 py-0.5 rounded text-gray-400 font-sans border border-dark-700">↑</kbd><kbd className="bg-dark-800 px-1.5 py-0.5 rounded text-gray-400 font-sans border border-dark-700">↓</kbd> to navigate</span>
-            <span className="flex items-center gap-1"><kbd className="bg-dark-800 px-1.5 py-0.5 rounded text-gray-400 font-sans border border-dark-700">Enter</kbd> to select</span>
+            <span className="flex items-center gap-1"><kbd className="bg-white dark:bg-dark-800 px-1.5 py-0.5 rounded text-slate-600 dark:text-slate-400 font-sans border border-slate-200 dark:border-dark-700 shadow-xs">↑</kbd><kbd className="bg-white dark:bg-dark-800 px-1.5 py-0.5 rounded text-slate-600 dark:text-slate-400 font-sans border border-slate-200 dark:border-dark-700 shadow-xs">↓</kbd> to navigate</span>
+            <span className="flex items-center gap-1"><kbd className="bg-white dark:bg-dark-800 px-1.5 py-0.5 rounded text-slate-600 dark:text-slate-400 font-sans border border-slate-200 dark:border-dark-700 shadow-xs">Enter</kbd> to select</span>
           </div>
-          <span className="flex items-center gap-1"><kbd className="bg-dark-800 px-1.5 py-0.5 rounded text-gray-400 font-sans border border-dark-700">Esc</kbd> to close</span>
+          <span className="flex items-center gap-1"><kbd className="bg-white dark:bg-dark-800 px-1.5 py-0.5 rounded text-slate-600 dark:text-slate-400 font-sans border border-slate-200 dark:border-dark-700 shadow-xs">Esc</kbd> to close</span>
         </div>
       </div>
     </Modal>

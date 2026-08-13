@@ -67,7 +67,7 @@ const CompanyLogoItem: React.FC<{ company: Company }> = ({ company }) => {
   const showCustomImg = company.logoUrl && !imageError;
 
   return (
-    <div className="flex items-center gap-3.5 shrink-0 group cursor-pointer px-6 py-3.5 rounded-2xl bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.1] hover:border-white/30 transition-all duration-300 shadow-lg hover:shadow-2xl hover:scale-[1.04]">
+    <div className="flex items-center gap-3.5 shrink-0 group cursor-pointer px-6 py-3.5 rounded-2xl bg-white dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.08] hover:bg-slate-50 dark:hover:bg-white/[0.1] hover:border-purple-500/30 dark:hover:border-white/30 transition-all duration-300 shadow-sm dark:shadow-lg hover:shadow-md dark:hover:shadow-2xl hover:scale-[1.04]">
       {showCustomImg ? (
         <img
           src={company.logoUrl}
@@ -94,7 +94,7 @@ const CompanyLogoItem: React.FC<{ company: Company }> = ({ company }) => {
       )}
 
       <span 
-        className="font-extrabold text-base sm:text-lg tracking-tight transition-all duration-300 whitespace-nowrap group-hover:brightness-125"
+        className="font-extrabold text-base sm:text-lg tracking-tight transition-all duration-300 whitespace-nowrap group-hover:brightness-110"
         style={{ color: company.color }}
       >
         {company.name}
@@ -105,7 +105,7 @@ const CompanyLogoItem: React.FC<{ company: Company }> = ({ company }) => {
 
 export const CompaniesMarquee: React.FC = () => {
   return (
-    <section className="py-20 relative overflow-hidden border-t border-white/5 bg-transparent">
+    <section className="py-20 relative overflow-hidden border-t border-slate-200/60 dark:border-white/5 bg-transparent">
       {/* Background ambient lighting */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[300px] bg-purple-600/10 rounded-full blur-[140px]" />
@@ -113,16 +113,16 @@ export const CompaniesMarquee: React.FC = () => {
 
       <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 mb-14">
         {/* Header Pill Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-[11px] font-extrabold uppercase tracking-wider mb-5 shadow-[0_0_20px_rgba(245,158,11,0.15)]">
-          <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 text-[11px] font-extrabold uppercase tracking-wider mb-5 shadow-[0_0_20px_rgba(245,158,11,0.15)]">
+          <span className="w-2 h-2 rounded-full bg-amber-500 dark:bg-amber-400 animate-pulse" />
           TOP COMPANIES WHERE OUR STUDENTS WORK
         </div>
 
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4">
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight mb-4">
           Trusted By Leading <span className="gradient-text-blue">Companies</span>
         </h2>
 
-        <p className="text-slate-400 text-sm sm:text-base lg:text-lg max-w-3xl mx-auto leading-relaxed font-normal">
+        <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base lg:text-lg max-w-3xl mx-auto leading-relaxed font-normal">
           Our students have gone on to build careers at some of the world's most renowned organizations. Their success is proof that the skills you gain here open doors to top opportunities across the industry.
         </p>
       </div>
@@ -130,12 +130,12 @@ export const CompaniesMarquee: React.FC = () => {
       {/* Marquee Wrapper with side fade masks */}
       <div className="relative w-full overflow-hidden space-y-4 select-none">
         {/* Left Gradient Fade Mask */}
-        <div className="absolute top-0 bottom-0 left-0 w-24 sm:w-48 bg-gradient-to-r from-[#060814] via-[#060814]/70 to-transparent z-20 pointer-events-none" />
+        <div className="absolute top-0 bottom-0 left-0 w-24 sm:w-48 bg-gradient-to-r from-slate-50 dark:from-[#060814] via-slate-50/70 dark:via-[#060814]/70 to-transparent z-20 pointer-events-none transition-colors duration-300" />
         
         {/* Right Gradient Fade Mask */}
-        <div className="absolute top-0 bottom-0 right-0 w-24 sm:w-48 bg-gradient-to-l from-[#060814] via-[#060814]/70 to-transparent z-20 pointer-events-none" />
+        <div className="absolute top-0 bottom-0 right-0 w-24 sm:w-48 bg-gradient-to-l from-slate-50 dark:from-[#060814] via-slate-50/70 dark:via-[#060814]/70 to-transparent z-20 pointer-events-none transition-colors duration-300" />
 
-        {/* Row 1 — Right to Left (100% Smooth Infinite Loop) */}
+        {/* Row 1 — Right to Left */}
         <div className="flex overflow-hidden py-3 group/row1">
           <div className="flex shrink-0 items-center gap-6 pr-6 sm:gap-8 sm:pr-8 animate-marquee-left group-hover/row1:[animation-play-state:paused] [animation-duration:38s]">
             {row1Companies.map((company, index) => (
@@ -149,7 +149,7 @@ export const CompaniesMarquee: React.FC = () => {
           </div>
         </div>
 
-        {/* Row 2 — Left to Right (100% Smooth Infinite Loop) */}
+        {/* Row 2 — Left to Right */}
         <div className="flex overflow-hidden py-3 group/row2">
           <div className="flex shrink-0 items-center gap-6 pr-6 sm:gap-8 sm:pr-8 animate-marquee-right group-hover/row2:[animation-play-state:paused] [animation-duration:38s]">
             {row2Companies.map((company, index) => (
