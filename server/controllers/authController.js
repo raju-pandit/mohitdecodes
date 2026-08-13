@@ -45,18 +45,34 @@ export const sendOtp = async (req, res, next) => {
     );
 
     // Call SmsHorizon API matching official documentation and API console
-    const apiKey = process.env.SMSHORIZON_API_KEY || 'ldPBxWuf3A3Yao28lCfwjTivLgs1re';
-    const user = process.env.SMSHORIZON_USER || 'mohitdecodes';
-    const senderId = process.env.SMSHORIZON_SENDER_ID || '8235402646';
-    const templateId = process.env.SMSHORIZON_TEMPLATE_ID || '1607100000000323238';
+    const rawApiKey = process.env.SMSHORIZON_API_KEY;
+    const apiKey = (rawApiKey && !rawApiKey.includes('YOUR_') && rawApiKey.trim().length > 5) 
+      ? rawApiKey.trim() 
+      : 'ldPBxWuf3A3Yao28lCfwjTivLgs1re';
+
+    const rawUser = process.env.SMSHORIZON_USER;
+    const user = (rawUser && !rawUser.includes('YOUR_') && rawUser.trim().length > 0)
+      ? rawUser.trim()
+      : 'mohitdecodes';
+
+    const rawSenderId = process.env.SMSHORIZON_SENDER_ID;
+    const senderId = (rawSenderId && !rawSenderId.includes('YOUR_') && rawSenderId.trim().length > 0)
+      ? rawSenderId.trim()
+      : '8235402646';
+
+    const rawTemplateId = process.env.SMSHORIZON_TEMPLATE_ID;
+    const templateId = (rawTemplateId && !rawTemplateId.includes('YOUR_') && rawTemplateId.trim().length > 0)
+      ? rawTemplateId.trim()
+      : '1607100000000323238';
+
     const smsMessage = `OTP for your new user account registration is: ${otpCode}\n\n- SmsHorizon`;
 
     // Safe debugging logs (only boolean flags)
     console.log('SmsHorizon Credentials Check:');
-    console.log('API key exists:', Boolean(apiKey));
-    console.log('Username exists:', Boolean(user));
-    console.log('Sender ID exists:', Boolean(senderId));
-    console.log('Template ID exists:', Boolean(templateId));
+    console.log('API key configured:', Boolean(apiKey));
+    console.log('Username configured:', Boolean(user));
+    console.log('Sender ID configured:', Boolean(senderId));
+    console.log('Template ID configured:', Boolean(templateId));
 
     if (apiKey) {
       try {
