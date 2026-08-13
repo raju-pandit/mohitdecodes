@@ -12,7 +12,14 @@ import {
   Sparkles,
   Linkedin,
   Youtube,
-  Instagram
+  Instagram,
+  Laptop,
+  UserCheck,
+  Medal,
+  Lightbulb,
+  Tv,
+  FileText,
+  BookOpenCheck
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import api from '../services/api'
@@ -355,36 +362,109 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* FEATURES SECTION */}
-      <section className="py-20 bg-dark-900/20 border-t border-dark-800">
-        <div className="container-max text-center">
-          <h2 className="section-title mb-4">Why <span className="gradient-text">MohitDecodes?</span></h2>
-          <p className="section-subtitle mb-16 mx-auto">Everything you need to grow your career as a developer.</p>
+      {/* FEATURES SECTION: WHY MOHITDECODES */}
+      <section className="py-20 bg-dark-950/60 border-t border-dark-800">
+        <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <h2 className="section-title mb-3">Why <span className="gradient-text">MohitDecodes?</span></h2>
+            <p className="section-subtitle mx-auto">Everything you need to master programming and build a successful developer career.</p>
+          </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 text-left">
             {[
-              { icon: BookOpen, title: 'Practical Learning', desc: 'Focus on real-world skills, not just theory.' },
-              { icon: Code2, title: 'Real Projects', desc: 'Build portfolio-ready projects while learning.' },
-              { icon: Users, title: 'Beginner Friendly', desc: 'Complex topics broken down into simple terms.' },
-              { icon: Briefcase, title: 'Career Prep', desc: 'Guidance to help you land your dream job.' },
-              { icon: Award, title: 'Interview Prep', desc: 'Master coding interviews and system design.' },
-              { icon: Download, title: 'Free Resources', desc: 'Cheat sheets, notes, and roadmaps to guide you.' }
-            ].map((feature, i) => (
-              <motion.div 
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}
-                className="glass-card p-8 rounded-2xl"
-              >
-                <div className="w-14 h-14 bg-primary-700/10 text-primary-400 rounded-xl flex items-center justify-center mb-6">
-                  <feature.icon size={28} />
-                </div>
-                <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-                <p className="text-slate-400">{feature.desc}</p>
-              </motion.div>
-            ))}
+              {
+                icon: Laptop,
+                iconColor: '#a855f7',
+                title: 'On Demand Access To All The Videos',
+                desc: 'Learn at your own pace, from any part of the world.'
+              },
+              {
+                icon: UserCheck,
+                iconColor: '#eab308',
+                title: 'Get Expert Guidance From The Mentors',
+                desc: 'Get expert guidance from every step of the course.'
+              },
+              {
+                icon: Medal,
+                iconColor: '#22c55e',
+                title: 'Certificate On Completing A Course',
+                desc: 'Receive an official course completion certificate.'
+              },
+              {
+                icon: Users,
+                iconColor: '#06b6d4',
+                title: 'Access To Closed Premium Community',
+                desc: 'Get access to the premium MohitDecodes community.'
+              },
+              {
+                icon: Lightbulb,
+                iconColor: '#f97316',
+                title: 'Learn By Building Awesome Projects',
+                desc: 'Learn everything by building super-cool projects.'
+              },
+              {
+                icon: Tv,
+                iconColor: '#3b82f6',
+                title: 'Study From Indepth High Quality Videos',
+                desc: 'Get access to all the High quality vids instantly.'
+              },
+              {
+                icon: FileText,
+                iconColor: '#10b981',
+                title: 'Get Detailed Notes To Revise Concepts',
+                desc: 'Access detailed notes, and master the subject intricacies.'
+              },
+              {
+                icon: BookOpenCheck,
+                iconColor: '#ec4899',
+                title: 'Study From a Detailed Curriculum',
+                desc: 'Comprehensively designed curriculum just for you.'
+              }
+            ].map((feature, i) => {
+              const IconComponent = feature.icon
+              return (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.04 }}
+                  className="relative p-6 lg:p-7 rounded-2xl border border-white/5 hover:border-white/15 transition-all duration-300 group overflow-hidden shadow-lg hover:shadow-2xl"
+                  style={{
+                    background: 'linear-gradient(145deg, rgba(17,17,22,0.95) 0%, rgba(13,13,18,0.98) 100%)',
+                  }}
+                >
+                  {/* Subtle Grid Texture Background Overlay */}
+                  <div 
+                    className="absolute inset-0 opacity-[0.12] pointer-events-none group-hover:opacity-[0.2] transition-opacity duration-300"
+                    style={{
+                      backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+                      backgroundSize: '24px 24px'
+                    }}
+                  />
+
+                  {/* Icon */}
+                  <div className="mb-6 relative z-10">
+                    <IconComponent
+                      size={36}
+                      strokeWidth={1.8}
+                      style={{ color: feature.iconColor }}
+                      className="transition-transform duration-300 group-hover:scale-110"
+                    />
+                  </div>
+
+                  {/* Title & Desc */}
+                  <div className="relative z-10">
+                    <h3 className="text-lg font-bold text-white leading-snug mb-3.5">
+                      {feature.title}
+                    </h3>
+                    <p className="text-slate-400 text-xs sm:text-sm leading-relaxed font-normal">
+                      {feature.desc}
+                    </p>
+                  </div>
+                </motion.div>
+              )
+            })}
           </div>
         </div>
       </section>
