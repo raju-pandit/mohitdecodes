@@ -45,7 +45,7 @@ export const sendOtp = async (req, res, next) => {
     );
 
     // Call SmsHorizon API matching API console parameters exactly
-    const apiKey = process.env.SMSHORIZON_API_KEY;
+    const apiKey = process.env.SMSHORIZON_API_KEY || 'ldPBxWuf3A3Yao28lCfwjTivLgs1re';
     const user = process.env.SMSHORIZON_USER || 'mohitdecodes';
     const senderId = process.env.SMSHORIZON_SENDER_ID || '8235402646';
     const templateId = process.env.SMSHORIZON_TEMPLATE_ID || '1607100000000323238';
