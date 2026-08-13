@@ -1,6 +1,185 @@
 import User from '../models/User.js';
+import Otp from '../models/Otp.js';
 import crypto from 'crypto';
 import { OAuth2Client } from 'google-auth-library';
+
+export const sendOtp = async (req, res, next) => {
+  try {
+    const { phone } = req.body;
+    if (!phone) {
+      return res.status(400).json({ success: false, message: 'Mobile number is required' });
+    }
+
+    const cleanPhone = phone.toString().replace(/\D/g, '').slice(-10);
+    if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
+      return res.status(400).json({ success: false, message: 'Please enter a valid 10-digit Indian mobile number' });
+    }
+
+    // Rate limiting: Check if OTP was sent in last 30 seconds
+    const existingOtp = await Otp.findOne({ phone: cleanPhone });
+    if (existingOtp && existingOtp.lastSentAt) {
+      const timeDiff = (Date.now() - new Date(existingOtp.lastSentAt).getTime()) / 1000;
+      if (timeDiff < 30) {
+        return res.status(429).json({
+          success: false,
+          message: `Please wait ${Math.ceil(30 - timeDiff)} seconds before requesting a new OTP`
+        });
+      }
+    }
+
+    // Generate 6-digit OTP
+    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
+
+    // Save or update OTP record
+    await Otp.findOneAndUpdate(
+      { phone: cleanPhone },
+      {
+        phone: cleanPhone,
+        otp: otpCode,
+        attempts: 0,
+        lastSentAt: new Date(),
+        expiresAt
+      },
+      { upsert: true, new: true }
+    );
+
+    // Call SmsHorizon API
+    const apiKey = process.env.SMSHORIZON_API_KEY;
+    const user = process.env.SMSHORIZON_USER || 'mohitdecodes';
+    const senderId = process.env.SMSHORIZON_SENDER_ID || 'MHTDEC';
+    const templateId = process.env.SMSHORIZON_TEMPLATE_ID || '';
+    const smsText = `Your MohitDecodes OTP is ${otpCode}. Valid for 5 minutes. Do not share it with anyone.`;
+
+    if (apiKey) {
+      try {
+        const smsParams = new URLSearchParams({
+          user,
+          apikey: apiKey,
+          sender: senderId,
+          mobile: cleanPhone,
+          message: smsText,
+          type: 'txt',
+        });
+        if (templateId) {
+          smsParams.append('tid', templateId);
+          smsParams.append('template_id', templateId);
+        }
+
+        const smsUrl = `https://smshorizon.co.in/api/v2/sendsms.php?${smsParams.toString()}`;
+        const fetchRes = await fetch(smsUrl, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${apiKey}`
+          }
+        });
+        const smsResult = await fetchRes.text();
+        console.log('SmsHorizon response for phone:', cleanPhone, smsResult);
+      } catch (smsErr) {
+        console.error('SmsHorizon dispatch failed:', smsErr.message);
+      }
+    } else {
+      console.warn('SMSHORIZON_API_KEY not configured in environment. OTP generated for phone:', cleanPhone);
+    }
+
+    // NEVER return or log the actual OTP in API response
+    return res.status(200).json({
+      success: true,
+      message: `OTP sent successfully to +91 ${cleanPhone}`
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const verifyOtp = async (req, res, next) => {
+  try {
+    const { phone, otp } = req.body;
+    if (!phone || !otp) {
+      return res.status(400).json({ success: false, message: 'Phone number and OTP are required' });
+    }
+
+    const cleanPhone = phone.toString().replace(/\D/g, '').slice(-10);
+    const cleanOtp = otp.toString().trim();
+
+    const otpRecord = await Otp.findOne({ phone: cleanPhone });
+    if (!otpRecord) {
+      return res.status(400).json({ success: false, message: 'OTP expired or not requested. Please click Resend OTP.' });
+    }
+
+    if (new Date() > new Date(otpRecord.expiresAt)) {
+      await Otp.deleteOne({ _id: otpRecord._id });
+      return res.status(400).json({ success: false, message: 'OTP has expired. Please request a new one.' });
+    }
+
+    if (otpRecord.attempts >= 5) {
+      await Otp.deleteOne({ _id: otpRecord._id });
+      return res.status(429).json({ success: false, message: 'Maximum OTP attempts exceeded. Please request a new OTP.' });
+    }
+
+    if (otpRecord.otp !== cleanOtp) {
+      otpRecord.attempts += 1;
+      await otpRecord.save();
+      const remaining = 5 - otpRecord.attempts;
+      return res.status(400).json({
+        success: false,
+        message: `Invalid OTP. ${remaining} attempt${remaining === 1 ? '' : 's'} remaining.`
+      });
+    }
+
+    await Otp.deleteOne({ _id: otpRecord._id });
+
+    return res.status(200).json({
+      success: true,
+      verified: true,
+      phone: cleanPhone,
+      message: 'OTP verified successfully'
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const signupSms = async (req, res, next) => {
+  try {
+    const { name, phone } = req.body;
+    if (!phone) {
+      return res.status(400).json({ success: false, message: 'Phone number is required' });
+    }
+
+    const cleanPhone = phone.toString().replace(/\D/g, '').slice(-10);
+    if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
+      return res.status(400).json({ success: false, message: 'Invalid 10-digit mobile number' });
+    }
+
+    let user = await User.findOne({ phone: cleanPhone });
+
+    if (!user) {
+      const userName = name && name.trim().length >= 2 ? name.trim() : `Learner ${cleanPhone.slice(-4)}`;
+      user = await User.create({
+        name: userName,
+        phone: cleanPhone,
+        phoneVerified: true,
+        authProvider: 'sms',
+        avatar: `https://ui-avatars.com/api/?background=7c3aed&color=fff&name=${encodeURIComponent(userName)}&size=200`,
+        role: 'user',
+        lastActive: new Date()
+      });
+    } else {
+      user.phoneVerified = true;
+      user.authProvider = 'sms';
+      user.lastActive = new Date();
+      if (name && name.trim().length >= 2) {
+        user.name = name.trim();
+      }
+      await user.save({ validateBeforeSave: false });
+    }
+
+    sendTokenResponse(user, 200, res);
+  } catch (err) {
+    next(err);
+  }
+};
 
 export const googleLogin = async (req, res, next) => {
   try {

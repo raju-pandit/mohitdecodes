@@ -36,3 +36,15 @@ export const googleLogin = async (credential: string): Promise<ApiResponse<{ use
 export const socialLogin = async (name: string, email: string, avatar: string, provider: string): Promise<ApiResponse<{ user: User; token: string }>> => {
   return await api.post('/auth/social-login', { name, email, avatar, provider });
 };
+
+export const sendOtp = async (phone: string): Promise<ApiResponse<null>> => {
+  return await api.post('/auth/send-otp', { phone });
+};
+
+export const verifyOtp = async (phone: string, otp: string): Promise<ApiResponse<{ verified: boolean; phone: string }>> => {
+  return await api.post('/auth/verify-otp', { phone, otp });
+};
+
+export const signupSms = async (name: string, phone: string): Promise<ApiResponse<{ user: User; token: string }>> => {
+  return await api.post('/auth/signup', { name, phone });
+};

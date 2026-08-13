@@ -11,17 +11,28 @@ const UserSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: [true, 'Please add an email'],
       unique: true,
+      sparse: true,
       lowercase: true,
-      match: [
-        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-        'Please add a valid email',
-      ],
+    },
+    phone: {
+      type: String,
+      unique: true,
+      sparse: true,
+      trim: true,
+    },
+    phoneVerified: {
+      type: Boolean,
+      default: false,
+    },
+    authProvider: {
+      type: String,
+      enum: ['local', 'google', 'sms'],
+      default: 'local',
     },
     password: {
       type: String,
-      required: function() { return this.provider === 'local'; },
+      required: function() { return this.provider === 'local' && this.authProvider === 'local'; },
       minlength: 6,
       select: false,
     },

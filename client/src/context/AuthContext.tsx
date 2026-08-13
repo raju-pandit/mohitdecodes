@@ -11,6 +11,7 @@ interface AuthContextType {
   updateUser: (user: User) => void;
   googleAuth: (credential: string) => Promise<ApiResponse<{ user: User; token: string }>>;
   socialLogin: (name: string, email: string, avatar: string, provider: string) => Promise<ApiResponse<{ user: User; token: string }>>;
+  signupSms: (name: string, phone: string) => Promise<ApiResponse<{ user: User; token: string }>>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -104,8 +105,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return res;
   };
 
+  const signupSms = async (name: string, phone: string) => {
+    const res = await authService.signupSms(name, phone);
+    const token = res.token || (res as any).data?.token;
+    const userData = res.data?.user || (res as any).user;
+    if (token) {
+      localStorage.setItem('token', token);
+    }
+    if (userData) {
+      setUser(userData);
+    }
+    return res;
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, updateUser, googleAuth, socialLogin }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout, updateUser, googleAuth, socialLogin, signupSms }}>
       {children}
     </AuthContext.Provider>
   );
