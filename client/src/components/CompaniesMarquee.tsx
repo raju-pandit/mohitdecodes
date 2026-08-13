@@ -67,18 +67,18 @@ const CompanyLogoItem: React.FC<{ company: Company }> = ({ company }) => {
   const showCustomImg = company.logoUrl && !imageError;
 
   return (
-    <div className="flex items-center gap-3 shrink-0 group cursor-pointer px-5 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.07] hover:bg-white/[0.08] hover:border-white/25 transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-0.5">
+    <div className="flex items-center gap-3.5 shrink-0 group cursor-pointer px-6 py-3.5 rounded-2xl bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.1] hover:border-white/30 transition-all duration-300 shadow-lg hover:shadow-2xl hover:scale-[1.04]">
       {showCustomImg ? (
         <img
           src={company.logoUrl}
           alt={`${company.name} logo`}
           onError={() => setImageError(true)}
-          className="h-6 sm:h-7 w-auto max-w-[120px] object-contain transition-all duration-300 group-hover:scale-105"
+          className="h-7 sm:h-9 w-auto max-w-[140px] object-contain transition-transform duration-300 group-hover:scale-105"
           loading="lazy"
         />
       ) : (
         <div 
-          className="w-6 h-6 sm:w-7 sm:h-7 shrink-0 transition-transform duration-300 group-hover:scale-110"
+          className="w-7 h-7 sm:w-8 sm:h-8 shrink-0 transition-transform duration-300 group-hover:scale-110"
           style={{
             backgroundColor: company.color,
             maskImage: `url(${simpleIconUrl})`,
@@ -94,7 +94,7 @@ const CompanyLogoItem: React.FC<{ company: Company }> = ({ company }) => {
       )}
 
       <span 
-        className="font-bold text-sm sm:text-base tracking-tight transition-all duration-300 whitespace-nowrap group-hover:brightness-125"
+        className="font-extrabold text-base sm:text-lg tracking-tight transition-all duration-300 whitespace-nowrap group-hover:brightness-125"
         style={{ color: company.color }}
       >
         {company.name}
@@ -128,7 +128,7 @@ export const CompaniesMarquee: React.FC = () => {
       </div>
 
       {/* Marquee Wrapper with side fade masks */}
-      <div className="relative w-full overflow-hidden space-y-7 select-none">
+      <div className="relative w-full overflow-hidden space-y-4 select-none">
         {/* Left Gradient Fade Mask */}
         <div className="absolute top-0 bottom-0 left-0 w-24 sm:w-48 bg-gradient-to-r from-[#060814] via-[#060814]/70 to-transparent z-20 pointer-events-none" />
         
@@ -136,7 +136,7 @@ export const CompaniesMarquee: React.FC = () => {
         <div className="absolute top-0 bottom-0 right-0 w-24 sm:w-48 bg-gradient-to-l from-[#060814] via-[#060814]/70 to-transparent z-20 pointer-events-none" />
 
         {/* Row 1 — Right to Left (100% Smooth Infinite Loop) */}
-        <div className="flex overflow-hidden group/row1">
+        <div className="flex overflow-hidden py-3 group/row1">
           <div className="flex shrink-0 items-center gap-6 pr-6 sm:gap-8 sm:pr-8 animate-marquee-left group-hover/row1:[animation-play-state:paused] [animation-duration:38s]">
             {row1Companies.map((company, index) => (
               <CompanyLogoItem key={`r1-${company.name}-${index}`} company={company} />
@@ -150,7 +150,7 @@ export const CompaniesMarquee: React.FC = () => {
         </div>
 
         {/* Row 2 — Left to Right (100% Smooth Infinite Loop) */}
-        <div className="flex overflow-hidden group/row2">
+        <div className="flex overflow-hidden py-3 group/row2">
           <div className="flex shrink-0 items-center gap-6 pr-6 sm:gap-8 sm:pr-8 animate-marquee-right group-hover/row2:[animation-play-state:paused] [animation-duration:38s]">
             {row2Companies.map((company, index) => (
               <CompanyLogoItem key={`r2-${company.name}-${index}`} company={company} />
