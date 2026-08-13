@@ -9,7 +9,7 @@ declare global {
   }
 }
 
-const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '1041920786523-google-client-id-placeholder.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '947632566198-m5130g3m4dmsa0afof1vb3deeg4hs3fr.apps.googleusercontent.com';
 
 interface GoogleSignInButtonProps {
   onSuccess?: () => void;
