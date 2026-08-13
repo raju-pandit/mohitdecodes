@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { 
   BookOpen, 
   Code2, 
@@ -211,6 +211,7 @@ const FeatureSpotlightCard: React.FC<{
 
 const Home: React.FC = () => {
   useTitle('Learn. Build. Decode.', 'Practical programming courses, roadmaps, and projects to master MERN full-stack development.')
+  const navigate = useNavigate()
   const [courses, setCourses] = useState<Course[]>([])
   const [roadmaps, setRoadmaps] = useState<Roadmap[]>([])
   const [blogs, setBlogs] = useState<Blog[]>([])
@@ -335,9 +336,13 @@ const Home: React.FC = () => {
 
             {/* CTA Buttons */}
             <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
-              <Link to="/courses" className="btn-primary py-3 px-6 sm:py-3.5 sm:px-8 font-semibold rounded-xl flex items-center gap-2 group shadow-glow-purple">
+              <button 
+                type="button"
+                onClick={() => navigate('/courses')}
+                className="btn-primary py-3 px-6 sm:py-3.5 sm:px-8 font-semibold rounded-xl flex items-center gap-2 group shadow-glow-purple cursor-pointer"
+              >
                 Start Paid Learning
-              </Link>
+              </button>
               <button 
                 type="button"
                 onClick={() => window.open('https://youtube.com/@mohitdecodes', '_blank', 'noopener,noreferrer')} 
@@ -425,9 +430,13 @@ const Home: React.FC = () => {
               <h2 className="section-title mb-2">Featured <span className="gradient-text">Courses</span></h2>
               <p className="section-subtitle">Top rated courses to level up your skills.</p>
             </div>
-            <Link to="/courses" className="btn-outline btn-sm flex items-center gap-1">
+            <button 
+              type="button" 
+              onClick={() => navigate('/courses')} 
+              className="btn-outline btn-sm flex items-center gap-1 cursor-pointer"
+            >
               View All Courses <ArrowRight size={16} />
-            </Link>
+            </button>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -457,9 +466,13 @@ const Home: React.FC = () => {
               <h2 className="section-title mb-2">Learning <span className="gradient-text">Roadmaps</span></h2>
               <p className="section-subtitle">Step-by-step guidance on what to learn next.</p>
             </div>
-            <Link to="/roadmaps" className="btn-outline btn-sm flex items-center gap-1">
+            <button 
+              type="button" 
+              onClick={() => navigate('/roadmaps')} 
+              className="btn-outline btn-sm flex items-center gap-1 cursor-pointer"
+            >
               View All Roadmaps <ArrowRight size={16} />
-            </Link>
+            </button>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -597,9 +610,13 @@ const Home: React.FC = () => {
                 <h2 className="section-title mb-2">Latest from the <span className="gradient-text">Blog</span></h2>
                 <p className="section-subtitle">Insightful articles on web dev trends and career tips.</p>
               </div>
-              <Link to="/blogs" className="btn-outline btn-sm flex items-center gap-1">
-                View All Articles <ArrowRight size={16} />
-              </Link>
+              <button 
+              type="button" 
+              onClick={() => navigate('/blogs')} 
+              className="btn-outline btn-sm flex items-center gap-1 cursor-pointer"
+            >
+              View All Articles <ArrowRight size={16} />
+            </button>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

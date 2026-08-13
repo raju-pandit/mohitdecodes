@@ -76,18 +76,24 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
 
         <div className="grid grid-cols-2 gap-3 mt-auto">
           {project.githubUrl && (
-            <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="w-full">
-              <Button variant="outline" size="sm" className="w-full gap-2 text-gray-300">
-                <Github className="w-4 h-4" /> Code
-              </Button>
-            </a>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="w-full gap-2 text-gray-300 cursor-pointer"
+              onClick={() => window.open(project.githubUrl, '_blank', 'noopener,noreferrer')}
+            >
+              <Github className="w-4 h-4" /> Code
+            </Button>
           )}
           {project.liveUrl && (
-            <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="w-full">
-              <Button variant="primary" size="sm" className="w-full gap-2">
-                <ExternalLink className="w-4 h-4" /> Demo
-              </Button>
-            </a>
+            <Button 
+              variant="primary" 
+              size="sm" 
+              className="w-full gap-2 cursor-pointer"
+              onClick={() => window.open(project.liveUrl, '_blank', 'noopener,noreferrer')}
+            >
+              <ExternalLink className="w-4 h-4" /> Demo
+            </Button>
           )}
         </div>
       </div>

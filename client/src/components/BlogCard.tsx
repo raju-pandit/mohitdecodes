@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Clock, Calendar, ArrowRight } from 'lucide-react';
 import { Card } from './ui/Card';
 import { Badge } from './ui/Badge';
@@ -22,6 +22,7 @@ export interface BlogCardProps {
 }
 
 export const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
+  const navigate = useNavigate();
   const dateVal = blog.publishedAt || blog.createdAt || new Date().toISOString();
   const readTimeVal = blog.readTime || 
     (typeof blog.readingTime === 'number' ? `${blog.readingTime} min` : blog.readingTime) || 
@@ -29,8 +30,11 @@ export const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
   const tagsVal = blog.tags || [];
 
   return (
-    <Card className="group flex flex-col p-0 overflow-hidden bg-dark-900 border-dark-800 h-full">
-      <Link to={`/blogs/${blog.slug}`} className="block relative aspect-[16/9] overflow-hidden shrink-0">
+    <Card 
+      onClick={() => navigate(`/blogs/${blog.slug}`)}
+      className="group flex flex-col p-0 overflow-hidden bg-dark-900 border-dark-800 h-full cursor-pointer"
+    >
+      <div className="block relative aspect-[16/9] overflow-hidden shrink-0">
         <img 
           src={blog.coverImage} 
           alt={blog.title} 
@@ -41,14 +45,12 @@ export const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
             {blog.category}
           </Badge>
         </div>
-      </Link>
+      </div>
 
       <div className="flex flex-col flex-grow p-6">
-        <Link to={`/blogs/${blog.slug}`}>
-          <h3 className="text-xl font-bold text-white mb-3 line-clamp-2 group-hover:text-primary-400 transition-colors">
-            {blog.title}
-          </h3>
-        </Link>
+        <h3 className="text-xl font-bold text-white mb-3 line-clamp-2 group-hover:text-purple-400 transition-colors">
+          {blog.title}
+        </h3>
         
         <p className="text-gray-400 text-sm mb-5 line-clamp-2 flex-grow">
           {blog.excerpt}
@@ -82,9 +84,9 @@ export const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
             </div>
           </div>
           
-          <Link to={`/blogs/${blog.slug}`} className="hidden sm:flex items-center justify-center w-10 h-10 rounded-full bg-dark-800 text-gray-400 group-hover:bg-primary-600 group-hover:text-white transition-all">
+          <div className="hidden sm:flex items-center justify-center w-10 h-10 rounded-full bg-dark-800 text-gray-400 group-hover:bg-purple-600 group-hover:text-white transition-all">
             <ArrowRight className="w-5 h-5 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
-          </Link>
+          </div>
         </div>
       </div>
     </Card>

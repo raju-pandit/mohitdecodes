@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Clock, ListChecks, ChevronRight } from 'lucide-react';
 import { Card } from './ui/Card';
 import { Badge } from './ui/Badge';
@@ -22,11 +22,15 @@ export interface RoadmapCardProps {
 }
 
 export const RoadmapCard: React.FC<RoadmapCardProps> = ({ roadmap }) => {
+  const navigate = useNavigate();
   const stepsCount = roadmap.stepCount || roadmap.steps?.length || 0;
   const roadmapColor = roadmap.color || '#7c3aed';
 
   return (
-    <Card className="group flex flex-col p-6 bg-dark-900 border-dark-800 relative overflow-hidden h-full">
+    <Card 
+      onClick={() => navigate(`/roadmaps/${roadmap.slug}`)}
+      className="group flex flex-col p-6 bg-dark-900 border-dark-800 relative overflow-hidden h-full cursor-pointer"
+    >
       {/* Decorative colored line */}
       <div 
         className="absolute left-0 top-0 bottom-0 w-1.5 transition-all duration-300 group-hover:w-2"
@@ -54,7 +58,7 @@ export const RoadmapCard: React.FC<RoadmapCardProps> = ({ roadmap }) => {
 
         <div className="flex flex-col gap-3 mb-6 bg-dark-950/50 p-4 rounded-xl border border-dark-800/50">
           <div className="flex items-center justify-between text-sm text-gray-300">
-            <span className="flex items-center gap-2"><ListChecks className="w-4 h-4 text-primary-400" /> Milestones</span>
+            <span className="flex items-center gap-2"><ListChecks className="w-4 h-4 text-purple-400" /> Milestones</span>
             <span className="font-semibold">{stepsCount} Steps</span>
           </div>
           <div className="w-full bg-dark-800 rounded-full h-1.5">
@@ -66,12 +70,19 @@ export const RoadmapCard: React.FC<RoadmapCardProps> = ({ roadmap }) => {
           </div>
         </div>
 
-        <Link to={`/roadmaps/${roadmap.slug}`} className="block mt-auto">
-          <Button variant="ghost" className="w-full justify-between hover:bg-dark-800 text-gray-300 group-hover:text-white border border-transparent group-hover:border-dark-700">
+        <div className="mt-auto">
+          <Button 
+            variant="ghost" 
+            className="w-full justify-between hover:bg-dark-800 text-gray-300 group-hover:text-white border border-transparent group-hover:border-dark-700 cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(`/roadmaps/${roadmap.slug}`);
+            }}
+          >
             Start Journey
             <ChevronRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
           </Button>
-        </Link>
+        </div>
       </div>
     </Card>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Clock, BookOpen, Star, Users } from 'lucide-react';
 import { Card } from './ui/Card';
 import { Badge } from './ui/Badge';
@@ -25,22 +25,22 @@ export interface CourseCardProps {
 }
 
 export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
+  const navigate = useNavigate();
   const difficultyColors = {
     Beginner: 'green',
     Intermediate: 'blue',
     Advanced: 'orange'
   };
 
-  const ratingVal = typeof course.rating === 'number' 
-    ? course.rating 
-    : (course.rating?.average || 4.8);
-
   const lessonsCountVal = course.lessonsCount || 
     course.modules?.reduce((acc, m) => acc + (m.lessons?.length || 0), 0) || 
     0;
 
   return (
-    <Card className="group flex flex-col p-0 overflow-hidden bg-dark-900 border-dark-800 h-full">
+    <Card 
+      onClick={() => navigate(`/courses/${course.slug}`)}
+      className="group flex flex-col p-0 overflow-hidden bg-dark-900 border-dark-800 h-full cursor-pointer"
+    >
       {/* Thumbnail */}
       <div className="relative aspect-video overflow-hidden shrink-0">
         <img 
@@ -48,43 +48,32 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
           alt={course.title} 
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-dark-950 via-dark-950/20 to-transparent opacity-80"></div>
-        
-        <div className="absolute top-3 right-3">
-          <Badge variant={difficultyColors[course.difficulty] as any} className="bg-dark-950/80 backdrop-blur-md font-semibold tracking-wide border-0 shadow-lg">
+        <div className="absolute top-3 left-3">
+          <Badge variant={(difficultyColors as any)[course.difficulty] || 'purple'}>
             {course.difficulty}
+          </Badge>
+        </div>
+        <div className="absolute top-3 right-3">
+          <Badge variant="purple" className="bg-dark-950/80 backdrop-blur-md">
+            {course.category}
           </Badge>
         </div>
       </div>
 
       {/* Content */}
-      <div className="flex flex-col flex-grow p-5">
-        <div className="mb-2">
-          <Badge variant="primary" className="text-[10px] uppercase tracking-wider">{course.category}</Badge>
-        </div>
+      <div className="flex flex-col flex-grow p-5 sm:p-6">
+        <h3 className="text-lg sm:text-xl font-bold text-white mb-2 line-clamp-1 group-hover:text-purple-400 transition-colors">
+          {course.title}
+        </h3>
         
-        <Link to={`/courses/${course.slug}`}>
-          <h3 className="text-xl font-bold text-white mb-2 line-clamp-2 group-hover:text-primary-400 transition-colors">
-            {course.title}
-          </h3>
-        </Link>
-        
-        <p className="text-gray-400 text-sm mb-4 line-clamp-2">
+        <p className="text-gray-400 text-sm mb-4 line-clamp-2 flex-grow">
           {course.shortDescription || course.description}
         </p>
 
-        {/* Meta Stats */}
-        <div className="grid grid-cols-2 gap-y-3 mb-6 mt-auto text-sm text-gray-400">
+        {/* Course Meta */}
+        <div className="grid grid-cols-2 gap-2 text-xs text-gray-400 mb-4 py-3 border-y border-dark-800">
           <div className="flex items-center gap-1.5">
-            <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-            <span className="text-gray-300 font-medium">{ratingVal.toFixed(1)}</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <Users className="w-4 h-4 text-blue-400" />
-            <span>{course.students.toLocaleString()} students</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <Clock className="w-4 h-4 text-emerald-400" />
+            <Clock className="w-4 h-4 text-purple-400" />
             <span>{course.duration}</span>
           </div>
           <div className="flex items-center gap-1.5">
@@ -94,7 +83,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between pt-4 border-t border-dark-800">
+        <div className="flex items-center justify-between pt-2">
           <div className="flex items-center gap-2">
             <img src={course.instructor.avatar} alt={course.instructor.name} className="w-8 h-8 rounded-full border border-dark-700" />
             <span className="text-sm font-medium text-gray-300">{course.instructor.name}</span>
@@ -108,11 +97,18 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
           </div>
         </div>
         
-        <Link to={`/courses/${course.slug}`} className="mt-4 block">
-          <Button variant="primary" className="w-full">
+        <div className="mt-4">
+          <Button 
+            variant="primary" 
+            className="w-full cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(`/courses/${course.slug}`);
+            }}
+          >
             View Course
           </Button>
-        </Link>
+        </div>
       </div>
     </Card>
   );
