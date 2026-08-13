@@ -399,7 +399,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* FEATURED COURSES */}
-      <section className="py-20 bg-dark-900/40 border-y border-dark-800">
+      <section className="py-20 bg-[#060814] border-y border-dark-800">
         <div className="container-max">
           <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 gap-4">
             <div className="text-center md:text-left">
@@ -463,7 +463,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* FEATURES SECTION: WHY MOHITDECODES */}
-      <section className="py-20 bg-dark-950/60 border-t border-dark-800">
+      <section className="py-20 bg-[#060814] border-t border-dark-800">
         <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <h2 className="section-title mb-3">Why <span className="gradient-text">MohitDecodes?</span></h2>
@@ -537,15 +537,15 @@ const Home: React.FC = () => {
 
       {/* TESTIMONIALS */}
       {testimonials.length > 0 && (
-        <section className="py-20 bg-dark-900/40 border-t border-dark-800">
+        <section className="py-20 bg-[#060814] border-t border-dark-800">
           <div className="container-max text-center">
             <h2 className="section-title mb-4">Loved by <span className="gradient-text">Learners</span></h2>
             <p className="section-subtitle mb-16 mx-auto">Here is what our students have to say about their learning experience.</p>
             
             <div className="marquee-container py-4 relative">
               {/* Side fades */}
-              <div className="absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-[#060a12] to-transparent z-10 pointer-events-none" />
-              <div className="absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-[#060a12] to-transparent z-10 pointer-events-none" />
+              <div className="absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-[#060814] to-transparent z-10 pointer-events-none" />
+              <div className="absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-[#060814] to-transparent z-10 pointer-events-none" />
 
               <div className="marquee-content">
                 {testimonials.map((testimonial, i) => (

@@ -109,7 +109,7 @@ export const CompaniesMarquee: React.FC = () => {
   const row2Items = [...row2Companies, ...row2Companies, ...row2Companies];
 
   return (
-    <section className="py-20 relative overflow-hidden border-b border-dark-800 bg-black">
+    <section className="py-20 relative overflow-hidden border-b border-dark-800 bg-[#060814]">
       {/* Background ambient lighting */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[300px] bg-purple-600/10 rounded-full blur-[140px]" />
@@ -134,10 +134,10 @@ export const CompaniesMarquee: React.FC = () => {
       {/* Marquee Wrapper with side fade masks */}
       <div className="relative w-full overflow-hidden space-y-7 select-none">
         {/* Left Gradient Fade Mask */}
-        <div className="absolute top-0 bottom-0 left-0 w-24 sm:w-48 bg-gradient-to-r from-black via-black/80 to-transparent z-20 pointer-events-none" />
+        <div className="absolute top-0 bottom-0 left-0 w-24 sm:w-48 bg-gradient-to-r from-[#060814] via-[#060814]/80 to-transparent z-20 pointer-events-none" />
         
         {/* Right Gradient Fade Mask */}
-        <div className="absolute top-0 bottom-0 right-0 w-24 sm:w-48 bg-gradient-to-l from-black via-black/80 to-transparent z-20 pointer-events-none" />
+        <div className="absolute top-0 bottom-0 right-0 w-24 sm:w-48 bg-gradient-to-l from-[#060814] via-[#060814]/80 to-transparent z-20 pointer-events-none" />
 
         {/* Row 1 — Right to Left (Continuous, Slow) */}
         <div className="flex overflow-hidden group/row1">
