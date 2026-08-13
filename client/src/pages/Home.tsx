@@ -109,6 +109,105 @@ const AnimatedWord: React.FC = () => {
   );
 };
 
+const FeatureSpotlightCard: React.FC<{
+  feature: {
+    icon: any;
+    iconColor: string;
+    glowColor: string;
+    title: string;
+    desc: string;
+  };
+  index: number;
+}> = ({ feature, index }) => {
+  const cardRef = React.useRef<HTMLDivElement>(null);
+  const [mousePosition, setMousePosition] = useState({ x: -500, y: -500 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    setMousePosition({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    });
+  };
+
+  const IconComponent = feature.icon;
+
+  return (
+    <motion.div
+      ref={cardRef}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.04 }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        setMousePosition({ x: -500, y: -500 });
+      }}
+      className="relative p-6 lg:p-7 rounded-2xl border border-white/10 transition-colors duration-300 group overflow-hidden shadow-lg select-none"
+      style={{
+        background: 'linear-gradient(145deg, rgba(17,17,22,0.95) 0%, rgba(13,13,18,0.98) 100%)',
+      }}
+    >
+      {/* Cursor Radial Spotlight Glow Effect (NamasteDev / Vercel style) */}
+      <div
+        className="pointer-events-none absolute -inset-px rounded-2xl transition-opacity duration-300 z-0"
+        style={{
+          opacity: isHovered ? 1 : 0,
+          background: `radial-gradient(350px circle at ${mousePosition.x}px ${mousePosition.y}px, ${feature.glowColor}, transparent 75%)`
+        }}
+      />
+
+      {/* Cursor Glowing Border Highlight */}
+      <div
+        className="pointer-events-none absolute -inset-px rounded-2xl transition-opacity duration-300 z-0"
+        style={{
+          opacity: isHovered ? 1 : 0,
+          border: `1.5px solid ${feature.iconColor}`,
+          maskImage: `radial-gradient(160px circle at ${mousePosition.x}px ${mousePosition.y}px, black 0%, transparent 80%)`,
+          WebkitMaskImage: `radial-gradient(160px circle at ${mousePosition.x}px ${mousePosition.y}px, black 0%, transparent 80%)`
+        }}
+      />
+
+      {/* Subtle Grid Texture Background Overlay */}
+      <div 
+        className="absolute inset-0 opacity-[0.14] pointer-events-none group-hover:opacity-[0.25] transition-opacity duration-300 z-0"
+        style={{
+          backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.12) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.12) 1px, transparent 1px)`,
+          backgroundSize: '24px 24px'
+        }}
+      />
+
+      {/* Icon */}
+      <div className="mb-6 relative z-10">
+        <div 
+          className="w-12 h-12 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+          style={{ background: `${feature.iconColor}18`, border: `1px solid ${feature.iconColor}35` }}
+        >
+          <IconComponent
+            size={28}
+            strokeWidth={1.8}
+            style={{ color: feature.iconColor }}
+          />
+        </div>
+      </div>
+
+      {/* Title & Desc */}
+      <div className="relative z-10">
+        <h3 className="text-lg font-bold text-white leading-snug mb-3 transition-colors">
+          {feature.title}
+        </h3>
+        <p className="text-slate-400 text-xs sm:text-sm leading-relaxed font-normal">
+          {feature.desc}
+        </p>
+      </div>
+    </motion.div>
+  );
+};
+
 const Home: React.FC = () => {
   useTitle('Learn. Build. Decode.', 'Practical programming courses, roadmaps, and projects to master MERN full-stack development.')
   const [courses, setCourses] = useState<Course[]>([])
@@ -375,96 +474,62 @@ const Home: React.FC = () => {
               {
                 icon: Laptop,
                 iconColor: '#a855f7',
+                glowColor: 'rgba(168, 85, 247, 0.18)',
                 title: 'On Demand Access To All The Videos',
                 desc: 'Learn at your own pace, from any part of the world.'
               },
               {
                 icon: UserCheck,
                 iconColor: '#eab308',
+                glowColor: 'rgba(234, 179, 8, 0.18)',
                 title: 'Get Expert Guidance From The Mentors',
                 desc: 'Get expert guidance from every step of the course.'
               },
               {
                 icon: Medal,
                 iconColor: '#22c55e',
+                glowColor: 'rgba(34, 197, 94, 0.18)',
                 title: 'Certificate On Completing A Course',
                 desc: 'Receive an official course completion certificate.'
               },
               {
                 icon: Users,
                 iconColor: '#06b6d4',
+                glowColor: 'rgba(6, 182, 212, 0.18)',
                 title: 'Access To Closed Premium Community',
                 desc: 'Get access to the premium MohitDecodes community.'
               },
               {
                 icon: Lightbulb,
                 iconColor: '#f97316',
+                glowColor: 'rgba(249, 115, 22, 0.18)',
                 title: 'Learn By Building Awesome Projects',
                 desc: 'Learn everything by building super-cool projects.'
               },
               {
                 icon: Tv,
                 iconColor: '#3b82f6',
+                glowColor: 'rgba(59, 130, 246, 0.18)',
                 title: 'Study From Indepth High Quality Videos',
                 desc: 'Get access to all the High quality vids instantly.'
               },
               {
                 icon: FileText,
                 iconColor: '#10b981',
+                glowColor: 'rgba(16, 185, 129, 0.18)',
                 title: 'Get Detailed Notes To Revise Concepts',
                 desc: 'Access detailed notes, and master the subject intricacies.'
               },
               {
                 icon: BookOpenCheck,
                 iconColor: '#ec4899',
+                glowColor: 'rgba(236, 72, 153, 0.18)',
                 title: 'Study From a Detailed Curriculum',
                 desc: 'Comprehensively designed curriculum just for you.'
               }
-            ].map((feature, i) => {
-              const IconComponent = feature.icon
-              return (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.04 }}
-                  className="relative p-6 lg:p-7 rounded-2xl border border-white/5 hover:border-white/15 transition-all duration-300 group overflow-hidden shadow-lg hover:shadow-2xl"
-                  style={{
-                    background: 'linear-gradient(145deg, rgba(17,17,22,0.95) 0%, rgba(13,13,18,0.98) 100%)',
-                  }}
-                >
-                  {/* Subtle Grid Texture Background Overlay */}
-                  <div 
-                    className="absolute inset-0 opacity-[0.12] pointer-events-none group-hover:opacity-[0.2] transition-opacity duration-300"
-                    style={{
-                      backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-                      backgroundSize: '24px 24px'
-                    }}
-                  />
-
-                  {/* Icon */}
-                  <div className="mb-6 relative z-10">
-                    <IconComponent
-                      size={36}
-                      strokeWidth={1.8}
-                      style={{ color: feature.iconColor }}
-                      className="transition-transform duration-300 group-hover:scale-110"
-                    />
-                  </div>
-
-                  {/* Title & Desc */}
-                  <div className="relative z-10">
-                    <h3 className="text-lg font-bold text-white leading-snug mb-3.5">
-                      {feature.title}
-                    </h3>
-                    <p className="text-slate-400 text-xs sm:text-sm leading-relaxed font-normal">
-                      {feature.desc}
-                    </p>
-                  </div>
-                </motion.div>
-              )
-            })}
+            ].map((feature, i) => (
+              <FeatureSpotlightCard key={i} feature={feature} index={i} />
+            ))}
           </div>
         </div>
       </section>
