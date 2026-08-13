@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Edit2, Trash2, X, AlertTriangle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
+import { formatDate } from '../../utils/formatters';
 
 interface Resource {
   _id: string;
@@ -13,21 +14,31 @@ interface Resource {
   fileType: string;
   fileSize: string;
   downloads: number;
-  published: boolean;
+  isPublished?: boolean;
+  published?: boolean;
+  createdAt?: string;
 }
 
 const AdminResources = () => {
   const [resources, setResources] = useState<Resource[]>([]);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
   const [formData, setFormData] = useState({
-    title: '', description: '', category: 'Cheat Sheet', fileUrl: '',
-    fileType: 'PDF', fileSize: '', published: false
+    title: '',
+    description: '',
+    category: 'Cheat Sheet',
+    fileUrl: '',
+    fileType: 'PDF',
+    fileSize: '',
+    isPublished: true
   });
 
-  useEffect(() => { fetchResources(); }, []);
+  useEffect(() => {
+    fetchResources();
+  }, []);
 
   const fetchResources = async () => {
     try {
@@ -43,17 +54,26 @@ const AdminResources = () => {
   const handleOpenModal = (resource?: Resource) => {
     if (resource) {
       setSelectedResource(resource);
+      const isPub = resource.isPublished ?? resource.published ?? true;
       setFormData({
-        title: resource.title, description: resource.description,
-        category: resource.category, fileUrl: resource.fileUrl,
-        fileType: resource.fileType, fileSize: resource.fileSize,
-        published: resource.published
+        title: resource.title || '',
+        description: resource.description || '',
+        category: resource.category || 'Cheat Sheet',
+        fileUrl: resource.fileUrl || '',
+        fileType: resource.fileType || 'PDF',
+        fileSize: resource.fileSize || '',
+        isPublished: isPub
       });
     } else {
       setSelectedResource(null);
       setFormData({
-        title: '', description: '', category: 'Cheat Sheet', fileUrl: '',
-        fileType: 'PDF', fileSize: '', published: false
+        title: '',
+        description: '',
+        category: 'Cheat Sheet',
+        fileUrl: '',
+        fileType: 'PDF',
+        fileSize: '',
+        isPublished: true
       });
     }
     setIsModalOpen(true);
@@ -61,18 +81,32 @@ const AdminResources = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitting(true);
     try {
+      const payload = {
+        title: formData.title,
+        description: formData.description,
+        category: formData.category,
+        fileUrl: formData.fileUrl,
+        fileType: formData.fileType,
+        fileSize: formData.fileSize || '1.0 MB',
+        isPublished: formData.isPublished,
+        published: formData.isPublished
+      };
+
       if (selectedResource) {
-        await api.put(`/resources/${selectedResource._id}`, formData);
-        toast.success('Resource updated successfully');
+        await api.put(`/resources/${selectedResource._id}`, payload);
+        toast.success('Resource updated successfully!');
       } else {
-        await api.post('/resources', formData);
-        toast.success('Resource created successfully');
+        await api.post('/resources', payload);
+        toast.success('Resource created successfully!');
       }
       setIsModalOpen(false);
       fetchResources();
-    } catch (error) {
-      toast.error('Failed to save resource');
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || 'Failed to save resource');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -80,11 +114,11 @@ const AdminResources = () => {
     if (!selectedResource) return;
     try {
       await api.delete(`/resources/${selectedResource._id}`);
-      toast.success('Resource deleted successfully');
+      toast.success('Resource deleted successfully!');
       setIsDeleteModalOpen(false);
       fetchResources();
-    } catch (error) {
-      toast.error('Failed to delete resource');
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || 'Failed to delete resource');
     }
   };
 
@@ -99,7 +133,7 @@ const AdminResources = () => {
 
       {loading ? (
         <div className="flex justify-center h-64 items-center">
-          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : resources.length === 0 ? (
         <div className="glass-card p-10 text-center text-gray-400">No resources found.</div>
@@ -113,34 +147,39 @@ const AdminResources = () => {
                 <th className="p-4">Type & Size</th>
                 <th className="p-4">Downloads</th>
                 <th className="p-4">Status</th>
+                <th className="p-4">Date</th>
                 <th className="p-4">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700/50">
-              {resources.map((resource) => (
-                <tr key={resource._id} className="hover:bg-gray-800/30">
-                  <td className="p-4 font-medium text-white">{resource.title}</td>
-                  <td className="p-4">{resource.category}</td>
-                  <td className="p-4">
-                    <span className="badge-blue">{resource.fileType}</span>
-                    <span className="text-xs text-gray-500 ml-2">{resource.fileSize}</span>
-                  </td>
-                  <td className="p-4">{resource.downloads}</td>
-                  <td className="p-4">
-                    <span className={resource.published ? 'badge-primary' : 'badge-orange'}>
-                      {resource.published ? 'Published' : 'Draft'}
-                    </span>
-                  </td>
-                  <td className="p-4 flex gap-2">
-                    <button onClick={() => handleOpenModal(resource)} className="p-2 text-blue-400 hover:bg-blue-400/10 rounded">
-                      <Edit2 size={16} />
-                    </button>
-                    <button onClick={() => { setSelectedResource(resource); setIsDeleteModalOpen(true); }} className="p-2 text-red-400 hover:bg-red-400/10 rounded">
-                      <Trash2 size={16} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {resources.map((resource) => {
+                const isPub = resource.isPublished ?? resource.published ?? true;
+                return (
+                  <tr key={resource._id} className="hover:bg-gray-800/30">
+                    <td className="p-4 font-medium text-white max-w-xs truncate">{resource.title}</td>
+                    <td className="p-4">{resource.category}</td>
+                    <td className="p-4">
+                      <span className="badge-blue">{resource.fileType}</span>
+                      <span className="text-xs text-gray-500 ml-2">{resource.fileSize}</span>
+                    </td>
+                    <td className="p-4">{resource.downloads || 0}</td>
+                    <td className="p-4">
+                      <span className={isPub ? 'badge-primary' : 'badge-orange'}>
+                        {isPub ? 'Published' : 'Draft'}
+                      </span>
+                    </td>
+                    <td className="p-4">{formatDate(resource.createdAt)}</td>
+                    <td className="p-4 flex gap-2">
+                      <button onClick={() => handleOpenModal(resource)} className="p-2 text-blue-400 hover:bg-blue-400/10 rounded">
+                        <Edit2 size={16} />
+                      </button>
+                      <button onClick={() => { setSelectedResource(resource); setIsDeleteModalOpen(true); }} className="p-2 text-red-400 hover:bg-red-400/10 rounded">
+                        <Trash2 size={16} />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -215,8 +254,8 @@ const AdminResources = () => {
                         value={formData.category}
                         onChange={e => setFormData({ ...formData, category: e.target.value })}
                       >
-                        <option value="PDF">PDF</option>
                         <option value="Cheat Sheet">Cheat Sheet</option>
+                        <option value="PDF">PDF</option>
                         <option value="Notes">Notes</option>
                         <option value="Interview Questions">Interview Questions</option>
                         <option value="Roadmap">Roadmap</option>
@@ -233,11 +272,11 @@ const AdminResources = () => {
                         value={formData.fileType}
                         onChange={e => setFormData({ ...formData, fileType: e.target.value })}
                       >
-                        <option>PDF</option>
-                        <option>ZIP</option>
-                        <option>DOCX</option>
-                        <option>JPG</option>
-                        <option>PNG</option>
+                        <option value="PDF">PDF</option>
+                        <option value="ZIP">ZIP</option>
+                        <option value="DOCX">DOCX</option>
+                        <option value="JPG">JPG</option>
+                        <option value="PNG">PNG</option>
                       </select>
                     </div>
                   </div>
@@ -279,8 +318,8 @@ const AdminResources = () => {
                     <label className="flex items-center gap-2 cursor-pointer select-none w-fit">
                       <input
                         type="checkbox"
-                        checked={formData.published}
-                        onChange={e => setFormData({ ...formData, published: e.target.checked })}
+                        checked={formData.isPublished}
+                        onChange={e => setFormData({ ...formData, isPublished: e.target.checked })}
                         className="w-4 h-4 rounded accent-purple-500"
                       />
                       <span className="text-sm text-gray-300">Publish immediately</span>
@@ -295,14 +334,17 @@ const AdminResources = () => {
                   type="button"
                   onClick={() => setIsModalOpen(false)}
                   className="btn-secondary text-sm px-4 py-2"
+                  disabled={submitting}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   form="resource-form"
-                  className="btn-primary text-sm px-5 py-2"
+                  disabled={submitting}
+                  className="btn-primary text-sm px-5 py-2 flex items-center gap-2"
                 >
+                  {submitting && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
                   {selectedResource ? 'Update Resource' : 'Save Resource'}
                 </button>
               </div>
