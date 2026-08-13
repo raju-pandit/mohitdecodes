@@ -37,25 +37,25 @@ const Projects: React.FC = () => {
   return (
     <div className="container-max py-12">
       <div className="text-center max-w-3xl mx-auto mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">
+        <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-slate-900 dark:text-white">
           Build <span className="gradient-text">Projects</span>
         </h1>
-        <p className="text-xl text-slate-400">
+        <p className="text-xl text-slate-600 dark:text-slate-400">
           Build portfolio-ready, fully functional full-stack projects to test and showcase your skills.
         </p>
       </div>
 
       {/* Filter Row */}
       <div className="flex justify-center mb-12">
-        <div className="flex bg-dark-900 border border-dark-800 p-1.5 rounded-full overflow-x-auto no-scrollbar max-w-md w-full">
+        <div className="flex bg-slate-100 dark:bg-dark-900 border border-slate-200 dark:border-dark-800 p-1.5 rounded-full overflow-x-auto no-scrollbar max-w-md w-full shadow-inner">
           {Categories.map(cat => (
             <button
               key={cat.value}
               onClick={() => setCategory(cat.value)}
-              className={`flex-1 px-5 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-200 ${
+              className={`flex-1 px-5 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${
                 category === cat.value
-                  ? 'bg-primary-700 text-white shadow-glow'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-purple-600 text-white shadow-md'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               {cat.label}
@@ -85,7 +85,7 @@ const Projects: React.FC = () => {
           ))}
         </div>
       ) : (
-        <div className="text-center py-20 text-slate-500">
+        <div className="text-center py-20 text-slate-500 font-medium">
           No projects found. Check back later!
         </div>
       )}

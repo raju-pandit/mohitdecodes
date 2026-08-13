@@ -62,36 +62,36 @@ const Courses: React.FC = () => {
   return (
     <div className="container-max py-12">
       <div className="mb-12 text-center md:text-left">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">
+        <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-slate-900 dark:text-white">
           Explore <span className="gradient-text">Courses</span>
         </h1>
-        <p className="text-xl text-gray-400 max-w-2xl">
+        <p className="text-xl text-slate-600 dark:text-gray-400 max-w-2xl">
           Level up your skills with our comprehensive, project-based courses designed for modern developers.
         </p>
       </div>
 
       {/* Course Type Tabs */}
-      <div className="flex border-b border-dark-800 mb-8 pb-px">
+      <div className="flex border-b border-slate-200 dark:border-dark-800 mb-8 pb-px">
         <button
           onClick={() => setActiveTab('premium')}
-          className={`pb-3 text-lg font-bold transition-all relative px-2 ${
-            activeTab === 'premium' ? 'text-primary-400' : 'text-gray-400 hover:text-gray-200'
+          className={`pb-3 text-lg font-bold transition-all relative px-2 cursor-pointer ${
+            activeTab === 'premium' ? 'text-purple-600 dark:text-primary-400' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-gray-200'
           }`}
         >
           Premium Courses
           {activeTab === 'premium' && (
-            <motion.div layoutId="course-type-indicator" className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-500" />
+            <motion.div layoutId="course-type-indicator" className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-600 dark:bg-primary-500" />
           )}
         </button>
         <button
           onClick={() => setActiveTab('free')}
-          className={`ml-6 pb-3 text-lg font-bold transition-all relative px-2 ${
-            activeTab === 'free' ? 'text-primary-400' : 'text-gray-400 hover:text-gray-200'
+          className={`ml-6 pb-3 text-lg font-bold transition-all relative px-2 cursor-pointer ${
+            activeTab === 'free' ? 'text-purple-600 dark:text-primary-400' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-gray-200'
           }`}
         >
           Free Courses
           {activeTab === 'free' && (
-            <motion.div layoutId="course-type-indicator" className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-500" />
+            <motion.div layoutId="course-type-indicator" className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-600 dark:bg-primary-500" />
           )}
         </button>
       </div>
@@ -100,11 +100,11 @@ const Courses: React.FC = () => {
       <div className="flex flex-col lg:flex-row gap-6 mb-12">
         {/* Search */}
         <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
           <input
             type="text"
             placeholder="Search courses by title or tags..."
-            className="input pl-12"
+            className="input pl-12 bg-white dark:bg-dark-900 border-slate-200 dark:border-dark-700 shadow-xs"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -115,7 +115,7 @@ const Courses: React.FC = () => {
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="input py-3 rounded-xl bg-dark-800 border-dark-700 min-w-[140px] text-sm text-slate-300"
+            className="input py-3 rounded-xl bg-white dark:bg-dark-800 border-slate-200 dark:border-dark-700 min-w-[140px] text-sm text-slate-800 dark:text-slate-300 shadow-xs"
           >
             {Categories.map(cat => (
               <option key={cat.value} value={cat.value}>{cat.label}</option>
@@ -125,7 +125,7 @@ const Courses: React.FC = () => {
           <select
             value={difficulty}
             onChange={(e) => setDifficulty(e.target.value)}
-            className="input py-3 rounded-xl bg-dark-800 border-dark-700 min-w-[140px] text-sm text-slate-300"
+            className="input py-3 rounded-xl bg-white dark:bg-dark-800 border-slate-200 dark:border-dark-700 min-w-[140px] text-sm text-slate-800 dark:text-slate-300 shadow-xs"
           >
             {Difficulties.map(diff => (
               <option key={diff.value} value={diff.value}>{diff.label}</option>
@@ -135,7 +135,7 @@ const Courses: React.FC = () => {
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value)}
-            className="input py-3 rounded-xl bg-dark-800 border-dark-700 min-w-[140px] text-sm text-slate-300"
+            className="input py-3 rounded-xl bg-white dark:bg-dark-800 border-slate-200 dark:border-dark-700 min-w-[140px] text-sm text-slate-800 dark:text-slate-300 shadow-xs"
           >
             <option value="-createdAt">Newest First</option>
             <option value="price">Price: Low to High</option>
@@ -164,8 +164,8 @@ const Courses: React.FC = () => {
           ))}
         </div>
       ) : (
-        <div className="text-center py-20 bg-dark-900/30 rounded-2xl border border-dark-700 max-w-lg mx-auto">
-          <p className="text-xl text-gray-400 mb-4">No courses found matching your criteria.</p>
+        <div className="text-center py-20 bg-white dark:bg-dark-900/30 rounded-2xl border border-slate-200 dark:border-dark-700 max-w-lg mx-auto shadow-sm">
+          <p className="text-xl text-slate-600 dark:text-gray-400 mb-4 font-medium">No courses found matching your criteria.</p>
           <button
             onClick={() => {
               setSearchTerm('')
@@ -173,7 +173,7 @@ const Courses: React.FC = () => {
               setDifficulty('')
               setActiveTab('premium')
             }}
-            className="btn-outline btn-sm"
+            className="btn-outline btn-sm cursor-pointer"
           >
             Clear Filters
           </button>

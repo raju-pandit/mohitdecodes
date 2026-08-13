@@ -25,10 +25,10 @@ const Roadmaps: React.FC = () => {
   return (
     <div className="container-max py-12">
       <div className="text-center max-w-3xl mx-auto mb-16">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">
+        <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-slate-900 dark:text-white">
           Learning <span className="gradient-text">Roadmaps</span>
         </h1>
-        <p className="text-xl text-slate-400">
+        <p className="text-xl text-slate-600 dark:text-slate-400">
           Step-by-step developer guides and curriculum paths to help you master skills in the correct order.
         </p>
       </div>

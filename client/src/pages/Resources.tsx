@@ -71,10 +71,10 @@ const Resources: React.FC = () => {
   return (
     <div className="container-max py-12">
       <div className="text-center max-w-3xl mx-auto mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">
+        <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-slate-900 dark:text-white">
           Developer <span className="gradient-text">Resources</span>
         </h1>
-        <p className="text-xl text-slate-400">
+        <p className="text-xl text-slate-600 dark:text-slate-400">
           Free premium developer resources: study guides, cheat sheets, templates, and resume guides.
         </p>
       </div>
@@ -82,11 +82,11 @@ const Resources: React.FC = () => {
       {/* Filter Row */}
       <div className="flex flex-col md:flex-row gap-6 mb-12">
         <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
           <input
             type="text"
             placeholder="Search resources by title..."
-            className="input pl-12"
+            className="input pl-12 bg-white dark:bg-dark-900 border-slate-200 dark:border-dark-700 shadow-xs"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -95,7 +95,7 @@ const Resources: React.FC = () => {
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="input py-3 rounded-xl bg-dark-800 border-dark-700 min-w-[200px] text-sm text-slate-300"
+            className="input py-3 rounded-xl bg-white dark:bg-dark-800 border-slate-200 dark:border-dark-700 min-w-[200px] text-sm text-slate-800 dark:text-slate-300 shadow-xs"
           >
             {Categories.map(cat => (
               <option key={cat.value} value={cat.value}>{cat.label}</option>
@@ -119,23 +119,23 @@ const Resources: React.FC = () => {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.05 }}
-              className="glass-card p-6 border border-dark-700 flex flex-col justify-between h-full"
+              className="p-6 rounded-2xl bg-white dark:bg-dark-900 border border-slate-200/90 dark:border-dark-700 shadow-sm hover:shadow-xl dark:shadow-none flex flex-col justify-between h-full transition-all duration-300"
             >
               <div>
-                <span className="badge badge-primary text-[10px] mb-3">{resource.category}</span>
-                <h3 className="text-xl font-bold text-slate-100 mb-2">{resource.title}</h3>
-                <p className="text-slate-400 text-sm mb-6 leading-relaxed">{resource.description}</p>
+                <span className="badge badge-primary text-[10px] font-semibold mb-3">{resource.category}</span>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">{resource.title}</h3>
+                <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 leading-relaxed">{resource.description}</p>
               </div>
 
-              <div className="border-t border-dark-800/80 pt-4 flex items-center justify-between mt-auto">
-                <div className="flex items-center gap-1 text-xs text-slate-500">
-                  <FileText className="w-4 h-4" />
+              <div className="border-t border-slate-100 dark:border-dark-800/80 pt-4 flex items-center justify-between mt-auto">
+                <div className="flex items-center gap-1 text-xs text-slate-500 font-medium">
+                  <FileText className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                   <span>{resource.fileType} ({resource.fileSize})</span>
                 </div>
                 <button
                   onClick={() => handleDownload(resource._id, resource.title)}
                   disabled={downloading === resource._id}
-                  className="btn-primary btn-sm flex items-center gap-1.5"
+                  className="btn-primary btn-sm flex items-center gap-1.5 cursor-pointer font-semibold"
                 >
                   {downloading === resource._id ? (
                     'Opening...'
@@ -150,14 +150,14 @@ const Resources: React.FC = () => {
           ))}
         </div>
       ) : (
-        <div className="text-center py-20 bg-dark-900/30 rounded-2xl border border-dark-700 max-w-lg mx-auto">
-          <p className="text-xl text-gray-400 mb-4">No resources found matching your criteria.</p>
+        <div className="text-center py-20 bg-white dark:bg-dark-900/30 rounded-2xl border border-slate-200 dark:border-dark-700 max-w-lg mx-auto shadow-sm">
+          <p className="text-xl text-slate-600 dark:text-gray-400 mb-4 font-medium">No resources found matching your criteria.</p>
           <button
             onClick={() => {
               setSearchTerm('')
               setCategory('')
             }}
-            className="btn-outline btn-sm"
+            className="btn-outline btn-sm cursor-pointer"
           >
             Clear Filters
           </button>

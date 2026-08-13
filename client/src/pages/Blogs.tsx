@@ -48,10 +48,10 @@ const Blogs: React.FC = () => {
   return (
     <div className="container-max py-12">
       <div className="text-center max-w-3xl mx-auto mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">
+        <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-slate-900 dark:text-white">
           Latest <span className="gradient-text">Articles</span>
         </h1>
-        <p className="text-xl text-slate-400">
+        <p className="text-xl text-slate-600 dark:text-slate-400">
           Discover tips, tutorials, and insights about web development and software engineering.
         </p>
       </div>
@@ -59,11 +59,11 @@ const Blogs: React.FC = () => {
       {/* Filter Row */}
       <div className="flex flex-col md:flex-row gap-6 mb-12">
         <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
           <input
             type="text"
             placeholder="Search articles by title..."
-            className="input pl-12"
+            className="input pl-12 bg-white dark:bg-dark-900 border-slate-200 dark:border-dark-700 shadow-xs"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -72,7 +72,7 @@ const Blogs: React.FC = () => {
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="input py-3 rounded-xl bg-dark-800 border-dark-700 min-w-[180px] text-sm text-slate-300"
+            className="input py-3 rounded-xl bg-white dark:bg-dark-800 border-slate-200 dark:border-dark-700 min-w-[180px] text-sm text-slate-800 dark:text-slate-300 shadow-xs"
           >
             {Categories.map(cat => (
               <option key={cat.value} value={cat.value}>{cat.label}</option>
@@ -100,14 +100,14 @@ const Blogs: React.FC = () => {
           ))}
         </div>
       ) : (
-        <div className="text-center py-20 bg-dark-900/30 rounded-2xl border border-dark-700 max-w-lg mx-auto">
-          <p className="text-xl text-gray-400 mb-4">No articles found matching your criteria.</p>
+        <div className="text-center py-20 bg-white dark:bg-dark-900/30 rounded-2xl border border-slate-200 dark:border-dark-700 max-w-lg mx-auto shadow-sm">
+          <p className="text-xl text-slate-600 dark:text-gray-400 mb-4 font-medium">No articles found matching your criteria.</p>
           <button
             onClick={() => {
               setSearchTerm('')
               setCategory('')
             }}
-            className="btn-outline btn-sm"
+            className="btn-outline btn-sm cursor-pointer"
           >
             Clear Filters
           </button>
