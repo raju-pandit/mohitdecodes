@@ -68,7 +68,14 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
     { name: 'YouTube', path: '/youtube' },
   ];
 
-  const isMac = typeof window !== 'undefined' && /Mac|iPod|iPhone|iPad/i.test(navigator.platform || navigator.userAgent);
+  const [isMac, setIsMac] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
+      setIsMac(/Mac|iPod|iPhone|iPad/i.test(navigator.platform || navigator.userAgent || ''));
+    }
+  }, []);
+
   const searchShortcutLabel = isMac ? '⌘K' : 'Ctrl K';
 
   return (
