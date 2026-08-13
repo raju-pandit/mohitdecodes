@@ -44,42 +44,41 @@ export const sendOtp = async (req, res, next) => {
       { upsert: true, new: true }
     );
 
-    // Call SmsHorizon API
+    // Call SmsHorizon API matching API console parameters exactly
     const apiKey = process.env.SMSHORIZON_API_KEY;
     const user = process.env.SMSHORIZON_USER || 'mohitdecodes';
-    const senderId = process.env.SMSHORIZON_SENDER_ID || 'MHTDEC';
-    const templateId = process.env.SMSHORIZON_TEMPLATE_ID || '';
-    const smsText = `Your MohitDecodes OTP is ${otpCode}. Valid for 5 minutes. Do not share it with anyone.`;
+    const senderId = process.env.SMSHORIZON_SENDER_ID || '8235402646';
+    const templateId = process.env.SMSHORIZON_TEMPLATE_ID || '1607100000000323238';
+    const smsMessage = `OTP for your new user account registration is: ${otpCode}\n\n- SmsHorizon`;
 
     if (apiKey) {
       try {
-        const smsParams = new URLSearchParams({
+        const bodyParams = new URLSearchParams({
           user,
-          apikey: apiKey,
-          sender: senderId,
-          mobile: cleanPhone,
-          message: smsText,
+          number: cleanPhone,
+          senderid: senderId,
+          message: smsMessage,
           type: 'txt',
+          tid: templateId,
+          prettyprint: '1'
         });
-        if (templateId) {
-          smsParams.append('tid', templateId);
-          smsParams.append('template_id', templateId);
-        }
 
-        const smsUrl = `https://smshorizon.co.in/api/v2/sendsms.php?${smsParams.toString()}`;
-        const fetchRes = await fetch(smsUrl, {
-          method: 'GET',
+        const fetchRes = await fetch('https://smshorizon.co.in/api/v2/sendsms.php', {
+          method: 'POST',
           headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
             'Authorization': `Bearer ${apiKey}`
-          }
+          },
+          body: bodyParams.toString()
         });
-        const smsResult = await fetchRes.text();
+
+        const smsResult = await fetchRes.json().catch(() => null) || await fetchRes.text();
         console.log('SmsHorizon response for phone:', cleanPhone, smsResult);
       } catch (smsErr) {
         console.error('SmsHorizon dispatch failed:', smsErr.message);
       }
     } else {
-      console.warn('SMSHORIZON_API_KEY not configured in environment. OTP generated for phone:', cleanPhone);
+      console.warn('SMSHORIZON_API_KEY not configured in environment. Generated OTP for phone:', cleanPhone);
     }
 
     // NEVER return or log the actual OTP in API response
