@@ -2,8 +2,6 @@
 
 > **Learn. Build. Decode.** — A production-ready developer education platform built with the MERN Stack.
 
-![MohitDecodes](https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?w=1200&q=80)
-
 ## 🚀 Tech Stack
 
 ### Frontend
@@ -111,20 +109,13 @@ npm install
 
 **Server** (`server/.env`):
 ```env
-PORT=5000
-MONGO_URI=mongodb://localhost:27017/mohitdecodes
-JWT_SECRET=your_super_secret_jwt_key_change_in_production
-JWT_EXPIRE=7d
-CLIENT_URL=http://localhost:5173
+
+
 NODE_ENV=development
-ADMIN_EMAIL=admin@mohitdecodes.com
-ADMIN_PASSWORD=Admin@123456
+
 ```
 
-**Client** (`client/.env`):
-```env
-VITE_API_URL=http://localhost:5000/api
-```
+
 
 ### 3. Seed Database
 
@@ -155,16 +146,7 @@ cd client
 npm run dev
 ```
 
-Visit: **http://localhost:5173**
 
----
-
-## 🔐 Admin Access
-
-After seeding:
-- **Email**: `admin@mohitdecodes.com`
-- **Password**: `Admin@123456`
-- **Admin Panel**: http://localhost:5173/admin
 
 ---
 
