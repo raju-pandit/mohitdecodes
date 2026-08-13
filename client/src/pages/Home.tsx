@@ -161,6 +161,17 @@ const FeatureSpotlightCard: React.FC<{
         }}
       />
 
+      {/* Cursor Glowing Border Highlight */}
+      <div
+        className="pointer-events-none absolute -inset-px rounded-2xl transition-opacity duration-300 z-0"
+        style={{
+          opacity: isHovered ? 1 : 0,
+          border: `1.5px solid ${feature.iconColor}`,
+          maskImage: `radial-gradient(160px circle at ${mousePosition.x}px ${mousePosition.y}px, black 0%, transparent 80%)`,
+          WebkitMaskImage: `radial-gradient(160px circle at ${mousePosition.x}px ${mousePosition.y}px, black 0%, transparent 80%)`
+        }}
+      />
+
       {/* Subtle Grid Texture Background Overlay */}
       <div 
         className="absolute inset-0 opacity-[0.14] pointer-events-none group-hover:opacity-[0.25] transition-opacity duration-300 z-0"

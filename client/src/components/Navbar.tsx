@@ -68,16 +68,6 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
     { name: 'YouTube', path: '/youtube' },
   ];
 
-  const [isMac, setIsMac] = useState(false);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
-      setIsMac(/Mac|iPod|iPhone|iPad/i.test(navigator.platform || navigator.userAgent || ''));
-    }
-  }, []);
-
-  const searchShortcutLabel = isMac ? '⌘K' : 'Ctrl K';
-
   return (
     <header 
       style={{
@@ -87,7 +77,7 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
       className="fixed top-[10px] left-1/2 z-[9999] w-[95%] max-w-7xl pointer-events-none"
     >
       <div className="w-full flex flex-col items-center">
-        {/* Outer Header Bar */}
+        {/* Outer Header Bar (When scrolled, outer container becomes transparent so ONLY center pill remains) */}
         <div 
           style={{ 
             backgroundColor: scrolled ? 'transparent' : 'rgba(10, 10, 22, 0.45)',
@@ -99,12 +89,12 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
             scrolled ? 'shadow-none' : 'shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] shadow-purple-950/15'
           }`}
         >
-          {/* Left: Logo */}
+          {/* Left: MD Logo + MohitDecodes (hides on desktop when scrolled so only center menu pill remains) */}
           <div className={`transition-all duration-300 shrink-0 ${scrolled ? 'lg:opacity-0 lg:w-0 lg:overflow-hidden lg:pointer-events-none' : 'opacity-100'}`}>
             <BrandLogo size="md" />
           </div>
 
-          {/* Center: Nav links */}
+          {/* Center: Floating Glass Pill Navigation (Matching User Screenshot Exactly) */}
           <nav 
             style={{
               backgroundColor: scrolled ? 'rgba(10, 10, 25, 0.85)' : 'rgba(255, 255, 255, 0.04)',
@@ -142,7 +132,8 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
             })}
           </nav>
 
-          {/* Right: Search + Profile */}
+
+          {/* Right: Search / Ctrl K + Profile (hides on desktop when scrolled so only center menu pill remains) */}
           <div className={`flex items-center gap-2 sm:gap-4 transition-all duration-300 ${scrolled ? 'lg:opacity-0 lg:w-0 lg:overflow-hidden lg:pointer-events-none' : 'opacity-100'}`}>
             <button 
               onClick={onOpenSearch}
@@ -151,7 +142,7 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
             >
               <Search className="w-3.5 h-3.5 text-slate-400 group-hover:text-primary-400 transition-colors" />
               <span className="hidden sm:inline-block text-[10px] font-mono text-slate-400 bg-white/10 px-1.5 py-0.5 rounded border border-white/10">
-                {searchShortcutLabel}
+                Ctrl K
               </span>
             </button>
 

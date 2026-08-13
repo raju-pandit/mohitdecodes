@@ -24,10 +24,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (token) {
         try {
           const res = await authService.getMe();
-          const userData = res?.data?.user || (res as any)?.user;
-          if (userData) {
-            setUser(userData);
-          }
+          setUser(res.data.user);
         } catch (error) {
           console.error('Failed to load user', error);
           localStorage.removeItem('token');

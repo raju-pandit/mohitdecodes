@@ -10,18 +10,6 @@ const MainLayout: React.FC = () => {
   const location = useLocation();
   const [searchOpen, setSearchOpen] = useState(false);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K' || e.code === 'KeyK')) {
-        e.preventDefault();
-        setSearchOpen((prev) => !prev);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
-
   return (
     <div className="flex flex-col min-h-screen bg-dark-950 text-gray-100">
       <Navbar onOpenSearch={() => setSearchOpen(true)} />
