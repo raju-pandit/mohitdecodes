@@ -222,12 +222,22 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
               </div>
             ) : (
               <div className="hidden lg:flex items-center gap-2">
-                <Link to="/login">
-                  <Button variant="ghost" size="sm" className="text-slate-200 hover:text-white">Login</Button>
-                </Link>
-                <Link to="/register">
-                  <Button variant="primary" size="sm">Sign Up</Button>
-                </Link>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="text-slate-200 hover:text-white cursor-pointer"
+                  onClick={() => navigate('/login')}
+                >
+                  Login
+                </Button>
+                <Button 
+                  variant="primary" 
+                  size="sm" 
+                  className="cursor-pointer"
+                  onClick={() => navigate('/register')}
+                >
+                  Sign Up
+                </Button>
               </div>
             )}
 
@@ -301,12 +311,22 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
                   </div>
                 ) : (
                   <div className="grid grid-cols-2 gap-2 pt-1">
-                    <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
-                      <Button variant="outline" size="sm" className="w-full justify-center">Login</Button>
-                    </Link>
-                    <Link to="/register" onClick={() => setMobileMenuOpen(false)}>
-                      <Button variant="primary" size="sm" className="w-full justify-center">Sign Up</Button>
-                    </Link>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full justify-center cursor-pointer"
+                      onClick={() => { navigate('/login'); setMobileMenuOpen(false); }}
+                    >
+                      Login
+                    </Button>
+                    <Button 
+                      variant="primary" 
+                      size="sm" 
+                      className="w-full justify-center cursor-pointer"
+                      onClick={() => { navigate('/register'); setMobileMenuOpen(false); }}
+                    >
+                      Sign Up
+                    </Button>
                   </div>
                 )}
               </div>
