@@ -8,6 +8,7 @@ import remarkGfm from 'remark-gfm'
 import { getBlog, addComment, toggleSaveBlog } from '../services/blogService'
 import { Blog } from '../types'
 import { useAuth } from '../context/AuthContext'
+import { formatDate } from '../utils/formatters'
 import { useTitle } from '../hooks/useTitle'
 
 const BlogDetail: React.FC = () => {
@@ -114,7 +115,7 @@ const BlogDetail: React.FC = () => {
               <div className="flex items-center gap-3 text-sm text-gray-500">
                 <span className="flex items-center gap-1">
                   <Calendar size={14} />
-                  {new Date(blogDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  {formatDate(blogDate)}
                 </span>
                 <span className="flex items-center gap-1">
                   <Clock size={14} />
@@ -195,7 +196,7 @@ const BlogDetail: React.FC = () => {
                     <div className="flex items-center justify-between">
                       <h4 className="font-semibold text-slate-200">{comment.name}</h4>
                       <span className="text-xs text-slate-500">
-                        {new Date(comment.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                        {formatDate(comment.createdAt)}
                       </span>
                     </div>
                     <p className="text-sm text-slate-300 leading-relaxed">{comment.message}</p>

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Edit2, Trash2, X, AlertTriangle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
+import { formatDate } from '../../utils/formatters';
 
 interface Tutorial {
   _id: string;
@@ -137,7 +138,7 @@ const AdminTutorials = () => {
                       {tutorial.published ? 'Published' : 'Draft'}
                     </span>
                   </td>
-                  <td className="p-4">{new Date(tutorial.createdAt).toLocaleDateString()}</td>
+                  <td className="p-4">{formatDate(tutorial.createdAt)}</td>
                   <td className="p-4 flex gap-2">
                     <button onClick={() => handleOpenModal(tutorial)} className="p-2 text-blue-400 hover:bg-blue-400/10 rounded">
                       <Edit2 size={16} />

@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { getTutorial } from '../services/tutorialService'
 import { Tutorial } from '../types'
+import { formatDate } from '../utils/formatters'
 import { useTitle } from '../hooks/useTitle'
 
 const TutorialDetail: React.FC = () => {
@@ -41,9 +42,7 @@ const TutorialDetail: React.FC = () => {
 
   if (!tutorial) return null
 
-  const formattedDate = tutorial.createdAt 
-    ? new Date(tutorial.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
-    : 'Recently'
+  const formattedDate = formatDate(tutorial.createdAt)
 
   return (
     <div className="min-h-screen bg-dark-950 pb-20">

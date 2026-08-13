@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Clock, Calendar, ArrowRight } from 'lucide-react';
 import { Card } from './ui/Card';
 import { Badge } from './ui/Badge';
+import { formatDate } from '../utils/formatters';
 
 export interface BlogCardProps {
   blog: {
@@ -71,7 +72,7 @@ export const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
               <div className="flex items-center gap-3 text-xs text-gray-500 mt-0.5">
                 <span className="flex items-center gap-1">
                   <Calendar className="w-3 h-3" />
-                  {new Date(dateVal).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  {formatDate(dateVal)}
                 </span>
                 <span className="flex items-center gap-1">
                   <Clock className="w-3 h-3" />

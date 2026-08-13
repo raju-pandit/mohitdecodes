@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Search, Download, Mail } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
+import { formatDate } from '../../utils/formatters';
 
 interface Subscriber {
   _id: string;
@@ -103,7 +104,7 @@ const AdminNewsletter = () => {
                   <td className="p-4">
                     {sub.subscribed ? <span className="badge-primary">Active</span> : <span className="badge-red">Unsubscribed</span>}
                   </td>
-                  <td className="p-4">{new Date(sub.createdAt).toLocaleDateString()}</td>
+                  <td className="p-4">{formatDate(sub.createdAt)}</td>
                 </tr>
               ))}
             </tbody>
