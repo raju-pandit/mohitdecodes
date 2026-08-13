@@ -166,60 +166,183 @@ const AdminProjects = () => {
       {/* Form Modal */}
       <AnimatePresence>
         {isModalOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 overflow-y-auto">
-            <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }} className="glass-card w-full max-w-3xl my-8 p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold text-white">{selectedProject ? 'Edit Project' : 'Add Project'}</h2>
-                <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-white"><X size={24} /></button>
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-3"
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
+              className="relative w-full max-w-3xl flex flex-col rounded-2xl border border-purple-700/30 shadow-[0_0_40px_rgba(139,92,246,0.15)]"
+              style={{ background: 'linear-gradient(135deg, #0f0f1a 0%, #13111f 100%)', maxHeight: '85vh' }}
+            >
+              {/* Sticky Header */}
+              <div className="flex justify-between items-center px-5 py-3.5 border-b border-white/5 flex-shrink-0">
+                <h2 className="text-base font-bold text-white">
+                  {selectedProject ? 'Edit Project' : 'Add Project'}
+                </h2>
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-white/5 transition"
+                >
+                  <X size={18} />
+                </button>
               </div>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="md:col-span-2">
-                    <label className="block text-sm mb-1 text-gray-300">Title</label>
-                    <input required type="text" className="input w-full" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} />
-                  </div>
-                  <div className="md:col-span-2">
-                    <label className="block text-sm mb-1 text-gray-300">Description</label>
-                    <textarea required className="input w-full h-24" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})}></textarea>
-                  </div>
-                  <div className="md:col-span-2">
-                    <label className="block text-sm mb-1 text-gray-300">Image URL</label>
-                    <input required type="text" className="input w-full" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} />
-                  </div>
-                  <div className="md:col-span-2">
-                    <label className="block text-sm mb-1 text-gray-300">Technologies (comma separated)</label>
-                    <input required type="text" className="input w-full" value={formData.technologies} onChange={e => setFormData({...formData, technologies: e.target.value})} />
-                  </div>
+
+              {/* Scrollable Body */}
+              <div className="overflow-y-auto flex-1 px-5 py-4">
+                <form id="project-form" onSubmit={handleSubmit} className="space-y-3">
+                  {/* Title */}
                   <div>
-                    <label className="block text-sm mb-1 text-gray-300">GitHub URL</label>
-                    <input type="text" className="input w-full" value={formData.githubUrl} onChange={e => setFormData({...formData, githubUrl: e.target.value})} />
+                    <label className="block text-xs font-medium mb-1 text-gray-400">
+                      Title <span className="text-red-400">*</span>
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      className="input w-full text-sm"
+                      style={{ height: '40px' }}
+                      placeholder="Project title..."
+                      value={formData.title}
+                      onChange={e => setFormData({ ...formData, title: e.target.value })}
+                    />
                   </div>
+
+                  {/* Description */}
                   <div>
-                    <label className="block text-sm mb-1 text-gray-300">Live URL</label>
-                    <input type="text" className="input w-full" value={formData.liveUrl} onChange={e => setFormData({...formData, liveUrl: e.target.value})} />
+                    <label className="block text-xs font-medium mb-1 text-gray-400">
+                      Description <span className="text-red-400">*</span>
+                    </label>
+                    <textarea
+                      required
+                      className="input w-full text-sm resize-none"
+                      style={{ height: '85px' }}
+                      placeholder="Short description of the project..."
+                      value={formData.description}
+                      onChange={e => setFormData({ ...formData, description: e.target.value })}
+                    />
                   </div>
+
+                  {/* Image URL */}
                   <div>
-                    <label className="block text-sm mb-1 text-gray-300">Category</label>
-                    <input required type="text" className="input w-full" value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} />
+                    <label className="block text-xs font-medium mb-1 text-gray-400">
+                      Image URL <span className="text-red-400">*</span>
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      className="input w-full text-sm"
+                      style={{ height: '40px' }}
+                      placeholder="https://..."
+                      value={formData.image}
+                      onChange={e => setFormData({ ...formData, image: e.target.value })}
+                    />
                   </div>
+
+                  {/* Technologies */}
                   <div>
-                    <label className="block text-sm mb-1 text-gray-300">Difficulty</label>
-                    <select className="input w-full" value={formData.difficulty} onChange={e => setFormData({...formData, difficulty: e.target.value})}>
-                      <option>Beginner</option><option>Intermediate</option><option>Advanced</option>
-                    </select>
+                    <label className="block text-xs font-medium mb-1 text-gray-400">
+                      Technologies <span className="text-gray-500">(comma separated)</span> <span className="text-red-400">*</span>
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      className="input w-full text-sm"
+                      style={{ height: '40px' }}
+                      placeholder="React, Node.js, MongoDB, Tailwind..."
+                      value={formData.technologies}
+                      onChange={e => setFormData({ ...formData, technologies: e.target.value })}
+                    />
                   </div>
-                  <div className="md:col-span-2 mt-2">
-                    <label className="flex items-center space-x-2 text-sm text-gray-300">
-                      <input type="checkbox" checked={formData.featured} onChange={e => setFormData({...formData, featured: e.target.checked})} className="rounded bg-gray-700 border-gray-600 text-blue-500" />
-                      <span>Featured Project</span>
+
+                  {/* GitHub URL | Live URL */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium mb-1 text-gray-400">GitHub URL</label>
+                      <input
+                        type="text"
+                        className="input w-full text-sm"
+                        style={{ height: '40px' }}
+                        placeholder="https://github.com/..."
+                        value={formData.githubUrl}
+                        onChange={e => setFormData({ ...formData, githubUrl: e.target.value })}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium mb-1 text-gray-400">Live URL</label>
+                      <input
+                        type="text"
+                        className="input w-full text-sm"
+                        style={{ height: '40px' }}
+                        placeholder="https://..."
+                        value={formData.liveUrl}
+                        onChange={e => setFormData({ ...formData, liveUrl: e.target.value })}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Category | Difficulty */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium mb-1 text-gray-400">
+                        Category <span className="text-red-400">*</span>
+                      </label>
+                      <input
+                        required
+                        type="text"
+                        className="input w-full text-sm"
+                        style={{ height: '40px' }}
+                        placeholder="e.g. Frontend, MERN, Full Stack..."
+                        value={formData.category}
+                        onChange={e => setFormData({ ...formData, category: e.target.value })}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium mb-1 text-gray-400">Difficulty</label>
+                      <select
+                        className="input w-full text-sm"
+                        style={{ height: '40px' }}
+                        value={formData.difficulty}
+                        onChange={e => setFormData({ ...formData, difficulty: e.target.value })}
+                      >
+                        <option>Beginner</option>
+                        <option>Intermediate</option>
+                        <option>Advanced</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Featured Project */}
+                  <div className="pt-1">
+                    <label className="flex items-center gap-2 cursor-pointer select-none w-fit">
+                      <input
+                        type="checkbox"
+                        checked={formData.featured}
+                        onChange={e => setFormData({ ...formData, featured: e.target.checked })}
+                        className="w-4 h-4 rounded accent-purple-500"
+                      />
+                      <span className="text-sm text-gray-300">Featured Project</span>
                     </label>
                   </div>
-                </div>
-                <div className="flex justify-end gap-3 mt-6">
-                  <button type="button" onClick={() => setIsModalOpen(false)} className="btn-secondary">Cancel</button>
-                  <button type="submit" className="btn-primary">Save Project</button>
-                </div>
-              </form>
+                </form>
+              </div>
+
+              {/* Sticky Footer */}
+              <div className="flex justify-end gap-2 px-5 py-3 border-t border-white/5 flex-shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="btn-secondary text-sm px-4 py-2"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  form="project-form"
+                  className="btn-primary text-sm px-5 py-2"
+                >
+                  {selectedProject ? 'Update Project' : 'Save Project'}
+                </button>
+              </div>
             </motion.div>
           </motion.div>
         )}
