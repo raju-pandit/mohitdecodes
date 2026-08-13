@@ -23,20 +23,8 @@ type RegisterFormData = z.infer<typeof registerSchema>
 
 const Register: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false)
-  const [oauthProvider, setOauthProvider] = useState<'google' | 'github' | null>(null)
-  const { register: registerUser, user, socialLogin } = useAuth()
+  const { register: registerUser, user } = useAuth()
   const navigate = useNavigate()
-
-  const handleSelectAccount = async (name: string, email: string, avatar: string) => {
-    try {
-      await socialLogin(name, email, avatar, oauthProvider || 'google')
-      toast.success('Account created successfully!')
-      setOauthProvider(null)
-      navigate('/dashboard')
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Social Registration failed. Please try again.')
-    }
-  }
 
   const { register, handleSubmit, watch, formState: { errors, isSubmitting } } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema)
@@ -187,13 +175,6 @@ const Register: React.FC = () => {
             <Link to="/about" className="text-primary-400 hover:text-primary-300">Privacy Policy</Link>
           </p>
         </div>
-
-        <OAuthOverlay
-          isOpen={oauthProvider !== null}
-          onClose={() => setOauthProvider(null)}
-          provider={oauthProvider}
-          onSelectAccount={handleSelectAccount}
-        />
 
         <p className="text-center text-slate-400 mt-6">
           Already have an account?{' '}

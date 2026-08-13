@@ -18,22 +18,10 @@ type LoginForm = z.infer<typeof loginSchema>
 
 const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false)
-  const [oauthProvider, setOauthProvider] = useState<'google' | 'github' | null>(null)
-  const { login, user, socialLogin } = useAuth()
+  const { login, user } = useAuth()
   const navigate = useNavigate()
 
-  const handleSelectAccount = async (name: string, email: string, avatar: string) => {
-    try {
-      await socialLogin(name, email, avatar, oauthProvider || 'google')
-      toast.success('Welcome back!')
-      setOauthProvider(null)
-      navigate('/dashboard')
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Social Login failed. Please try again.')
-    }
-  }
-
-  const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm<LoginForm>({
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema)
   })
 
@@ -143,13 +131,6 @@ const Login: React.FC = () => {
           </div>
 
         </div>
-
-        <OAuthOverlay
-          isOpen={oauthProvider !== null}
-          onClose={() => setOauthProvider(null)}
-          provider={oauthProvider}
-          onSelectAccount={handleSelectAccount}
-        />
 
         <p className="text-center text-slate-400 mt-6">
           Don't have an account?{' '}
