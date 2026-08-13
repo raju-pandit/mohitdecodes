@@ -104,10 +104,6 @@ const CompanyLogoItem: React.FC<{ company: Company }> = ({ company }) => {
 };
 
 export const CompaniesMarquee: React.FC = () => {
-  // Triple arrays for seamless infinite scrolling loop
-  const row1Items = [...row1Companies, ...row1Companies, ...row1Companies];
-  const row2Items = [...row2Companies, ...row2Companies, ...row2Companies];
-
   return (
     <section className="py-20 relative overflow-hidden border-t border-white/5 bg-transparent">
       {/* Background ambient lighting */}
@@ -139,29 +135,29 @@ export const CompaniesMarquee: React.FC = () => {
         {/* Right Gradient Fade Mask */}
         <div className="absolute top-0 bottom-0 right-0 w-24 sm:w-48 bg-gradient-to-l from-[#060814] via-[#060814]/70 to-transparent z-20 pointer-events-none" />
 
-        {/* Row 1 — Right to Left (Continuous, Slow) */}
+        {/* Row 1 — Right to Left (100% Smooth Infinite Loop) */}
         <div className="flex overflow-hidden group/row1">
-          <div className="flex shrink-0 items-center gap-6 sm:gap-8 animate-marquee-left group-hover/row1:[animation-play-state:paused] [animation-duration:45s]">
-            {row1Items.map((company, index) => (
+          <div className="flex shrink-0 items-center gap-6 pr-6 sm:gap-8 sm:pr-8 animate-marquee-left group-hover/row1:[animation-play-state:paused] [animation-duration:38s]">
+            {row1Companies.map((company, index) => (
               <CompanyLogoItem key={`r1-${company.name}-${index}`} company={company} />
             ))}
           </div>
-          <div className="flex shrink-0 items-center gap-6 sm:gap-8 animate-marquee-left group-hover/row1:[animation-play-state:paused] [animation-duration:45s]" aria-hidden="true">
-            {row1Items.map((company, index) => (
+          <div className="flex shrink-0 items-center gap-6 pr-6 sm:gap-8 sm:pr-8 animate-marquee-left group-hover/row1:[animation-play-state:paused] [animation-duration:38s]" aria-hidden="true">
+            {row1Companies.map((company, index) => (
               <CompanyLogoItem key={`r1-dup-${company.name}-${index}`} company={company} />
             ))}
           </div>
         </div>
 
-        {/* Row 2 — Left to Right (Continuous, Slow) */}
+        {/* Row 2 — Left to Right (100% Smooth Infinite Loop) */}
         <div className="flex overflow-hidden group/row2">
-          <div className="flex shrink-0 items-center gap-6 sm:gap-8 animate-marquee-right group-hover/row2:[animation-play-state:paused] [animation-duration:45s]">
-            {row2Items.map((company, index) => (
+          <div className="flex shrink-0 items-center gap-6 pr-6 sm:gap-8 sm:pr-8 animate-marquee-right group-hover/row2:[animation-play-state:paused] [animation-duration:38s]">
+            {row2Companies.map((company, index) => (
               <CompanyLogoItem key={`r2-${company.name}-${index}`} company={company} />
             ))}
           </div>
-          <div className="flex shrink-0 items-center gap-6 sm:gap-8 animate-marquee-right group-hover/row2:[animation-play-state:paused] [animation-duration:45s]" aria-hidden="true">
-            {row2Items.map((company, index) => (
+          <div className="flex shrink-0 items-center gap-6 pr-6 sm:gap-8 sm:pr-8 animate-marquee-right group-hover/row2:[animation-play-state:paused] [animation-duration:38s]" aria-hidden="true">
+            {row2Companies.map((company, index) => (
               <CompanyLogoItem key={`r2-dup-${company.name}-${index}`} company={company} />
             ))}
           </div>
