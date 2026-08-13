@@ -398,9 +398,6 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* TRUSTED BY LEADING COMPANIES MARQUEE */}
-      <CompaniesMarquee />
-
       {/* FEATURED COURSES */}
       <section className="py-20 bg-dark-900/40 border-y border-dark-800">
         <div className="container-max">
@@ -568,6 +565,9 @@ const Home: React.FC = () => {
           </div>
         </section>
       )}
+
+      {/* TRUSTED BY LEADING COMPANIES MARQUEE */}
+      <CompaniesMarquee />
 
       {/* LATEST BLOGS */}
       {blogs.length > 0 && (
