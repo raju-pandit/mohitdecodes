@@ -189,7 +189,7 @@ const Register: React.FC = () => {
                   <input
                     required
                     type="text"
-                    placeholder="Mohit Sharma"
+                    placeholder="Enter your full name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="input w-full"
@@ -209,7 +209,7 @@ const Register: React.FC = () => {
                     <input
                       required
                       type="tel"
-                      placeholder="98765 43210"
+                      placeholder="Enter your phone number"
                       value={phone}
                       onChange={handlePhoneChange}
                       className="input w-full pl-20 tracking-wider font-semibold text-slate-100"
