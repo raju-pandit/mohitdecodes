@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Trash2, Shield, AlertTriangle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
-import { getInitials, hasCustomAvatar } from '../../utils/formatters';
+import { getInitials, hasCustomAvatar, formatDate } from '../../utils/formatters';
 
 interface User {
   _id: string;
@@ -121,7 +121,7 @@ const AdminUsers = () => {
                     </select>
                   </td>
                   <td className="p-4">{user.enrolledCourses?.length || 0} courses</td>
-                  <td className="p-4">{new Date(user.createdAt).toLocaleDateString()}</td>
+                  <td className="p-4 text-slate-300 font-medium">{formatDate(user.createdAt)}</td>
                   <td className="p-4">
                     <button onClick={() => { setSelectedUser(user); setIsDeleteModalOpen(true); }} className="p-2 text-red-400 hover:bg-red-400/10 rounded">
                       <Trash2 size={16} />
