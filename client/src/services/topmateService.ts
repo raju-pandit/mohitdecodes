@@ -8,8 +8,11 @@ export const DEFAULT_TOPMATE_URL = 'https://topmate.io/mohitdecodes';
  */
 export const getPublicTopmateCards = async (): Promise<TopmateCard[]> => {
   try {
-    const res = await api.get<ApiResponse<TopmateCard[]>>('/topmate');
-    return (res as any)?.data?.data || (res as any)?.data || [];
+    const res: any = await api.get('/topmate');
+    if (Array.isArray(res)) return res;
+    if (Array.isArray(res?.data)) return res.data;
+    if (Array.isArray(res?.data?.data)) return res.data.data;
+    return [];
   } catch (error) {
     console.error('Failed to fetch public Topmate cards:', error);
     return [];
@@ -20,32 +23,40 @@ export const getPublicTopmateCards = async (): Promise<TopmateCard[]> => {
  * Fetch all Topmate cards for Admin (including inactive)
  */
 export const getAdminTopmateCards = async (): Promise<TopmateCard[]> => {
-  const res = await api.get<ApiResponse<TopmateCard[]>>('/topmate?all=true');
-  return (res as any)?.data?.data || (res as any)?.data || [];
+  try {
+    const res: any = await api.get('/topmate?all=true');
+    if (Array.isArray(res)) return res;
+    if (Array.isArray(res?.data)) return res.data;
+    if (Array.isArray(res?.data?.data)) return res.data.data;
+    return [];
+  } catch (error) {
+    console.error('Failed to fetch admin Topmate cards:', error);
+    return [];
+  }
 };
 
 /**
  * Fetch single Topmate card by ID
  */
 export const getTopmateCardById = async (id: string): Promise<TopmateCard> => {
-  const res = await api.get<ApiResponse<TopmateCard>>(`/topmate/${id}`);
-  return (res as any)?.data?.data || (res as any)?.data;
+  const res: any = await api.get(`/topmate/${id}`);
+  return res?.data?.data || res?.data || res;
 };
 
 /**
  * Create new Topmate card (Admin)
  */
 export const createTopmateCard = async (data: Partial<TopmateCard>): Promise<TopmateCard> => {
-  const res = await api.post<ApiResponse<TopmateCard>>('/topmate', data);
-  return (res as any)?.data?.data || (res as any)?.data;
+  const res: any = await api.post('/topmate', data);
+  return res?.data?.data || res?.data || res;
 };
 
 /**
  * Update Topmate card (Admin)
  */
 export const updateTopmateCard = async (id: string, data: Partial<TopmateCard>): Promise<TopmateCard> => {
-  const res = await api.put<ApiResponse<TopmateCard>>(`/topmate/${id}`, data);
-  return (res as any)?.data?.data || (res as any)?.data;
+  const res: any = await api.put(`/topmate/${id}`, data);
+  return res?.data?.data || res?.data || res;
 };
 
 /**
@@ -59,8 +70,8 @@ export const deleteTopmateCard = async (id: string): Promise<void> => {
  * Toggle Topmate card active/inactive status (Admin)
  */
 export const toggleTopmateStatus = async (id: string): Promise<TopmateCard> => {
-  const res = await api.patch<ApiResponse<TopmateCard>>(`/topmate/${id}/status`);
-  return (res as any)?.data?.data || (res as any)?.data;
+  const res: any = await api.patch(`/topmate/${id}/status`);
+  return res?.data?.data || res?.data || res;
 };
 
 /**
@@ -70,13 +81,13 @@ export const uploadTopmateImage = async (file: File): Promise<{ imageUrl: string
   const formData = new FormData();
   formData.append('image', file);
 
-  const res = await api.post('/topmate/upload', formData, {
+  const res: any = await api.post('/topmate/upload', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
   });
 
-  const data = (res as any)?.data?.data || (res as any)?.data || {};
+  const data = res?.data?.data || res?.data || res || {};
   return {
     imageUrl: data.imageUrl || '',
     cloudinaryPublicId: data.cloudinaryPublicId || ''

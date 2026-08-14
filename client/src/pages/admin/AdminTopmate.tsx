@@ -13,7 +13,6 @@ import {
   Sparkles,
   Link as LinkIcon,
   X,
-  Image as ImageIcon,
   Cloud
 } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -58,7 +57,7 @@ export const AdminTopmate: React.FC = () => {
     setLoading(true);
     try {
       const data = await getAdminTopmateCards();
-      setCards(data);
+      setCards(Array.isArray(data) ? data : []);
     } catch (error) {
       toast.error('Failed to load Topmate cards');
     } finally {
@@ -260,14 +259,14 @@ export const AdminTopmate: React.FC = () => {
             </span>
           </div>
 
-          {/* Table Container */}
+          {/* Table Container with Controlled Fixed Thumbnail Sizing */}
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-slate-700 dark:text-slate-300 min-w-[950px]">
+            <table className="w-full text-left text-sm text-slate-700 dark:text-slate-300 min-w-[900px]">
               <thead className="bg-slate-50 dark:bg-dark-950/80 text-slate-800 dark:text-slate-200 font-bold border-b border-slate-200 dark:border-dark-800 text-xs uppercase tracking-wider">
                 <tr>
                   <th className="p-4 w-72">Image & Card Title</th>
-                  <th className="p-4 w-40">Badge / Label</th>
-                  <th className="p-4 w-60">Topmate Link</th>
+                  <th className="p-4 w-36">Badge / Label</th>
+                  <th className="p-4 w-56">Topmate Link</th>
                   <th className="p-4 text-center w-24">Order</th>
                   <th className="p-4 text-center w-32">Status</th>
                   <th className="p-4 text-center w-28">Actions</th>
@@ -281,14 +280,17 @@ export const AdminTopmate: React.FC = () => {
                       key={card._id}
                       className="hover:bg-slate-50/80 dark:hover:bg-dark-800/40 transition-colors"
                     >
-                      {/* Image & Title */}
+                      {/* Image & Title - STRICT 48px Thumbnail Size */}
                       <td className="p-4">
                         <div className="flex items-center gap-3.5">
-                          <div className="w-13 h-13 rounded-xl bg-slate-100 dark:bg-dark-800 border border-slate-200 dark:border-dark-700 overflow-hidden shrink-0 flex items-center justify-center shadow-xs">
+                          <div
+                            style={{ width: '48px', height: '48px', minWidth: '48px', maxWidth: '48px', minHeight: '48px', maxHeight: '48px' }}
+                            className="rounded-xl bg-slate-100 dark:bg-dark-800 border border-slate-200 dark:border-dark-700 overflow-hidden shrink-0 flex items-center justify-center shadow-xs"
+                          >
                             <img
                               src={cardImg}
                               alt={card.title}
-                              className="w-full h-full object-cover"
+                              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                               onError={(e) => {
                                 (e.target as HTMLImageElement).src = '/logo.png';
                               }}
@@ -318,7 +320,7 @@ export const AdminTopmate: React.FC = () => {
                           href={card.url || DEFAULT_TOPMATE_URL}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:underline max-w-[220px] truncate"
+                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:underline max-w-[200px] truncate"
                           title={card.url || DEFAULT_TOPMATE_URL}
                         >
                           <LinkIcon size={12} className="shrink-0" />
@@ -437,11 +439,14 @@ export const AdminTopmate: React.FC = () => {
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
                       <div className="flex items-start gap-4 flex-1 min-w-0">
                         {/* Fixed aspect ratio thumbnail with object-cover */}
-                        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-slate-100 dark:bg-dark-800 border border-purple-300/40 dark:border-purple-500/30 overflow-hidden shrink-0 shadow-md flex items-center justify-center">
+                        <div
+                          style={{ width: '64px', height: '64px', minWidth: '64px', maxWidth: '64px', minHeight: '64px', maxHeight: '64px' }}
+                          className="rounded-2xl bg-slate-100 dark:bg-dark-800 border border-purple-300/40 dark:border-purple-500/30 overflow-hidden shrink-0 shadow-md flex items-center justify-center"
+                        >
                           <img
                             src={formData.imageUrl || '/logo.png'}
                             alt="Preview"
-                            className="w-full h-full object-cover"
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                             onError={(e) => {
                               (e.target as HTMLImageElement).src = '/logo.png';
                             }}

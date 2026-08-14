@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ExternalLink, ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import { TopmateCard as TopmateCardType } from '../types';
 import { getPublicTopmateCards, DEFAULT_TOPMATE_URL } from '../services/topmateService';
 
@@ -16,7 +16,6 @@ export const TopmateCard: React.FC<TopmateCardProps> = ({
   cardData
 }) => {
   const [card, setCard] = useState<TopmateCardType | null>(cardData || null);
-  const [loading, setLoading] = useState(!cardData);
   const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
@@ -29,15 +28,15 @@ export const TopmateCard: React.FC<TopmateCardProps> = ({
     const fetchActiveCard = async () => {
       try {
         const cards = await getPublicTopmateCards();
-        if (isMounted && cards && cards.length > 0) {
-          // Find first active card
+        if (isMounted && Array.isArray(cards) && cards.length > 0) {
+          // Find first active card or first card
           const activeCard = cards.find(c => c.status === 'active') || cards[0];
-          setCard(activeCard);
+          if (activeCard) {
+            setCard(activeCard);
+          }
         }
       } catch (err) {
-        console.error('Failed to load Topmate card:', err);
-      } finally {
-        if (isMounted) setLoading(false);
+        console.error('Failed to load Topmate card from backend:', err);
       }
     };
 
@@ -47,7 +46,7 @@ export const TopmateCard: React.FC<TopmateCardProps> = ({
     };
   }, [cardData]);
 
-  // If card status is inactive, do not render on frontend
+  // If card is explicitly fetched and set to inactive, hide
   if (card && card.status === 'inactive') {
     return null;
   }
@@ -67,7 +66,7 @@ export const TopmateCard: React.FC<TopmateCardProps> = ({
     window.open(targetUrl, '_blank', 'noopener,noreferrer');
   };
 
-  // Compact Variant (used in sidebars / contact list)
+  // Compact Variant (used in sidebars / contact lists)
   if (variant === 'compact') {
     return (
       <div
@@ -75,7 +74,7 @@ export const TopmateCard: React.FC<TopmateCardProps> = ({
         className={`group p-4 rounded-2xl bg-white dark:bg-dark-900 border border-purple-500/30 hover:border-purple-500 shadow-sm hover:shadow-xl hover:shadow-purple-500/10 transition-all duration-300 cursor-pointer flex items-center justify-between gap-4 ${className}`}
       >
         <div className="flex items-center gap-3.5 min-w-0">
-          <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-dark-800 border border-slate-200 dark:border-dark-700 overflow-hidden shrink-0 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+          <div className="w-12 h-12 min-w-[48px] max-w-[48px] h-[48px] max-h-[48px] rounded-xl bg-slate-100 dark:bg-dark-800 border border-slate-200 dark:border-dark-700 overflow-hidden shrink-0 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
             <img
               src={displayImage}
               alt={title}
@@ -103,7 +102,7 @@ export const TopmateCard: React.FC<TopmateCardProps> = ({
     );
   }
 
-  // Full Promotional Card
+  // Full Promotional Card (Used on Homepage & Topmate Page)
   return (
     <motion.div
       whileHover={{ y: -4 }}
@@ -119,7 +118,7 @@ export const TopmateCard: React.FC<TopmateCardProps> = ({
         {/* Left Area: Cloudinary Image + Badge + Title + Description */}
         <div className="flex items-start gap-4 sm:gap-6 flex-1 min-w-0">
           {/* Fixed aspect ratio rounded image with zoom on hover */}
-          <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-slate-100 dark:bg-dark-800 border border-purple-300/40 dark:border-purple-500/30 overflow-hidden shrink-0 shadow-lg shadow-purple-500/10 group-hover:scale-105 transition-transform duration-300 flex items-center justify-center">
+          <div className="relative w-16 h-16 sm:w-20 sm:h-20 min-w-[64px] min-h-[64px] sm:min-w-[80px] sm:min-h-[80px] rounded-2xl bg-slate-100 dark:bg-dark-800 border border-purple-300/40 dark:border-purple-500/30 overflow-hidden shrink-0 shadow-lg shadow-purple-500/10 group-hover:scale-105 transition-transform duration-300 flex items-center justify-center">
             <img
               src={displayImage}
               alt={title}
