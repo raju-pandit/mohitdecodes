@@ -3,9 +3,10 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import toast from 'react-hot-toast'
-import { Mail, MessageSquare, Send, Github, Twitter, Linkedin, Youtube, Instagram } from 'lucide-react'
+import { Mail, MessageSquare, Send, Github, Twitter, Linkedin, Youtube, Instagram, Calendar } from 'lucide-react'
 import { motion } from 'framer-motion'
 import api from '../services/api'
+import TopmateCard from '../components/TopmateCard'
 
 const contactSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -32,6 +33,7 @@ const Contact: React.FC = () => {
   }
 
   const contactInfo = [
+    { icon: Calendar, label: 'Topmate (1:1 Mentorship)', value: 'topmate.io/mohitdecodes', href: 'https://topmate.io/mohitdecodes' },
     { icon: Mail, label: 'Email', value: 'hello@mohitdecodes.com', href: 'mailto:hello@mohitdecodes.com' },
     { icon: Youtube, label: 'YouTube', value: '@MohitDecodes', href: 'https://youtube.com/@mohitdecodes' },
     { icon: Github, label: 'GitHub', value: 'mohitdjcet', href: 'https://github.com/mohitdjcet' },
@@ -95,12 +97,15 @@ const Contact: React.FC = () => {
                 })}
               </div>
 
+              {/* 1:1 Mentorship Topmate Card */}
+              <TopmateCard variant="compact" />
+
               <div className="glass-card p-5 border border-primary-700/20">
                 <div className="flex items-center gap-2 mb-2">
                   <MessageSquare className="w-5 h-5 text-primary-400" />
                   <h3 className="font-semibold text-slate-200">Response Time</h3>
                 </div>
-                <p className="text-slate-400 text-sm">Usually within 24-48 hours on weekdays. For urgent matters, DM on Twitter.</p>
+                <p className="text-slate-400 text-sm">Usually within 24-48 hours on weekdays. For direct 1:1 sessions, book on Topmate.</p>
               </div>
             </motion.div>
 

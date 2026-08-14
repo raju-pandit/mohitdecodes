@@ -107,15 +107,28 @@ export const Footer = () => {
               {[
                 { name: 'About Us', path: '/about' },
                 { name: 'Contact', path: '/contact' },
+                { name: 'Topmate (1:1 Mentorship)', path: 'https://topmate.io/mohitdecodes', isExternal: true },
                 { name: 'YouTube', path: '/youtube' },
                 { name: 'Privacy Policy', path: '/privacy' },
                 { name: 'Terms of Service', path: '/terms' },
               ].map((item) => (
                 <li key={item.name}>
-                  <Link to={item.path} className="text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors text-sm flex items-center group">
-                    <span className="w-0 h-0.5 bg-purple-500 mr-0 transition-all duration-300 group-hover:w-2 group-hover:mr-2"></span>
-                    {item.name}
-                  </Link>
+                  {item.isExternal ? (
+                    <a
+                      href={item.path}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors text-sm flex items-center group cursor-pointer"
+                    >
+                      <span className="w-0 h-0.5 bg-purple-500 mr-0 transition-all duration-300 group-hover:w-2 group-hover:mr-2"></span>
+                      {item.name}
+                    </a>
+                  ) : (
+                    <Link to={item.path} className="text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors text-sm flex items-center group">
+                      <span className="w-0 h-0.5 bg-purple-500 mr-0 transition-all duration-300 group-hover:w-2 group-hover:mr-2"></span>
+                      {item.name}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
