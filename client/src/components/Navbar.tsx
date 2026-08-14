@@ -68,7 +68,6 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
     { name: 'Resources', path: '/resources' },
     { name: 'Projects', path: '/projects' },
     { name: 'Blogs', path: '/blogs' },
-    { name: 'Topmate', path: 'https://topmate.io/mohitdecodes', isExternal: true },
     { name: 'YouTube', path: '/youtube' },
   ];
 
