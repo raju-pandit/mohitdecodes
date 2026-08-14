@@ -2,58 +2,70 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 interface LogoProps {
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
   showText?: boolean;
   className?: string;
   to?: string;
 }
 
-export const LogoIcon: React.FC<{ size?: number; className?: string }> = ({ size = 36, className = "" }) => {
+/**
+ * Compact Icon component using the official MohitDecodes logo image.
+ */
+export const LogoIcon: React.FC<{ size?: number; className?: string }> = ({ size = 40, className = '' }) => {
   return (
     <div
       style={{ width: size, height: size }}
-      className={`relative flex items-center justify-center shrink-0 rounded-[10px] bg-[#090d16] border border-primary-500/40 shadow-[0_0_12px_rgba(168,85,247,0.25)] transition-all duration-200 hover:scale-105 hover:border-primary-400/60 hover:shadow-[0_0_16px_rgba(168,85,247,0.35)] ${className}`}
+      className={`relative flex items-center justify-center shrink-0 rounded-xl overflow-hidden bg-[#0a071b] border border-purple-500/40 shadow-[0_0_12px_rgba(168,85,247,0.3)] transition-all duration-200 group-hover:scale-105 group-hover:border-purple-400 group-hover:shadow-[0_0_18px_rgba(168,85,247,0.45)] ${className}`}
     >
-      <svg
-        viewBox="0 0 36 36"
-        width={Math.round(size * 0.72)}
-        height={Math.round(size * 0.72)}
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="block"
-      >
-        {/* Bold geometric M & D monogram in pure solid white */}
-        <g fill="#FFFFFF">
-          {/* Letter M */}
-          <path d="M5.5 8.5h3.4l3.9 10.5L16.7 8.5h3.4v19h-3.3v-12.2l-4 12.2h-1.8l-4-12.2V27.5H5.5V8.5z" />
-          
-          {/* Letter D */}
-          <path d="M22.5 8.5h6.5c4.8 0 7.5 2.8 7.5 9.5s-2.7 9.5-7.5 9.5h-6.5V8.5zm3.3 3.3v12.4h3.2c2.6 0 4.1-1.6 4.1-6.2s-1.5-6.2-4.1-6.2h-3.2z" />
-        </g>
-      </svg>
+      <img
+        src="/logo.png"
+        alt="MohitDecodes Logo"
+        width={size}
+        height={size}
+        className="w-full h-full object-cover select-none"
+        loading="eager"
+      />
     </div>
   );
 };
 
-export const BrandLogo: React.FC<LogoProps> = ({ size = 'md', showText = true, className = "", to = "/" }) => {
-  // size map: sm=28px, md=36px, lg=44px
-  const iconSizes = { sm: 28, md: 36, lg: 44 };
-  const textSizes = { sm: 'text-base', md: 'text-xl', lg: 'text-2xl' };
+/**
+ * Primary BrandLogo component for Navbar, Footer, Admin, and Auth pages.
+ * Seamlessly integrates the official MohitDecodes logo with crisp responsive scaling.
+ */
+export const BrandLogo: React.FC<LogoProps> = ({
+  size = 'md',
+  showText = true,
+  className = '',
+  to = '/'
+}) => {
+  // size map for responsive icon heights: sm=32px, md=40px, lg=46px, xl=54px
+  const iconSizes = { sm: 32, md: 40, lg: 46, xl: 54 };
+  const textSizes = {
+    sm: 'text-sm sm:text-base',
+    md: 'text-base sm:text-lg lg:text-xl',
+    lg: 'text-xl sm:text-2xl',
+    xl: 'text-2xl sm:text-3xl'
+  };
 
   const content = (
-    <div className={`flex items-center gap-[10px] ${className}`}>
+    <div className={`flex items-center gap-2.5 sm:gap-3 ${className}`}>
       <LogoIcon size={iconSizes[size]} />
       {showText && (
-        <span className={`font-bold tracking-tight ${textSizes[size]}`}>
-          <span className="text-white">Mohit</span>
-          <span className="gradient-text">Decodes</span>
+        <span className={`font-extrabold tracking-tight select-none leading-tight ${textSizes[size]}`}>
+          <span className="text-slate-900 dark:text-white transition-colors">Mohit</span>
+          <span className="gradient-text ml-0.5">Decodes</span>
         </span>
       )}
     </div>
   );
 
   if (to) {
-    return <Link to={to} className="inline-flex items-center group">{content}</Link>;
+    return (
+      <Link to={to} className="inline-flex items-center group cursor-pointer" aria-label="MohitDecodes Home">
+        {content}
+      </Link>
+    );
   }
 
   return content;
