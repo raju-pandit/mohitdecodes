@@ -21,6 +21,7 @@ const RoadmapDetail = lazy(() => import('./pages/RoadmapDetail'))
 const Resources = lazy(() => import('./pages/Resources'))
 const Projects = lazy(() => import('./pages/Projects'))
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
+const Topmate = lazy(() => import('./pages/Topmate'))
 const YouTube = lazy(() => import('./pages/YouTube'))
 const Contact = lazy(() => import('./pages/Contact'))
 const Login = lazy(() => import('./pages/Login'))
@@ -102,6 +103,7 @@ function App() {
               <Route path="/resources" element={<Resources />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/projects/:slug" element={<ProjectDetail />} />
+              <Route path="/topmate" element={<Topmate />} />
               <Route path="/youtube" element={<YouTube />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
