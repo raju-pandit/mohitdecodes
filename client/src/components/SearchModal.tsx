@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Search, MonitorPlay, FileText, CodeSquare, BookOpen, ChevronRight, Loader2, Map } from 'lucide-react';
+import { Search, MonitorPlay, FileText, CodeSquare, BookOpen, ChevronRight, Loader2, Map, Sparkles } from 'lucide-react';
 import { Modal } from './ui/Modal';
 import { Badge } from './ui/Badge';
+import { LogoIcon } from './Logo';
 import { globalSearch } from '../services/searchService';
-
 
 export const SearchModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const [query, setQuery] = useState('');
@@ -14,6 +14,8 @@ export const SearchModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const quickSearches = ['React', 'JavaScript', 'Node.js', 'DSA', 'MERN Stack', 'Roadmaps', 'System Design'];
 
   // Close modal on location change
   useEffect(() => {
@@ -31,7 +33,6 @@ export const SearchModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
       setResults([]);
     }
   }, [isOpen]);
-
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -87,7 +88,6 @@ export const SearchModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
     return () => clearTimeout(timer);
   }, [query]);
 
-
   // Handle keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -116,15 +116,14 @@ export const SearchModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
     }
   };
 
-
   const getIcon = (type: string) => {
     switch (type) {
-      case 'course': return <MonitorPlay className="w-5 h-5 text-purple-400" />;
-      case 'tutorial': return <FileText className="w-5 h-5 text-blue-400" />;
-      case 'blog': return <BookOpen className="w-5 h-5 text-green-400" />;
-      case 'project': return <CodeSquare className="w-5 h-5 text-orange-400" />;
-      case 'roadmap': return <Map className="w-5 h-5 text-amber-400" />;
-      default: return <Search className="w-5 h-5" />;
+      case 'course': return <MonitorPlay className="w-5 h-5 text-purple-500" />;
+      case 'tutorial': return <FileText className="w-5 h-5 text-blue-500" />;
+      case 'blog': return <BookOpen className="w-5 h-5 text-emerald-500" />;
+      case 'project': return <CodeSquare className="w-5 h-5 text-orange-500" />;
+      case 'roadmap': return <Map className="w-5 h-5 text-amber-500" />;
+      default: return <Search className="w-5 h-5 text-purple-500" />;
     }
   };
 
@@ -141,73 +140,107 @@ export const SearchModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="lg">
-      <div className="-m-6">
-        {/* Search Input */}
-        <div className="relative border-b border-slate-200 dark:border-dark-800 p-4">
-          <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-slate-400" />
-          <input
-            ref={inputRef}
-            type="text"
-            placeholder="Search courses, tutorials, blogs..."
-            value={query}
-            onChange={(e) => { setQuery(e.target.value); setSelectedIndex(0); }}
-            className="w-full bg-transparent border-none outline-none text-xl text-slate-900 dark:text-white pl-12 pr-4 placeholder-slate-400 font-medium"
-          />
-          {loading && <Loader2 className="absolute right-6 top-1/2 -translate-y-1/2 w-5 h-5 text-purple-600 animate-spin" />}
+      <div className="-m-6 flex flex-col">
+        {/* Search Input Bar with Logo */}
+        <div className="relative border-b border-slate-200 dark:border-dark-800 p-4 sm:p-5 flex items-center gap-3 bg-white dark:bg-dark-900">
+          <LogoIcon size={36} className="shrink-0" />
+          <div className="relative flex-1 flex items-center">
+            <Search className="w-5 h-5 text-slate-400 mr-2.5 shrink-0" />
+            <input
+              ref={inputRef}
+              type="text"
+              placeholder="Search courses, tutorials, blogs, roadmaps..."
+              value={query}
+              onChange={(e) => { setQuery(e.target.value); setSelectedIndex(0); }}
+              className="w-full bg-transparent border-none outline-none text-base sm:text-lg text-slate-900 dark:text-white placeholder-slate-400 font-semibold"
+            />
+          </div>
+          {loading && <Loader2 className="w-5 h-5 text-purple-600 animate-spin shrink-0" />}
         </div>
 
-        {/* Results */}
-        <div className="p-2 max-h-[60vh] overflow-y-auto">
+        {/* Search Results Area */}
+        <div className="p-3 sm:p-4 max-h-[60vh] overflow-y-auto bg-slate-50/50 dark:bg-dark-950/40">
           {query.trim() === '' ? (
-            <div className="p-8 text-center text-slate-400">
-              <Search className="w-12 h-12 mx-auto mb-4 opacity-20" />
-              <p>Type to start searching...</p>
+            <div className="py-8 px-4 text-center space-y-5">
+              <div className="flex flex-col items-center justify-center space-y-3">
+                <LogoIcon size={56} className="shadow-lg shadow-purple-500/20" />
+                <div>
+                  <h3 className="font-bold text-slate-800 dark:text-slate-200 text-base">
+                    Search MohitDecodes
+                  </h3>
+                  <p className="text-xs text-slate-500 max-w-sm mx-auto mt-1">
+                    Find tutorials, complete courses, curated roadmaps, blogs, and developer resources.
+                  </p>
+                </div>
+              </div>
+
+              {/* Quick Suggestion Pills */}
+              <div className="pt-2">
+                <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2 flex items-center justify-center gap-1.5">
+                  <Sparkles size={12} className="text-purple-500" /> Popular Searches
+                </p>
+                <div className="flex flex-wrap items-center justify-center gap-2 max-w-md mx-auto">
+                  {quickSearches.map((item) => (
+                    <button
+                      key={item}
+                      onClick={() => setQuery(item)}
+                      className="px-3 py-1 rounded-full text-xs font-semibold bg-white dark:bg-dark-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-dark-700 hover:border-purple-500 dark:hover:border-purple-500 hover:text-purple-600 transition-all cursor-pointer shadow-xs"
+                    >
+                      {item}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           ) : results.length === 0 && !loading ? (
-            <div className="p-8 text-center text-slate-400">
-              <p>No results found for "{query}"</p>
+            <div className="py-12 text-center text-slate-500 space-y-2">
+              <Search className="w-10 h-10 mx-auto text-slate-400 opacity-40 mb-2" />
+              <p className="font-semibold text-slate-800 dark:text-slate-200">No results found for "{query}"</p>
+              <p className="text-xs text-slate-400">Try searching for keywords like "React", "JavaScript", or "Roadmaps"</p>
             </div>
           ) : (
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               {results.map((result, idx) => (
                 <div
                   key={result.id}
                   onClick={() => handleSelect(result)}
                   onMouseEnter={() => setSelectedIndex(idx)}
-                  className={`flex items-center gap-4 p-3 rounded-xl cursor-pointer transition-colors ${
+                  className={`flex items-center gap-3.5 p-3 rounded-xl cursor-pointer transition-all ${
                     selectedIndex === idx 
-                      ? 'bg-purple-50 dark:bg-dark-800 border border-purple-200 dark:border-transparent' 
-                      : 'hover:bg-slate-100 dark:hover:bg-dark-800/50'
+                      ? 'bg-purple-50 dark:bg-dark-800 border border-purple-200/80 dark:border-purple-500/30 shadow-xs' 
+                      : 'hover:bg-white dark:hover:bg-dark-900 border border-transparent'
                   }`}
                 >
-                  <div className={`p-2 rounded-lg bg-slate-100 dark:bg-dark-900 border border-slate-200 dark:border-dark-700`}>
+                  <div className="p-2.5 rounded-xl bg-white dark:bg-dark-900 border border-slate-200/80 dark:border-dark-700 shadow-xs shrink-0">
                     {getIcon(result.type)}
                   </div>
                   <div className="flex-grow min-w-0">
-                    <h4 className={`font-medium truncate ${selectedIndex === idx ? 'text-purple-700 dark:text-white' : 'text-slate-800 dark:text-slate-200'}`}>
+                    <h4 className={`font-semibold text-sm truncate ${selectedIndex === idx ? 'text-purple-700 dark:text-white' : 'text-slate-900 dark:text-slate-200'}`}>
                       {result.title}
                     </h4>
-                    <p className="text-sm text-slate-500 truncate">{result.category}</p>
+                    <p className="text-xs text-slate-500 truncate mt-0.5">{result.category}</p>
                   </div>
-                  <Badge variant={getBadgeVariant(result.type) as any} className="capitalize hidden sm:inline-flex">
+                  <Badge variant={getBadgeVariant(result.type) as any} className="capitalize hidden sm:inline-flex shrink-0">
                     {result.type}
                   </Badge>
-                  <ChevronRight className={`w-5 h-5 transition-colors ${selectedIndex === idx ? 'text-purple-600 dark:text-gray-300' : 'text-transparent'}`} />
+                  <ChevronRight className={`w-4 h-4 shrink-0 transition-colors ${selectedIndex === idx ? 'text-purple-600 dark:text-gray-300' : 'text-slate-300 dark:text-dark-700'}`} />
                 </div>
               ))}
             </div>
           )}
         </div>
         
-        {/* Footer */}
-        <div className="border-t border-slate-200 dark:border-dark-800 p-3 bg-slate-50 dark:bg-dark-900/50 flex items-center justify-between text-xs text-slate-500">
+        {/* Footer Shortcut Bar */}
+        <div className="border-t border-slate-200 dark:border-dark-800 p-3.5 bg-white dark:bg-dark-900 flex items-center justify-between text-xs text-slate-500">
           <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1"><kbd className="bg-white dark:bg-dark-800 px-1.5 py-0.5 rounded text-slate-600 dark:text-slate-400 font-sans border border-slate-200 dark:border-dark-700 shadow-xs">↑</kbd><kbd className="bg-white dark:bg-dark-800 px-1.5 py-0.5 rounded text-slate-600 dark:text-slate-400 font-sans border border-slate-200 dark:border-dark-700 shadow-xs">↓</kbd> to navigate</span>
-            <span className="flex items-center gap-1"><kbd className="bg-white dark:bg-dark-800 px-1.5 py-0.5 rounded text-slate-600 dark:text-slate-400 font-sans border border-slate-200 dark:border-dark-700 shadow-xs">Enter</kbd> to select</span>
+            <span className="flex items-center gap-1"><kbd className="bg-slate-100 dark:bg-dark-800 px-1.5 py-0.5 rounded text-slate-600 dark:text-slate-400 font-sans border border-slate-200 dark:border-dark-700 shadow-xs font-semibold">↑</kbd><kbd className="bg-slate-100 dark:bg-dark-800 px-1.5 py-0.5 rounded text-slate-600 dark:text-slate-400 font-sans border border-slate-200 dark:border-dark-700 shadow-xs font-semibold">↓</kbd> navigate</span>
+            <span className="flex items-center gap-1"><kbd className="bg-slate-100 dark:bg-dark-800 px-2 py-0.5 rounded text-slate-600 dark:text-slate-400 font-sans border border-slate-200 dark:border-dark-700 shadow-xs font-semibold">Enter</kbd> select</span>
           </div>
-          <span className="flex items-center gap-1"><kbd className="bg-white dark:bg-dark-800 px-1.5 py-0.5 rounded text-slate-600 dark:text-slate-400 font-sans border border-slate-200 dark:border-dark-700 shadow-xs">Esc</kbd> to close</span>
+          <span className="flex items-center gap-1"><kbd className="bg-slate-100 dark:bg-dark-800 px-1.5 py-0.5 rounded text-slate-600 dark:text-slate-400 font-sans border border-slate-200 dark:border-dark-700 shadow-xs font-semibold">Esc</kbd> close</span>
         </div>
       </div>
     </Modal>
   );
 };
+
+export default SearchModal;
