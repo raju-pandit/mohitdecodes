@@ -39,6 +39,7 @@ const AdminResources = lazy(() => import('./pages/admin/AdminResources'))
 const AdminProjects = lazy(() => import('./pages/admin/AdminProjects'))
 const AdminRoadmaps = lazy(() => import('./pages/admin/AdminRoadmaps'))
 const AdminTestimonials = lazy(() => import('./pages/admin/AdminTestimonials'))
+const AdminTopmate = lazy(() => import('./pages/admin/AdminTopmate'))
 const AdminUsers = lazy(() => import('./pages/admin/AdminUsers'))
 const AdminMessages = lazy(() => import('./pages/admin/AdminMessages'))
 const AdminNewsletter = lazy(() => import('./pages/admin/AdminNewsletter'))
@@ -127,6 +128,7 @@ function App() {
                 <Route path="/admin/projects" element={<AdminProjects />} />
                 <Route path="/admin/roadmaps" element={<AdminRoadmaps />} />
                 <Route path="/admin/testimonials" element={<AdminTestimonials />} />
+                <Route path="/admin/topmate" element={<AdminTopmate />} />
                 <Route path="/admin/users" element={<AdminUsers />} />
                 <Route path="/admin/messages" element={<AdminMessages />} />
                 <Route path="/admin/newsletter" element={<AdminNewsletter />} />

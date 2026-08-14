@@ -130,6 +130,21 @@ export interface Pagination {
   limit: number;
 }
 
+export interface TopmateCard {
+  _id: string;
+  image?: string;
+  category?: string;
+  title: string;
+  description: string;
+  badge?: string;
+  buttonText?: string;
+  url: string;
+  status: 'active' | 'inactive';
+  displayOrder: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface ApiResponse<T> {
   success: boolean;
   message: string;

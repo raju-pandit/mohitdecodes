@@ -20,6 +20,7 @@ const adminNavItems = [
   { label: 'Projects', path: '/admin/projects', icon: Folder },
   { label: 'Roadmaps', path: '/admin/roadmaps', icon: Map },
   { label: 'Testimonials', path: '/admin/testimonials', icon: Star },
+  { label: 'Topmate', path: '/admin/topmate', icon: ExternalLink },
   { label: 'Users', path: '/admin/users', icon: Users },
   { label: 'Messages', path: '/admin/messages', icon: MessageSquare },
   { label: 'Newsletter', path: '/admin/newsletter', icon: Mail },
