@@ -9,13 +9,10 @@ import {
   CheckCircle2,
   XCircle,
   AlertTriangle,
-  Eye,
-  EyeOff,
   ArrowRight,
   Sparkles,
   Link as LinkIcon,
-  Image as ImageIcon,
-  Check
+  X
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { TopmateCard } from '../../types';
@@ -42,7 +39,7 @@ export const AdminTopmate: React.FC = () => {
   const [formData, setFormData] = useState({
     title: 'Connect with Mohit',
     category: 'TOPMATE',
-    description: 'Book a 1:1 session, consultation or connect with me directly for career roadmaps and code reviews.',
+    description: 'Book a 1:1 mentorship session, consultation, resume audit or mock interview.',
     badge: '1:1 Session Available',
     buttonText: 'Book on Topmate',
     url: DEFAULT_TOPMATE_URL,
@@ -86,12 +83,12 @@ export const AdminTopmate: React.FC = () => {
       setFormData({
         title: 'Connect with Mohit',
         category: 'TOPMATE',
-        description: 'Book a 1:1 session, consultation or connect with me directly for career roadmaps and code reviews.',
+        description: 'Book a 1:1 mentorship session, consultation, resume audit or mock interview.',
         badge: '1:1 Session Available',
         buttonText: 'Book on Topmate',
         url: DEFAULT_TOPMATE_URL,
         status: 'active',
-        displayOrder: cards.length,
+        displayOrder: cards.length * 10,
         image: '/logo.png'
       });
     }
@@ -180,12 +177,12 @@ export const AdminTopmate: React.FC = () => {
   };
 
   return (
-    <div className="p-2 sm:p-6 space-y-8 max-w-7xl mx-auto">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-200 dark:border-dark-700 pb-5">
+    <div className="space-y-6">
+      {/* Top Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-slate-200 dark:border-dark-800">
         <div>
-          <div className="flex items-center gap-2.5">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               Topmate Management
             </h1>
             <span className="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-gradient-to-r from-rose-500/15 to-purple-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30">
@@ -197,12 +194,12 @@ export const AdminTopmate: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-wrap">
           <a
             href={DEFAULT_TOPMATE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-outline text-xs px-3.5 py-2.5 rounded-xl inline-flex items-center gap-1.5"
+            className="btn-outline text-xs px-3.5 py-2.5 rounded-xl inline-flex items-center gap-1.5 cursor-pointer"
           >
             <span>Preview Profile</span>
             <ExternalLink size={14} />
@@ -231,157 +228,160 @@ export const AdminTopmate: React.FC = () => {
           <div>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">No Topmate Cards Found</h3>
             <p className="text-sm text-slate-500 max-w-md mx-auto mt-1">
-              Create your first promotional card to showcase your 1:1 mentorship, guidance, and portfolio reviews on the website.
+              Create your promotional card to showcase 1:1 mentorship sessions on the website.
             </p>
           </div>
           <button
             onClick={() => handleOpenModal()}
-            className="btn-primary text-sm px-5 py-2.5 rounded-xl font-bold inline-flex items-center gap-2"
+            className="btn-primary text-sm px-5 py-2.5 rounded-xl font-bold inline-flex items-center gap-2 cursor-pointer"
           >
             <Plus size={16} />
             <span>Create First Card</span>
           </button>
         </div>
       ) : (
-        <div className="space-y-6">
-          {/* Cards List Table */}
-          <div className="bg-white dark:bg-dark-900 border border-slate-200/90 dark:border-dark-800 rounded-3xl shadow-sm overflow-hidden">
-            <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-dark-800 flex items-center justify-between">
-              <h3 className="font-extrabold text-base text-slate-900 dark:text-white">
-                Configured Topmate Cards ({cards.length})
-              </h3>
-              <span className="text-xs text-slate-400 font-medium">
-                Active cards are dynamically fetched by the website
-              </span>
-            </div>
+        <div className="bg-white dark:bg-dark-900 border border-slate-200/90 dark:border-dark-800 rounded-2xl shadow-sm overflow-hidden">
+          {/* Card Header Title */}
+          <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-dark-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <h3 className="font-extrabold text-base text-slate-900 dark:text-white">
+              Configured Topmate Cards ({cards.length})
+            </h3>
+            <span className="text-xs text-slate-400 font-medium">
+              Active cards are dynamically rendered on public pages
+            </span>
+          </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm text-slate-700 dark:text-slate-300">
-                <thead className="bg-slate-50 dark:bg-dark-950/80 text-slate-800 dark:text-slate-200 font-bold border-b border-slate-200 dark:border-dark-800 text-xs uppercase tracking-wider">
-                  <tr>
-                    <th className="p-4">Card / Thumbnail</th>
-                    <th className="p-4">Badge & Category</th>
-                    <th className="p-4">Destination Link</th>
-                    <th className="p-4 text-center">Order</th>
-                    <th className="p-4 text-center">Status</th>
-                    <th className="p-4 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-dark-800/80">
-                  {cards.map((card) => (
-                    <tr
-                      key={card._id}
-                      className="hover:bg-slate-50/80 dark:hover:bg-dark-800/40 transition-colors"
-                    >
-                      {/* Title & Image */}
-                      <td className="p-4">
-                        <div className="flex items-center gap-3.5">
-                          <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-dark-800 border border-slate-200 dark:border-dark-700 overflow-hidden shrink-0 flex items-center justify-center">
-                            {card.image ? (
-                              <img
-                                src={card.image}
-                                alt={card.title}
-                                className="w-full h-full object-cover"
-                              />
-                            ) : (
-                              <div className="w-full h-full bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center text-white font-bold text-base">
-                                T
-                              </div>
-                            )}
-                          </div>
-                          <div className="min-w-0 max-w-xs sm:max-w-md">
-                            <h4 className="font-bold text-slate-900 dark:text-white truncate">
-                              {card.title}
-                            </h4>
-                            <p className="text-xs text-slate-500 line-clamp-1 mt-0.5">
-                              {card.description}
-                            </p>
-                          </div>
+          {/* Table Container with Safe Horizontal Overflow */}
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm text-slate-700 dark:text-slate-300 min-w-[950px]">
+              <thead className="bg-slate-50 dark:bg-dark-950/80 text-slate-800 dark:text-slate-200 font-bold border-b border-slate-200 dark:border-dark-800 text-xs uppercase tracking-wider">
+                <tr>
+                  <th className="p-4 w-72">Card / Thumbnail</th>
+                  <th className="p-4 w-44">Badge & Category</th>
+                  <th className="p-4 w-60">Destination Link</th>
+                  <th className="p-4 text-center w-24">Order</th>
+                  <th className="p-4 text-center w-32">Status</th>
+                  <th className="p-4 text-center w-28">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-dark-800/80">
+                {cards.map((card) => (
+                  <tr
+                    key={card._id}
+                    className="hover:bg-slate-50/80 dark:hover:bg-dark-800/40 transition-colors"
+                  >
+                    {/* Title & Image */}
+                    <td className="p-4">
+                      <div className="flex items-center gap-3.5">
+                        <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-dark-800 border border-slate-200 dark:border-dark-700 overflow-hidden shrink-0 flex items-center justify-center shadow-xs">
+                          {card.image ? (
+                            <img
+                              src={card.image}
+                              alt={card.title}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center text-white font-bold text-base">
+                              T
+                            </div>
+                          )}
                         </div>
-                      </td>
-
-                      {/* Badge & Category */}
-                      <td className="p-4">
-                        <div className="space-y-1">
-                          <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-500/30">
-                            {card.badge || 'Available'}
-                          </span>
-                          <p className="text-[11px] font-mono text-slate-400">
-                            {card.category || 'TOPMATE'}
+                        <div className="min-w-0 flex-1">
+                          <h4 className="font-bold text-slate-900 dark:text-white truncate">
+                            {card.title}
+                          </h4>
+                          <p className="text-xs text-slate-500 line-clamp-1 mt-0.5">
+                            {card.description}
                           </p>
                         </div>
-                      </td>
+                      </div>
+                    </td>
 
-                      {/* Destination Link */}
-                      <td className="p-4">
-                        <a
-                          href={card.url || DEFAULT_TOPMATE_URL}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:underline max-w-[200px] truncate"
-                        >
-                          <LinkIcon size={12} className="shrink-0" />
-                          <span className="truncate">{card.url || DEFAULT_TOPMATE_URL}</span>
-                          <ExternalLink size={12} className="shrink-0" />
-                        </a>
-                      </td>
+                    {/* Badge & Category */}
+                    <td className="p-4">
+                      <div className="space-y-1">
+                        <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-500/30 whitespace-nowrap shadow-2xs">
+                          {card.badge || 'Available'}
+                        </span>
+                        <p className="text-[11px] font-mono text-slate-400 pl-1">
+                          {card.category || 'TOPMATE'}
+                        </p>
+                      </div>
+                    </td>
 
-                      {/* Display Order */}
-                      <td className="p-4 text-center font-bold text-slate-700 dark:text-slate-300">
-                        {card.displayOrder}
-                      </td>
+                    {/* Destination Link */}
+                    <td className="p-4">
+                      <a
+                        href={card.url || DEFAULT_TOPMATE_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:underline max-w-[220px] truncate"
+                        title={card.url || DEFAULT_TOPMATE_URL}
+                      >
+                        <LinkIcon size={12} className="shrink-0" />
+                        <span className="truncate">{card.url || DEFAULT_TOPMATE_URL}</span>
+                        <ExternalLink size={12} className="shrink-0" />
+                      </a>
+                    </td>
 
-                      {/* Status Toggle */}
-                      <td className="p-4 text-center">
+                    {/* Display Order */}
+                    <td className="p-4 text-center font-bold text-slate-800 dark:text-slate-200">
+                      {card.displayOrder}
+                    </td>
+
+                    {/* Status Toggle */}
+                    <td className="p-4 text-center">
+                      <button
+                        onClick={() => handleToggleStatus(card._id, card.status)}
+                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer whitespace-nowrap shadow-2xs ${
+                          card.status === 'active'
+                            ? 'bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-500/30 hover:bg-emerald-200'
+                            : 'bg-slate-200 dark:bg-dark-800 text-slate-600 dark:text-slate-400 border border-slate-300 dark:border-dark-700 hover:bg-slate-300'
+                        }`}
+                        title="Click to toggle active / inactive"
+                      >
+                        {card.status === 'active' ? (
+                          <>
+                            <CheckCircle2 size={13} className="text-emerald-500 shrink-0" />
+                            <span>Active</span>
+                          </>
+                        ) : (
+                          <>
+                            <XCircle size={13} className="text-slate-400 shrink-0" />
+                            <span>Inactive</span>
+                          </>
+                        )}
+                      </button>
+                    </td>
+
+                    {/* Actions */}
+                    <td className="p-4 text-center">
+                      <div className="flex items-center justify-center gap-1.5">
                         <button
-                          onClick={() => handleToggleStatus(card._id, card.status)}
-                          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                            card.status === 'active'
-                              ? 'bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-500/30 hover:bg-emerald-200'
-                              : 'bg-slate-200 dark:bg-dark-800 text-slate-600 dark:text-slate-400 border border-slate-300 dark:border-dark-700 hover:bg-slate-300'
-                          }`}
+                          onClick={() => handleOpenModal(card)}
+                          className="p-2 rounded-lg bg-slate-100 dark:bg-dark-800 text-slate-600 dark:text-slate-300 hover:text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-500/20 transition-all cursor-pointer"
+                          title="Edit Card"
+                          aria-label="Edit"
                         >
-                          {card.status === 'active' ? (
-                            <>
-                              <CheckCircle2 size={13} className="text-emerald-500" />
-                              <span>Active</span>
-                            </>
-                          ) : (
-                            <>
-                              <XCircle size={13} className="text-slate-400" />
-                              <span>Inactive</span>
-                            </>
-                          )}
+                          <Edit2 size={15} />
                         </button>
-                      </td>
-
-                      {/* Actions */}
-                      <td className="p-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          <button
-                            onClick={() => handleOpenModal(card)}
-                            className="p-2 rounded-lg bg-slate-100 dark:bg-dark-800 text-slate-600 dark:text-slate-300 hover:text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-500/20 transition-all cursor-pointer"
-                            title="Edit Card"
-                          >
-                            <Edit2 size={15} />
-                          </button>
-                          <button
-                            onClick={() => {
-                              setSelectedCard(card);
-                              setIsDeleteModalOpen(true);
-                            }}
-                            className="p-2 rounded-lg bg-slate-100 dark:bg-dark-800 text-slate-600 dark:text-slate-300 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/20 transition-all cursor-pointer"
-                            title="Delete Card"
-                          >
-                            <Trash2 size={15} />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                        <button
+                          onClick={() => {
+                            setSelectedCard(card);
+                            setIsDeleteModalOpen(true);
+                          }}
+                          className="p-2 rounded-lg bg-slate-100 dark:bg-dark-800 text-slate-600 dark:text-slate-300 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/20 transition-all cursor-pointer"
+                          title="Delete Card"
+                          aria-label="Delete"
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       )}
@@ -416,9 +416,9 @@ export const AdminTopmate: React.FC = () => {
                 </div>
                 <button
                   onClick={handleCloseModal}
-                  className="text-slate-400 hover:text-slate-600 dark:hover:text-white p-1"
+                  className="text-slate-400 hover:text-slate-600 dark:hover:text-white p-1 cursor-pointer"
                 >
-                  ✕
+                  <X size={18} />
                 </button>
               </div>
 
