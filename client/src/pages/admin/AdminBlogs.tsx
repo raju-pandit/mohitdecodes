@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Edit2, Trash2, X, AlertTriangle } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
-import toast from 'react-hot-toast';
 import api from '../../services/api';
 import { formatDate } from '../../utils/formatters';
+import ImageUploadInput from '../../components/admin/ImageUploadInput';
 
 interface Blog {
   _id: string;
@@ -229,16 +229,17 @@ const AdminBlogs = () => {
                       onChange={e => setFormData({ ...formData, content: e.target.value })} />
                   </div>
 
-                  {/* Row: Cover Image | Category */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-xs font-medium mb-1 text-gray-400">Cover Image URL</label>
-                      <input type="text"
-                        className="input w-full text-sm" style={{ height: '40px' }}
-                        placeholder="https://..."
-                        value={formData.coverImage}
-                        onChange={e => setFormData({ ...formData, coverImage: e.target.value })} />
-                    </div>
+                  {/* Cover Image Upload & Category */}
+                  <div className="space-y-4">
+                    <ImageUploadInput
+                      label="Cover Image"
+                      value={formData.coverImage}
+                      onChange={(url) => setFormData({ ...formData, coverImage: url })}
+                      folder="mohitdecodes/blogs"
+                      placeholder="https://... or click Upload Image"
+                      aspectRatio="wide"
+                    />
+
                     <div>
                       <label className="block text-xs font-medium mb-1 text-gray-400">Category</label>
                       <input type="text"

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Edit2, Trash2, X, AlertTriangle, ExternalLink, Github } from 'lucide-react';
-import toast from 'react-hot-toast';
 import api from '../../services/api';
+import ImageUploadInput from '../../components/admin/ImageUploadInput';
 
 interface Project {
   _id: string;
@@ -225,21 +224,16 @@ const AdminProjects = () => {
                     />
                   </div>
 
-                  {/* Image URL */}
-                  <div>
-                    <label className="block text-xs font-medium mb-1 text-gray-400">
-                      Image URL <span className="text-red-400">*</span>
-                    </label>
-                    <input
-                      required
-                      type="text"
-                      className="input w-full text-sm"
-                      style={{ height: '40px' }}
-                      placeholder="https://..."
-                      value={formData.image}
-                      onChange={e => setFormData({ ...formData, image: e.target.value })}
-                    />
-                  </div>
+                  {/* Image Upload with Cloud Storage */}
+                  <ImageUploadInput
+                    label="Project Image"
+                    required
+                    value={formData.image}
+                    onChange={(url) => setFormData({ ...formData, image: url })}
+                    folder="mohitdecodes/projects"
+                    placeholder="https://... or click Upload Image"
+                    aspectRatio="video"
+                  />
 
                   {/* Technologies */}
                   <div>

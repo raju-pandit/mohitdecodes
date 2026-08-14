@@ -36,6 +36,7 @@ import adminRoutes from './routes/admin.js';
 import paymentRoutes from './routes/payments.js';
 import youtubeRoutes from './routes/youtube.js';
 import topmateRoutes from './routes/topmate.js';
+import uploadRoutes from './routes/upload.js';
 import errorHandler from './middleware/errorHandler.js';
 
 const app = express();
@@ -117,6 +118,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/youtube', youtubeRoutes);
 app.use('/api/topmate', topmateRoutes);
+app.use('/api/upload', uploadRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

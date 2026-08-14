@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Edit2, Trash2, X, AlertTriangle } from 'lucide-react';
-import toast from 'react-hot-toast';
 import api from '../../services/api';
 import { formatDate } from '../../utils/formatters';
+import ImageUploadInput from '../../components/admin/ImageUploadInput';
 
 interface Resource {
   _id: string;
@@ -284,36 +284,31 @@ const AdminResources = () => {
                     </div>
                   </div>
 
-                  {/* File URL | File Size */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-xs font-medium mb-1 text-gray-400">
-                        File URL <span className="text-red-400">*</span>
-                      </label>
-                      <input
-                        required
-                        type="text"
-                        className="input w-full text-sm"
-                        style={{ height: '40px' }}
-                        placeholder="https://..."
-                        value={formData.fileUrl}
-                        onChange={e => setFormData({ ...formData, fileUrl: e.target.value })}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-medium mb-1 text-gray-400">
-                        File Size <span className="text-gray-500">(e.g. '2.5 MB')</span>
-                      </label>
-                      <input
-                        required
-                        type="text"
-                        className="input w-full text-sm"
-                        style={{ height: '40px' }}
-                        placeholder="e.g. 2.5 MB"
-                        value={formData.fileSize}
-                        onChange={e => setFormData({ ...formData, fileSize: e.target.value })}
-                      />
-                    </div>
+                  {/* File / Resource Upload */}
+                  <ImageUploadInput
+                    label="Resource File / Image URL"
+                    required
+                    value={formData.fileUrl}
+                    onChange={(url) => setFormData({ ...formData, fileUrl: url })}
+                    folder="mohitdecodes/resources"
+                    placeholder="https://... or upload from system"
+                    aspectRatio="wide"
+                  />
+
+                  {/* File Size */}
+                  <div>
+                    <label className="block text-xs font-medium mb-1 text-gray-400">
+                      File Size <span className="text-gray-500">(e.g. '2.5 MB')</span>
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      className="input w-full text-sm"
+                      style={{ height: '40px' }}
+                      placeholder="e.g. 2.5 MB"
+                      value={formData.fileSize}
+                      onChange={e => setFormData({ ...formData, fileSize: e.target.value })}
+                    />
                   </div>
 
                   {/* Published */}
