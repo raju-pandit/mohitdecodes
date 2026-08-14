@@ -152,24 +152,23 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
           </nav>
 
 
-          {/* Right: Search / Ctrl K + ThemeToggle + Profile */}
+          {/* Right: Search Icon + ThemeToggle + Profile */}
           <div className={`flex items-center gap-2 sm:gap-3 transition-all duration-300 ${scrolled ? 'lg:opacity-0 lg:w-0 lg:overflow-hidden lg:pointer-events-none' : 'opacity-100'}`}>
-            <button 
+            <motion.button 
+              type="button"
               onClick={onOpenSearch}
-              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full transition-all border cursor-pointer group shrink-0 ${
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.92 }}
+              className={`relative inline-flex items-center justify-center rounded-full p-2 transition-all duration-300 cursor-pointer overflow-hidden border ${
                 isDark
-                  ? 'bg-white/[0.05] hover:bg-white/[0.12] border-white/10 hover:border-primary-500/40 text-slate-300 hover:text-white'
-                  : 'bg-slate-100 hover:bg-slate-200/80 border-slate-200 hover:border-primary-500/40 text-slate-600 hover:text-slate-900 shadow-sm'
+                  ? 'bg-white/[0.06] hover:bg-white/[0.12] border-white/10 text-slate-300 hover:text-white hover:border-primary-500/40 shadow-[0_0_15px_rgba(168,85,247,0.15)]'
+                  : 'bg-slate-100 hover:bg-slate-200 border-slate-300/80 text-slate-700 hover:text-slate-900 shadow-sm'
               }`}
-              aria-label="Open Search"
+              aria-label="Search"
+              title="Search (Ctrl + K)"
             >
-              <Search className="w-3.5 h-3.5 text-slate-400 group-hover:text-primary-500 transition-colors" />
-              <span className={`hidden sm:inline-block text-[10px] font-mono px-1.5 py-0.5 rounded border ${
-                isDark ? 'text-slate-400 bg-white/10 border-white/10' : 'text-slate-500 bg-white border-slate-200'
-              }`}>
-                Ctrl K
-              </span>
-            </button>
+              <Search size={16} className="stroke-[2.2]" />
+            </motion.button>
 
             {/* Theme Toggle Button */}
             <ThemeToggle size="sm" />
