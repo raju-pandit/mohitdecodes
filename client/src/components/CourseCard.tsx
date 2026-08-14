@@ -24,6 +24,16 @@ export interface CourseCardProps {
   }
 }
 
+const resolveImageUrl = (img?: string) => {
+  if (!img || img === 'no-photo.jpg') return '/logo.png';
+  if (img.startsWith('http://') || img.startsWith('https://') || img.startsWith('data:')) {
+    return img;
+  }
+  const apiBase = import.meta.env.VITE_API_URL || '';
+  const cleanBase = apiBase.replace(/\/api\/?$/, '');
+  return `${cleanBase}${img.startsWith('/') ? '' : '/'}${img}`;
+};
+
 export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
   const navigate = useNavigate();
   const difficultyColors = {
@@ -36,16 +46,20 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
     course.modules?.reduce((acc, m) => acc + (m.lessons?.length || 0), 0) || 
     0;
 
+  const thumbUrl = resolveImageUrl(course.thumbnail);
+  const instructorAvatar = resolveImageUrl(course.instructor?.avatar);
+
   return (
     <Card 
       onClick={() => navigate(`/courses/${course.slug}`)}
       className="group flex flex-col p-0 overflow-hidden bg-white dark:bg-dark-900 border-slate-200/90 dark:border-dark-800 shadow-sm hover:shadow-xl dark:shadow-none h-full cursor-pointer transition-all duration-300"
     >
       {/* Thumbnail */}
-      <div className="relative aspect-video overflow-hidden shrink-0">
+      <div className="relative aspect-video overflow-hidden shrink-0 bg-slate-100 dark:bg-dark-800">
         <img 
-          src={course.thumbnail} 
+          src={thumbUrl} 
           alt={course.title} 
+          onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/logo.png'; }}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute top-3 left-3">
@@ -85,8 +99,8 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
         {/* Footer */}
         <div className="flex items-center justify-between pt-2">
           <div className="flex items-center gap-2">
-            <img src={course.instructor.avatar} alt={course.instructor.name} className="w-8 h-8 rounded-full border border-slate-200 dark:border-dark-700 object-cover" />
-            <span className="text-sm font-semibold text-slate-800 dark:text-gray-300">{course.instructor.name}</span>
+            <img src={instructorAvatar} alt={course.instructor?.name || 'Instructor'} onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/logo.png'; }} className="w-8 h-8 rounded-full border border-slate-200 dark:border-dark-700 object-cover" />
+            <span className="text-sm font-semibold text-slate-800 dark:text-gray-300">{course.instructor?.name || 'Mohit Sir'}</span>
           </div>
           <div className="text-right">
             {course.price === 0 ? (
