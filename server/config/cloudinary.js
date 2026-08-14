@@ -46,11 +46,8 @@ export const uploadToCloudinary = async (localFilePath, folder = 'mohitdecodes/t
     }
 
     const result = await cloudinary.uploader.upload(localFilePath, {
-      folder,
-      resource_type: 'auto',
-      transformation: [
-        { quality: 'auto', fetch_format: 'auto' }
-      ]
+      folder: folder || 'mohitdecodes/topmate',
+      resource_type: 'image'
     });
 
     // Remove local file after successful Cloudinary upload
