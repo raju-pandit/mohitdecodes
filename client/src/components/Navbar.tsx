@@ -146,17 +146,16 @@ export const Navbar = ({ onOpenSearch }: { onOpenSearch: () => void }) => {
           <div className={`flex items-center gap-2 sm:gap-3 transition-all duration-300 ${scrolled ? 'lg:opacity-0 lg:w-0 lg:overflow-hidden lg:pointer-events-none' : 'opacity-100'}`}>
             <button 
               onClick={onOpenSearch}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-full transition-all border cursor-pointer group shrink-0 ${
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full transition-all border cursor-pointer group shrink-0 ${
                 isDark
-                  ? 'bg-white/[0.06] hover:bg-white/[0.12] border-white/10 hover:border-purple-500/50 hover:shadow-[0_0_12px_rgba(168,85,247,0.25)] text-slate-300 hover:text-white'
-                  : 'bg-slate-100 hover:bg-slate-200/80 border-slate-200 hover:border-purple-500/40 hover:shadow-[0_0_10px_rgba(168,85,247,0.15)] text-slate-600 hover:text-slate-900 shadow-xs'
+                  ? 'bg-white/[0.05] hover:bg-white/[0.12] border-white/10 hover:border-primary-500/40 text-slate-300 hover:text-white'
+                  : 'bg-slate-100 hover:bg-slate-200/80 border-slate-200 hover:border-primary-500/40 text-slate-600 hover:text-slate-900 shadow-sm'
               }`}
               aria-label="Open Search"
             >
-              <Search className="w-3.5 h-3.5 text-slate-400 group-hover:text-purple-500 transition-colors" />
-              <span className="hidden xl:inline-block text-xs text-slate-400 group-hover:text-slate-200 font-medium">Search...</span>
-              <span className={`hidden sm:inline-block text-[10px] font-mono px-1.5 py-0.5 rounded border font-semibold ${
-                isDark ? 'text-slate-400 bg-white/10 border-white/10' : 'text-slate-500 bg-white border-slate-200 shadow-2xs'
+              <Search className="w-3.5 h-3.5 text-slate-400 group-hover:text-primary-500 transition-colors" />
+              <span className={`hidden sm:inline-block text-[10px] font-mono px-1.5 py-0.5 rounded border ${
+                isDark ? 'text-slate-400 bg-white/10 border-white/10' : 'text-slate-500 bg-white border-slate-200'
               }`}>
                 Ctrl K
               </span>
