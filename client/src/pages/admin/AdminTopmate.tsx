@@ -433,46 +433,48 @@ export const AdminTopmate: React.FC = () => {
                 {/* Live Card Preview Box */}
                 <div className="space-y-2">
                   <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
-                    Live Public Preview (No Price / Pure Promotional Card)
+                    Live Public Preview (Exact Card Appearance on Website)
                   </label>
-                  <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-white via-purple-50/40 to-white dark:from-dark-950 dark:via-dark-900 dark:to-purple-950/20 border border-purple-300/70 dark:border-purple-500/40 shadow-md relative overflow-hidden">
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
-                      <div className="flex items-start gap-4 flex-1 min-w-0">
-                        {/* Fixed aspect ratio thumbnail with object-cover */}
-                        <div
-                          style={{ width: '64px', height: '64px', minWidth: '64px', maxWidth: '64px', minHeight: '64px', maxHeight: '64px' }}
-                          className="rounded-2xl bg-slate-100 dark:bg-dark-800 border border-purple-300/40 dark:border-purple-500/30 overflow-hidden shrink-0 shadow-md flex items-center justify-center"
-                        >
-                          <img
-                            src={formData.imageUrl || '/logo.png'}
-                            alt="Preview"
-                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src = '/logo.png';
-                            }}
-                          />
-                        </div>
-
-                        <div className="space-y-1 flex-1 min-w-0">
-                          <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider bg-rose-100 dark:bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30">
-                            {formData.badge || 'TOPMATE'}
-                          </span>
-                          <h4 className="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white truncate">
-                            {formData.title || 'Developer Roadmap & Career Guidance'}
-                          </h4>
-                          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 line-clamp-2 leading-relaxed">
-                            {formData.description || 'Book a 1:1 mentorship session and get personalized guidance for your developer career.'}
-                          </p>
-                        </div>
+                  <div className="max-w-sm mx-auto rounded-3xl bg-white dark:bg-dark-900 border border-slate-200/90 dark:border-dark-800 shadow-xl overflow-hidden">
+                    {/* Top Cover Photo */}
+                    <div className="relative w-full aspect-[4/3] bg-slate-100 dark:bg-dark-800 overflow-hidden">
+                      <img
+                        src={formData.imageUrl || '/logo.png'}
+                        alt="Preview"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = '/logo.png';
+                        }}
+                      />
+                      <div className="absolute top-3 right-3">
+                        <span className="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-black/60 backdrop-blur-md text-white border border-white/20 shadow-xs flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                          <span>1:1 Session</span>
+                        </span>
                       </div>
+                    </div>
 
-                      <button
-                        type="button"
-                        className="btn-primary py-3 px-6 rounded-xl font-bold text-xs sm:text-sm inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-rose-600 text-white border-none shadow-md shrink-0 cursor-default"
-                      >
-                        <span>{formData.buttonText || 'Book on Topmate'}</span>
+                    {/* Middle Content */}
+                    <div className="p-4 sm:p-5 space-y-1.5">
+                      <span className="text-[11px] font-extrabold uppercase tracking-wider text-purple-600 dark:text-purple-400">
+                        {formData.badge || 'TOPMATE'}
+                      </span>
+                      <h4 className="font-extrabold text-base text-slate-900 dark:text-white line-clamp-2 leading-snug">
+                        {formData.title || 'Developer Roadmap & Career Guidance'}
+                      </h4>
+                      <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                        {formData.description || 'Book a 1:1 mentorship session and get personalized guidance for your developer career.'}
+                      </p>
+                    </div>
+
+                    {/* Bottom Action Bar */}
+                    <div className="px-5 py-3.5 border-t border-slate-100 dark:border-dark-800 flex items-center justify-between bg-slate-50/50 dark:bg-dark-950/40">
+                      <span className="font-extrabold text-sm text-slate-900 dark:text-white">
+                        {formData.buttonText || 'Book on Topmate'}
+                      </span>
+                      <div className="w-8 h-8 rounded-full bg-slate-900 dark:bg-dark-800 text-white flex items-center justify-center">
                         <ArrowRight size={14} />
-                      </button>
+                      </div>
                     </div>
                   </div>
                 </div>
