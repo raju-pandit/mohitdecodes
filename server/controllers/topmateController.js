@@ -1,36 +1,36 @@
 import TopmateCard from '../models/TopmateCard.js';
+import { uploadToCloudinary, deleteFromCloudinary } from '../config/cloudinary.js';
 
 const DEFAULT_TOPMATE_URL = 'https://topmate.io/mohitdecodes';
 
-// Seed helper if empty
+// Seed default Topmate card if database is empty
 const seedDefaultIfEmpty = async () => {
   const count = await TopmateCard.countDocuments();
   if (count === 0) {
     await TopmateCard.create({
-      category: 'TOPMATE',
-      title: 'Connect with Mohit',
-      description: 'Book a 1:1 mentorship call, portfolio & resume review, custom career guidance, or mock technical interview.',
-      badge: '1:1 Session Available',
+      badge: 'TOPMATE',
+      title: 'Developer Roadmap & Career Guidance',
+      description: 'Book a 1:1 mentorship session and get personalized guidance for your developer career.',
       buttonText: 'Book on Topmate',
       url: DEFAULT_TOPMATE_URL,
+      imageUrl: '/logo.png',
       status: 'active',
-      displayOrder: 0,
-      image: '/logo.png'
+      displayOrder: 0
     });
   }
 };
 
 /**
- * @desc    Get Topmate cards (Public active only or Admin all)
+ * @desc    Get all Topmate cards (Public active cards or Admin all)
  * @route   GET /api/topmate
- * @access  Public (admin can pass ?all=true)
+ * @access  Public
  */
 export const getTopmateCards = async (req, res, next) => {
   try {
     await seedDefaultIfEmpty();
 
     const query = {};
-    // If not admin asking for all, only return active cards
+    // If not an admin asking for all cards, filter by status === 'active'
     if (req.query.all !== 'true' || req.user?.role !== 'admin') {
       query.status = 'active';
     }
@@ -84,28 +84,28 @@ export const createTopmateCard = async (req, res, next) => {
       description,
       badge,
       buttonText,
-      category,
       url,
       status,
       displayOrder,
-      image
+      imageUrl,
+      cloudinaryPublicId
     } = req.body;
 
     const newCard = await TopmateCard.create({
       title,
       description,
-      badge: badge || 'Available',
+      badge: badge || 'TOPMATE',
       buttonText: buttonText || 'Book on Topmate',
-      category: category || 'TOPMATE',
       url: url || DEFAULT_TOPMATE_URL,
       status: status || 'active',
       displayOrder: Number(displayOrder) || 0,
-      image: image || ''
+      imageUrl: imageUrl || '/logo.png',
+      cloudinaryPublicId: cloudinaryPublicId || ''
     });
 
     res.status(201).json({
       success: true,
-      message: 'Topmate card created successfully',
+      message: 'Topmate promotional card created successfully',
       data: newCard
     });
   } catch (error) {
@@ -129,7 +129,11 @@ export const updateTopmateCard = async (req, res, next) => {
       });
     }
 
-    // Default url fallback if empty
+    // Delete old Cloudinary image if replaced
+    if (req.body.imageUrl && req.body.imageUrl !== card.imageUrl && card.cloudinaryPublicId) {
+      await deleteFromCloudinary(card.cloudinaryPublicId);
+    }
+
     if (req.body.url === '') {
       req.body.url = DEFAULT_TOPMATE_URL;
     }
@@ -165,6 +169,11 @@ export const deleteTopmateCard = async (req, res, next) => {
       });
     }
 
+    // Delete from Cloudinary if stored there
+    if (card.cloudinaryPublicId) {
+      await deleteFromCloudinary(card.cloudinaryPublicId);
+    }
+
     await TopmateCard.findByIdAndDelete(req.params.id);
 
     res.status(200).json({
@@ -177,7 +186,7 @@ export const deleteTopmateCard = async (req, res, next) => {
 };
 
 /**
- * @desc    Toggle Topmate card status (active / inactive)
+ * @desc    Toggle Topmate card active/inactive status
  * @route   PATCH /api/topmate/:id/status
  * @access  Private/Admin
  */
@@ -197,7 +206,7 @@ export const toggleTopmateStatus = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      message: `Card status changed to ${card.status}`,
+      message: `Card is now ${card.status}`,
       data: card
     });
   } catch (error) {
@@ -206,7 +215,7 @@ export const toggleTopmateStatus = async (req, res, next) => {
 };
 
 /**
- * @desc    Upload image for Topmate card
+ * @desc    Upload image to Cloudinary (or local fallback)
  * @route   POST /api/topmate/upload
  * @access  Private/Admin
  */
@@ -215,19 +224,19 @@ export const uploadTopmateImage = async (req, res, next) => {
     if (!req.file) {
       return res.status(400).json({
         success: false,
-        message: 'Please upload an image file'
+        message: 'Please select an image file to upload'
       });
     }
 
-    // Format relative URL
-    const imageUrl = `/${req.file.path.replace(/\\/g, '/')}`;
+    // Upload to Cloudinary
+    const uploadResult = await uploadToCloudinary(req.file.path, 'mohitdecodes/topmate');
 
     res.status(200).json({
       success: true,
-      message: 'Image uploaded successfully',
+      message: 'Image uploaded to Cloudinary successfully',
       data: {
-        imageUrl,
-        filename: req.file.filename
+        imageUrl: uploadResult.secure_url,
+        cloudinaryPublicId: uploadResult.public_id
       }
     });
   } catch (error) {

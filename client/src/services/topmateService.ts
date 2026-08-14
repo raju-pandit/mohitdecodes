@@ -64,9 +64,9 @@ export const toggleTopmateStatus = async (id: string): Promise<TopmateCard> => {
 };
 
 /**
- * Upload Topmate Card image
+ * Upload Topmate Card image to Cloudinary
  */
-export const uploadTopmateImage = async (file: File): Promise<string> => {
+export const uploadTopmateImage = async (file: File): Promise<{ imageUrl: string; cloudinaryPublicId: string }> => {
   const formData = new FormData();
   formData.append('image', file);
 
@@ -76,5 +76,9 @@ export const uploadTopmateImage = async (file: File): Promise<string> => {
     },
   });
 
-  return (res as any)?.data?.data?.imageUrl || (res as any)?.data?.imageUrl || '';
+  const data = (res as any)?.data?.data || (res as any)?.data || {};
+  return {
+    imageUrl: data.imageUrl || '',
+    cloudinaryPublicId: data.cloudinaryPublicId || ''
+  };
 };

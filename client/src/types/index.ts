@@ -132,15 +132,17 @@ export interface Pagination {
 
 export interface TopmateCard {
   _id: string;
-  image?: string;
+  imageUrl?: string;
+  image?: string; // backwards compatibility
+  badge?: string;
   category?: string;
   title: string;
   description: string;
-  badge?: string;
   buttonText?: string;
   url: string;
   status: 'active' | 'inactive';
   displayOrder: number;
+  cloudinaryPublicId?: string;
   createdAt?: string;
   updatedAt?: string;
 }

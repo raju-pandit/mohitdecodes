@@ -2,11 +2,12 @@ import mongoose from 'mongoose';
 
 const topmateCardSchema = new mongoose.Schema(
   {
-    image: {
+    imageUrl: {
       type: String,
-      default: ''
+      default: '/logo.png',
+      trim: true
     },
-    category: {
+    badge: {
       type: String,
       default: 'TOPMATE',
       trim: true
@@ -15,18 +16,13 @@ const topmateCardSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Please provide a title'],
       trim: true,
-      maxlength: [120, 'Title cannot exceed 120 characters']
+      maxlength: [150, 'Title cannot exceed 150 characters']
     },
     description: {
       type: String,
-      required: [true, 'Please provide a description'],
+      required: [true, 'Please provide a short description'],
       trim: true,
-      maxlength: [500, 'Description cannot exceed 500 characters']
-    },
-    badge: {
-      type: String,
-      default: 'Available',
-      trim: true
+      maxlength: [600, 'Description cannot exceed 600 characters']
     },
     buttonText: {
       type: String,
@@ -46,6 +42,10 @@ const topmateCardSchema = new mongoose.Schema(
     displayOrder: {
       type: Number,
       default: 0
+    },
+    cloudinaryPublicId: {
+      type: String,
+      default: ''
     }
   },
   {
@@ -53,8 +53,8 @@ const topmateCardSchema = new mongoose.Schema(
   }
 );
 
-// Index for fast public queries
-topmateCardSchema.index({ status: 1, displayOrder: 1 });
+// Fast indexing for public active cards
+topmateCardSchema.index({ status: 1, displayOrder: 1, createdAt: -1 });
 
 const TopmateCard = mongoose.models.TopmateCard || mongoose.model('TopmateCard', topmateCardSchema);
 

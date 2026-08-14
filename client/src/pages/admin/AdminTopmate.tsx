@@ -12,7 +12,9 @@ import {
   ArrowRight,
   Sparkles,
   Link as LinkIcon,
-  X
+  X,
+  Image as ImageIcon,
+  Cloud
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { TopmateCard } from '../../types';
@@ -37,15 +39,15 @@ export const AdminTopmate: React.FC = () => {
 
   // Form State
   const [formData, setFormData] = useState({
-    title: 'Connect with Mohit',
-    category: 'TOPMATE',
-    description: 'Book a 1:1 mentorship session, consultation, resume audit or mock interview.',
-    badge: '1:1 Session Available',
+    title: 'Developer Roadmap & Career Guidance',
+    badge: 'TOPMATE',
+    description: 'Book a 1:1 mentorship session and get personalized guidance for your developer career.',
     buttonText: 'Book on Topmate',
     url: DEFAULT_TOPMATE_URL,
     status: 'active' as 'active' | 'inactive',
     displayOrder: 0,
-    image: '/logo.png'
+    imageUrl: '/logo.png',
+    cloudinaryPublicId: ''
   });
 
   useEffect(() => {
@@ -69,27 +71,27 @@ export const AdminTopmate: React.FC = () => {
       setSelectedCard(card);
       setFormData({
         title: card.title || '',
-        category: card.category || 'TOPMATE',
+        badge: card.badge || 'TOPMATE',
         description: card.description || '',
-        badge: card.badge || 'Available',
         buttonText: card.buttonText || 'Book on Topmate',
         url: card.url || DEFAULT_TOPMATE_URL,
         status: card.status || 'active',
         displayOrder: card.displayOrder || 0,
-        image: card.image || '/logo.png'
+        imageUrl: card.imageUrl || card.image || '/logo.png',
+        cloudinaryPublicId: card.cloudinaryPublicId || ''
       });
     } else {
       setSelectedCard(null);
       setFormData({
-        title: 'Connect with Mohit',
-        category: 'TOPMATE',
-        description: 'Book a 1:1 mentorship session, consultation, resume audit or mock interview.',
-        badge: '1:1 Session Available',
+        title: 'Developer Roadmap & Career Guidance',
+        badge: 'TOPMATE',
+        description: 'Book a 1:1 mentorship session and get personalized guidance for your developer career.',
         buttonText: 'Book on Topmate',
         url: DEFAULT_TOPMATE_URL,
         status: 'active',
         displayOrder: cards.length * 10,
-        image: '/logo.png'
+        imageUrl: '/logo.png',
+        cloudinaryPublicId: ''
       });
     }
     setIsModalOpen(true);
@@ -116,11 +118,17 @@ export const AdminTopmate: React.FC = () => {
 
     setUploadingImage(true);
     try {
-      const uploadedUrl = await uploadTopmateImage(file);
-      setFormData(prev => ({ ...prev, image: uploadedUrl }));
-      toast.success('Image uploaded successfully!');
+      const result = await uploadTopmateImage(file);
+      if (result.imageUrl) {
+        setFormData(prev => ({
+          ...prev,
+          imageUrl: result.imageUrl,
+          cloudinaryPublicId: result.cloudinaryPublicId
+        }));
+        toast.success('Image uploaded to Cloudinary successfully!');
+      }
     } catch (error) {
-      toast.error('Failed to upload image. You can also paste an image URL.');
+      toast.error('Failed to upload image. You can also paste a direct image URL.');
     } finally {
       setUploadingImage(false);
     }
@@ -141,10 +149,10 @@ export const AdminTopmate: React.FC = () => {
     try {
       if (selectedCard) {
         await updateTopmateCard(selectedCard._id, formData);
-        toast.success('Topmate card updated successfully!');
+        toast.success('Topmate promotional card updated successfully!');
       } else {
         await createTopmateCard(formData);
-        toast.success('Topmate card created successfully!');
+        toast.success('Topmate promotional card created successfully!');
       }
       handleCloseModal();
       fetchCards();
@@ -185,12 +193,13 @@ export const AdminTopmate: React.FC = () => {
             <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               Topmate Management
             </h1>
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-gradient-to-r from-rose-500/15 to-purple-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30">
-              1:1 Mentorship
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-gradient-to-r from-rose-500/15 to-purple-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30 flex items-center gap-1">
+              <Sparkles size={12} />
+              <span>1:1 Mentorship</span>
             </span>
           </div>
           <p className="text-slate-500 text-sm mt-1">
-            Manage public Topmate cards, promotional banners, badges, and session URLs.
+            Manage public Topmate promotional cards, Cloudinary images, badges, and booking links.
           </p>
         </div>
 
@@ -228,7 +237,7 @@ export const AdminTopmate: React.FC = () => {
           <div>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">No Topmate Cards Found</h3>
             <p className="text-sm text-slate-500 max-w-md mx-auto mt-1">
-              Create your promotional card to showcase 1:1 mentorship sessions on the website.
+              Create your promotional card to showcase 1:1 mentorship sessions and career roadmaps on the website.
             </p>
           </div>
           <button
@@ -244,149 +253,144 @@ export const AdminTopmate: React.FC = () => {
           {/* Card Header Title */}
           <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-dark-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <h3 className="font-extrabold text-base text-slate-900 dark:text-white">
-              Configured Topmate Cards ({cards.length})
+              Configured Topmate Promotional Cards ({cards.length})
             </h3>
             <span className="text-xs text-slate-400 font-medium">
-              Active cards are dynamically rendered on public pages
+              Only Active cards are rendered dynamically on public frontend pages
             </span>
           </div>
 
-          {/* Table Container with Safe Horizontal Overflow */}
+          {/* Table Container */}
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm text-slate-700 dark:text-slate-300 min-w-[950px]">
               <thead className="bg-slate-50 dark:bg-dark-950/80 text-slate-800 dark:text-slate-200 font-bold border-b border-slate-200 dark:border-dark-800 text-xs uppercase tracking-wider">
                 <tr>
-                  <th className="p-4 w-72">Card / Thumbnail</th>
-                  <th className="p-4 w-44">Badge & Category</th>
-                  <th className="p-4 w-60">Destination Link</th>
+                  <th className="p-4 w-72">Image & Card Title</th>
+                  <th className="p-4 w-40">Badge / Label</th>
+                  <th className="p-4 w-60">Topmate Link</th>
                   <th className="p-4 text-center w-24">Order</th>
                   <th className="p-4 text-center w-32">Status</th>
                   <th className="p-4 text-center w-28">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-dark-800/80">
-                {cards.map((card) => (
-                  <tr
-                    key={card._id}
-                    className="hover:bg-slate-50/80 dark:hover:bg-dark-800/40 transition-colors"
-                  >
-                    {/* Title & Image */}
-                    <td className="p-4">
-                      <div className="flex items-center gap-3.5">
-                        <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-dark-800 border border-slate-200 dark:border-dark-700 overflow-hidden shrink-0 flex items-center justify-center shadow-xs">
-                          {card.image ? (
+                {cards.map((card) => {
+                  const cardImg = card.imageUrl || card.image || '/logo.png';
+                  return (
+                    <tr
+                      key={card._id}
+                      className="hover:bg-slate-50/80 dark:hover:bg-dark-800/40 transition-colors"
+                    >
+                      {/* Image & Title */}
+                      <td className="p-4">
+                        <div className="flex items-center gap-3.5">
+                          <div className="w-13 h-13 rounded-xl bg-slate-100 dark:bg-dark-800 border border-slate-200 dark:border-dark-700 overflow-hidden shrink-0 flex items-center justify-center shadow-xs">
                             <img
-                              src={card.image}
+                              src={cardImg}
                               alt={card.title}
                               className="w-full h-full object-cover"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src = '/logo.png';
+                              }}
                             />
-                          ) : (
-                            <div className="w-full h-full bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center text-white font-bold text-base">
-                              T
-                            </div>
-                          )}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <h4 className="font-bold text-slate-900 dark:text-white truncate">
+                              {card.title}
+                            </h4>
+                            <p className="text-xs text-slate-500 line-clamp-1 mt-0.5">
+                              {card.description}
+                            </p>
+                          </div>
                         </div>
-                        <div className="min-w-0 flex-1">
-                          <h4 className="font-bold text-slate-900 dark:text-white truncate">
-                            {card.title}
-                          </h4>
-                          <p className="text-xs text-slate-500 line-clamp-1 mt-0.5">
-                            {card.description}
-                          </p>
-                        </div>
-                      </div>
-                    </td>
+                      </td>
 
-                    {/* Badge & Category */}
-                    <td className="p-4">
-                      <div className="space-y-1">
-                        <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-500/30 whitespace-nowrap shadow-2xs">
-                          {card.badge || 'Available'}
+                      {/* Badge / Label */}
+                      <td className="p-4">
+                        <span className="inline-block px-3 py-1 rounded-full text-xs font-black bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-500/30 whitespace-nowrap uppercase tracking-wide shadow-2xs">
+                          {card.badge || 'TOPMATE'}
                         </span>
-                        <p className="text-[11px] font-mono text-slate-400 pl-1">
-                          {card.category || 'TOPMATE'}
-                        </p>
-                      </div>
-                    </td>
+                      </td>
 
-                    {/* Destination Link */}
-                    <td className="p-4">
-                      <a
-                        href={card.url || DEFAULT_TOPMATE_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:underline max-w-[220px] truncate"
-                        title={card.url || DEFAULT_TOPMATE_URL}
-                      >
-                        <LinkIcon size={12} className="shrink-0" />
-                        <span className="truncate">{card.url || DEFAULT_TOPMATE_URL}</span>
-                        <ExternalLink size={12} className="shrink-0" />
-                      </a>
-                    </td>
-
-                    {/* Display Order */}
-                    <td className="p-4 text-center font-bold text-slate-800 dark:text-slate-200">
-                      {card.displayOrder}
-                    </td>
-
-                    {/* Status Toggle */}
-                    <td className="p-4 text-center">
-                      <button
-                        onClick={() => handleToggleStatus(card._id, card.status)}
-                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer whitespace-nowrap shadow-2xs ${
-                          card.status === 'active'
-                            ? 'bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-500/30 hover:bg-emerald-200'
-                            : 'bg-slate-200 dark:bg-dark-800 text-slate-600 dark:text-slate-400 border border-slate-300 dark:border-dark-700 hover:bg-slate-300'
-                        }`}
-                        title="Click to toggle active / inactive"
-                      >
-                        {card.status === 'active' ? (
-                          <>
-                            <CheckCircle2 size={13} className="text-emerald-500 shrink-0" />
-                            <span>Active</span>
-                          </>
-                        ) : (
-                          <>
-                            <XCircle size={13} className="text-slate-400 shrink-0" />
-                            <span>Inactive</span>
-                          </>
-                        )}
-                      </button>
-                    </td>
-
-                    {/* Actions */}
-                    <td className="p-4 text-center">
-                      <div className="flex items-center justify-center gap-1.5">
-                        <button
-                          onClick={() => handleOpenModal(card)}
-                          className="p-2 rounded-lg bg-slate-100 dark:bg-dark-800 text-slate-600 dark:text-slate-300 hover:text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-500/20 transition-all cursor-pointer"
-                          title="Edit Card"
-                          aria-label="Edit"
+                      {/* Topmate Link */}
+                      <td className="p-4">
+                        <a
+                          href={card.url || DEFAULT_TOPMATE_URL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:underline max-w-[220px] truncate"
+                          title={card.url || DEFAULT_TOPMATE_URL}
                         >
-                          <Edit2 size={15} />
-                        </button>
+                          <LinkIcon size={12} className="shrink-0" />
+                          <span className="truncate">{card.url || DEFAULT_TOPMATE_URL}</span>
+                          <ExternalLink size={12} className="shrink-0" />
+                        </a>
+                      </td>
+
+                      {/* Display Order */}
+                      <td className="p-4 text-center font-bold text-slate-800 dark:text-slate-200">
+                        {card.displayOrder}
+                      </td>
+
+                      {/* Status Toggle */}
+                      <td className="p-4 text-center">
                         <button
-                          onClick={() => {
-                            setSelectedCard(card);
-                            setIsDeleteModalOpen(true);
-                          }}
-                          className="p-2 rounded-lg bg-slate-100 dark:bg-dark-800 text-slate-600 dark:text-slate-300 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/20 transition-all cursor-pointer"
-                          title="Delete Card"
-                          aria-label="Delete"
+                          onClick={() => handleToggleStatus(card._id, card.status)}
+                          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer whitespace-nowrap shadow-2xs ${
+                            card.status === 'active'
+                              ? 'bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-500/30 hover:bg-emerald-200'
+                              : 'bg-slate-200 dark:bg-dark-800 text-slate-600 dark:text-slate-400 border border-slate-300 dark:border-dark-700 hover:bg-slate-300'
+                          }`}
+                          title="Click to toggle active / inactive"
                         >
-                          <Trash2 size={15} />
+                          {card.status === 'active' ? (
+                            <>
+                              <CheckCircle2 size={13} className="text-emerald-500 shrink-0" />
+                              <span>Active</span>
+                            </>
+                          ) : (
+                            <>
+                              <XCircle size={13} className="text-slate-400 shrink-0" />
+                              <span>Inactive</span>
+                            </>
+                          )}
                         </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+
+                      {/* Actions */}
+                      <td className="p-4 text-center">
+                        <div className="flex items-center justify-center gap-1.5">
+                          <button
+                            onClick={() => handleOpenModal(card)}
+                            className="p-2 rounded-lg bg-slate-100 dark:bg-dark-800 text-slate-600 dark:text-slate-300 hover:text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-500/20 transition-all cursor-pointer"
+                            title="Edit Card"
+                            aria-label="Edit"
+                          >
+                            <Edit2 size={15} />
+                          </button>
+                          <button
+                            onClick={() => {
+                              setSelectedCard(card);
+                              setIsDeleteModalOpen(true);
+                            }}
+                            className="p-2 rounded-lg bg-slate-100 dark:bg-dark-800 text-slate-600 dark:text-slate-300 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/20 transition-all cursor-pointer"
+                            title="Delete Card"
+                            aria-label="Delete"
+                          >
+                            <Trash2 size={15} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
         </div>
       )}
 
-      {/* Add / Edit Modal */}
+      {/* Add / Edit Modal with Cloudinary Upload and Live Preview */}
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
@@ -411,7 +415,7 @@ export const AdminTopmate: React.FC = () => {
                     T
                   </div>
                   <h3 className="font-extrabold text-lg text-slate-900 dark:text-white">
-                    {selectedCard ? 'Edit Topmate Card' : 'Create Topmate Card'}
+                    {selectedCard ? 'Edit Topmate Promotional Card' : 'Create Topmate Promotional Card'}
                   </h3>
                 </div>
                 <button
@@ -427,56 +431,63 @@ export const AdminTopmate: React.FC = () => {
                 {/* Live Card Preview Box */}
                 <div className="space-y-2">
                   <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
-                    Live Public Preview
+                    Live Public Preview (No Price / Pure Promotional Card)
                   </label>
-                  <div className="p-5 rounded-2xl bg-gradient-to-br from-slate-50 via-white to-purple-50/50 dark:from-dark-950 dark:via-dark-900 dark:to-purple-950/20 border border-purple-300/60 dark:border-purple-500/30 shadow-sm relative overflow-hidden">
-                    <div className="flex items-start gap-4">
-                      <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-dark-800 border border-slate-200 dark:border-dark-700 overflow-hidden shrink-0 flex items-center justify-center shadow-md">
-                        {formData.image ? (
+                  <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-white via-purple-50/40 to-white dark:from-dark-950 dark:via-dark-900 dark:to-purple-950/20 border border-purple-300/70 dark:border-purple-500/40 shadow-md relative overflow-hidden">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
+                      <div className="flex items-start gap-4 flex-1 min-w-0">
+                        {/* Fixed aspect ratio thumbnail with object-cover */}
+                        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-slate-100 dark:bg-dark-800 border border-purple-300/40 dark:border-purple-500/30 overflow-hidden shrink-0 shadow-md flex items-center justify-center">
                           <img
-                            src={formData.image}
+                            src={formData.imageUrl || '/logo.png'}
                             alt="Preview"
                             className="w-full h-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = '/logo.png';
+                            }}
                           />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center text-white font-black text-xl">
-                            T
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="space-y-1 flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-[11px] font-black uppercase tracking-wider text-rose-600 dark:text-rose-400">
-                            {formData.category || 'TOPMATE'}
-                          </span>
-                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-500/30">
-                            {formData.badge || 'Available'}
-                          </span>
                         </div>
-                        <h4 className="font-extrabold text-base text-slate-900 dark:text-white truncate">
-                          {formData.title || 'Card Title'}
-                        </h4>
-                        <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
-                          {formData.description || 'Card description appears here...'}
-                        </p>
-                      </div>
-                    </div>
 
-                    <div className="mt-4 pt-3 border-t border-slate-200 dark:border-dark-800 flex items-center justify-between">
-                      <span className="text-xs font-bold text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
-                        {formData.buttonText || 'Book on Topmate'}
+                        <div className="space-y-1 flex-1 min-w-0">
+                          <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider bg-rose-100 dark:bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30">
+                            {formData.badge || 'TOPMATE'}
+                          </span>
+                          <h4 className="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white truncate">
+                            {formData.title || 'Developer Roadmap & Career Guidance'}
+                          </h4>
+                          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 line-clamp-2 leading-relaxed">
+                            {formData.description || 'Book a 1:1 mentorship session and get personalized guidance for your developer career.'}
+                          </p>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        className="btn-primary py-3 px-6 rounded-xl font-bold text-xs sm:text-sm inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-rose-600 text-white border-none shadow-md shrink-0 cursor-default"
+                      >
+                        <span>{formData.buttonText || 'Book on Topmate'}</span>
                         <ArrowRight size={14} />
-                      </span>
-                      <span className="text-[10px] font-mono text-slate-400 truncate max-w-[200px]">
-                        {formData.url || DEFAULT_TOPMATE_URL}
-                      </span>
+                      </button>
                     </div>
                   </div>
                 </div>
 
-                {/* Form Fields */}
+                {/* Form Inputs */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                      Badge / Label *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. TOPMATE"
+                      value={formData.badge}
+                      onChange={e => setFormData({ ...formData, badge: e.target.value })}
+                      className="input w-full text-sm font-bold uppercase tracking-wider"
+                    />
+                  </div>
+
                   <div>
                     <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
                       Card Title *
@@ -484,23 +495,10 @@ export const AdminTopmate: React.FC = () => {
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Connect with Mohit"
+                      placeholder="e.g. Developer Roadmap & Career Guidance"
                       value={formData.title}
                       onChange={e => setFormData({ ...formData, title: e.target.value })}
                       className="input w-full text-sm"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                      Category Label
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="e.g. TOPMATE or 1:1 CALL"
-                      value={formData.category}
-                      onChange={e => setFormData({ ...formData, category: e.target.value })}
-                      className="input w-full text-sm font-mono uppercase"
                     />
                   </div>
                 </div>
@@ -512,7 +510,7 @@ export const AdminTopmate: React.FC = () => {
                   <textarea
                     required
                     rows={3}
-                    placeholder="Briefly explain what learners will get from this session..."
+                    placeholder="e.g. Book a 1:1 mentorship session and get personalized guidance for your developer career."
                     value={formData.description}
                     onChange={e => setFormData({ ...formData, description: e.target.value })}
                     className="input w-full text-sm resize-none"
@@ -522,57 +520,52 @@ export const AdminTopmate: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                      Badge Text
+                      CTA Button Text *
                     </label>
                     <input
                       type="text"
-                      placeholder="e.g. Book a Session, 1:1 Call"
-                      value={formData.badge}
-                      onChange={e => setFormData({ ...formData, badge: e.target.value })}
-                      className="input w-full text-sm"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                      CTA Button Text
-                    </label>
-                    <input
-                      type="text"
+                      required
                       placeholder="e.g. Book on Topmate"
                       value={formData.buttonText}
                       onChange={e => setFormData({ ...formData, buttonText: e.target.value })}
                       className="input w-full text-sm"
                     />
                   </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                      Topmate Destination URL *
+                    </label>
+                    <input
+                      type="url"
+                      required
+                      placeholder="https://topmate.io/mohitdecodes"
+                      value={formData.url}
+                      onChange={e => setFormData({ ...formData, url: e.target.value })}
+                      className="input w-full text-sm font-mono"
+                    />
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                    Topmate URL *
-                  </label>
-                  <input
-                    type="url"
-                    required
-                    placeholder="https://topmate.io/mohitdecodes"
-                    value={formData.url}
-                    onChange={e => setFormData({ ...formData, url: e.target.value })}
-                    className="input w-full text-sm font-mono"
-                  />
-                </div>
-
-                {/* Image Upload & URL */}
+                {/* Cloudinary Image Upload Section */}
                 <div className="space-y-2">
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                    Card Image / Avatar
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                      Topmate Card Image (Cloudinary Storage)
+                    </label>
+                    <span className="text-[11px] font-medium text-purple-600 dark:text-purple-400 flex items-center gap-1">
+                      <Cloud size={13} />
+                      Cloud Storage
+                    </span>
+                  </div>
+
                   <div className="flex flex-col sm:flex-row gap-3 items-center">
                     <input
                       type="text"
-                      placeholder="Image URL or upload file below..."
-                      value={formData.image}
-                      onChange={e => setFormData({ ...formData, image: e.target.value })}
-                      className="input flex-1 w-full text-sm"
+                      placeholder="Cloudinary secure URL or image path..."
+                      value={formData.imageUrl}
+                      onChange={e => setFormData({ ...formData, imageUrl: e.target.value })}
+                      className="input flex-1 w-full text-sm font-mono"
                     />
 
                     <input
@@ -587,10 +580,10 @@ export const AdminTopmate: React.FC = () => {
                       type="button"
                       disabled={uploadingImage}
                       onClick={() => fileInputRef.current?.click()}
-                      className="btn-outline text-xs px-4 py-2.5 rounded-xl font-bold flex items-center gap-2 shrink-0 cursor-pointer w-full sm:w-auto justify-center"
+                      className="btn-primary text-xs px-4 py-2.5 rounded-xl font-bold flex items-center gap-2 shrink-0 cursor-pointer w-full sm:w-auto justify-center bg-purple-600 hover:bg-purple-700 shadow-sm"
                     >
                       <Upload size={14} />
-                      <span>{uploadingImage ? 'Uploading...' : 'Upload Image'}</span>
+                      <span>{uploadingImage ? 'Uploading to Cloudinary...' : 'Upload Image'}</span>
                     </button>
                   </div>
                 </div>
@@ -615,9 +608,9 @@ export const AdminTopmate: React.FC = () => {
                     <select
                       value={formData.status}
                       onChange={e => setFormData({ ...formData, status: e.target.value as any })}
-                      className="input w-full text-sm"
+                      className="input w-full text-sm font-semibold"
                     >
-                      <option value="active">Active (Visible on Site)</option>
+                      <option value="active">Active (Visible on Frontend)</option>
                       <option value="inactive">Inactive (Hidden)</option>
                     </select>
                   </div>
@@ -636,7 +629,7 @@ export const AdminTopmate: React.FC = () => {
                     type="submit"
                     className="btn-primary text-sm px-6 py-2.5 rounded-xl font-bold shadow-lg shadow-purple-600/20 cursor-pointer"
                   >
-                    {selectedCard ? 'Save Changes' : 'Create Card'}
+                    {selectedCard ? 'Save Changes' : 'Create Topmate Card'}
                   </button>
                 </div>
               </form>
@@ -668,7 +661,7 @@ export const AdminTopmate: React.FC = () => {
               <div className="text-center space-y-1">
                 <h3 className="text-lg font-bold text-slate-900 dark:text-white">Delete Topmate Card?</h3>
                 <p className="text-sm text-slate-500">
-                  Are you sure you want to delete <span className="font-semibold text-slate-800 dark:text-slate-200">"{selectedCard?.title}"</span>? This action cannot be undone.
+                  Are you sure you want to delete <span className="font-semibold text-slate-800 dark:text-slate-200">"{selectedCard?.title}"</span>? This will also remove associated Cloudinary media.
                 </p>
               </div>
               <div className="flex items-center justify-center gap-3 pt-2">
