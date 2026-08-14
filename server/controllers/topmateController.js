@@ -14,6 +14,7 @@ const seedDefaultIfEmpty = async () => {
       buttonText: 'Book on Topmate',
       url: DEFAULT_TOPMATE_URL,
       imageUrl: '/logo.png',
+      image: '/logo.png',
       status: 'active',
       displayOrder: 0
     });
@@ -37,10 +38,20 @@ export const getTopmateCards = async (req, res, next) => {
 
     const cards = await TopmateCard.find(query).sort({ displayOrder: 1, createdAt: -1 });
 
+    const normalizedCards = cards.map(c => {
+      const doc = c.toObject();
+      const img = doc.imageUrl || doc.image || '/logo.png';
+      return {
+        ...doc,
+        imageUrl: img,
+        image: img
+      };
+    });
+
     res.status(200).json({
       success: true,
-      count: cards.length,
-      data: cards
+      count: normalizedCards.length,
+      data: normalizedCards
     });
   } catch (error) {
     next(error);
@@ -63,9 +74,16 @@ export const getTopmateCard = async (req, res, next) => {
       });
     }
 
+    const doc = card.toObject();
+    const img = doc.imageUrl || doc.image || '/logo.png';
+
     res.status(200).json({
       success: true,
-      data: card
+      data: {
+        ...doc,
+        imageUrl: img,
+        image: img
+      }
     });
   } catch (error) {
     next(error);
@@ -88,8 +106,11 @@ export const createTopmateCard = async (req, res, next) => {
       status,
       displayOrder,
       imageUrl,
+      image,
       cloudinaryPublicId
     } = req.body;
+
+    const img = imageUrl || image || '/logo.png';
 
     const newCard = await TopmateCard.create({
       title,
@@ -99,7 +120,8 @@ export const createTopmateCard = async (req, res, next) => {
       url: url || DEFAULT_TOPMATE_URL,
       status: status || 'active',
       displayOrder: Number(displayOrder) || 0,
-      imageUrl: imageUrl || '/logo.png',
+      imageUrl: img,
+      image: img,
       cloudinaryPublicId: cloudinaryPublicId || ''
     });
 
@@ -127,6 +149,12 @@ export const updateTopmateCard = async (req, res, next) => {
         success: false,
         message: 'Topmate card not found'
       });
+    }
+
+    const img = req.body.imageUrl || req.body.image;
+    if (img) {
+      req.body.imageUrl = img;
+      req.body.image = img;
     }
 
     // Delete old Cloudinary image if replaced

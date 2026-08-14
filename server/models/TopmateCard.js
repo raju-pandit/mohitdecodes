@@ -7,6 +7,11 @@ const topmateCardSchema = new mongoose.Schema(
       default: '/logo.png',
       trim: true
     },
+    image: {
+      type: String,
+      default: '/logo.png',
+      trim: true
+    },
     badge: {
       type: String,
       default: 'TOPMATE',

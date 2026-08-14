@@ -10,6 +10,18 @@ interface TopmateCardProps {
   cardData?: TopmateCardType;
 }
 
+const resolveImageUrl = (img?: string) => {
+  if (!img) return '/logo.png';
+  if (img.startsWith('http://') || img.startsWith('https://')) return img;
+  if (img.startsWith('/uploads/')) {
+    const rawBase = (import.meta.env.VITE_API_URL || 'https://mohitdecodes.onrender.com')
+      .replace(/\/+$/, '')
+      .replace(/\/api$/, '');
+    return `${rawBase}${img}`;
+  }
+  return img;
+};
+
 export const TopmateCard: React.FC<TopmateCardProps> = ({
   className = '',
   variant = 'card',
@@ -58,7 +70,7 @@ export const TopmateCard: React.FC<TopmateCardProps> = ({
   const badge = card?.badge || 'TOPMATE';
   const buttonText = card?.buttonText || 'Book on Topmate';
   const rawImage = card?.imageUrl || card?.image || '/logo.png';
-  const displayImage = imageError ? '/logo.png' : rawImage;
+  const displayImage = imageError ? '/logo.png' : resolveImageUrl(rawImage);
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();

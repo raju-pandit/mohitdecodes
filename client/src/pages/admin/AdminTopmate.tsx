@@ -27,6 +27,18 @@ import {
   DEFAULT_TOPMATE_URL
 } from '../../services/topmateService';
 
+const resolveImageUrl = (img?: string) => {
+  if (!img) return '/logo.png';
+  if (img.startsWith('http://') || img.startsWith('https://')) return img;
+  if (img.startsWith('/uploads/')) {
+    const rawBase = (import.meta.env.VITE_API_URL || 'https://mohitdecodes.onrender.com')
+      .replace(/\/+$/, '')
+      .replace(/\/api$/, '');
+    return `${rawBase}${img}`;
+  }
+  return img;
+};
+
 export const AdminTopmate: React.FC = () => {
   const [cards, setCards] = useState<TopmateCard[]>([]);
   const [loading, setLoading] = useState(true);
@@ -274,7 +286,7 @@ export const AdminTopmate: React.FC = () => {
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-dark-800/80">
                 {cards.map((card) => {
-                  const cardImg = card.imageUrl || card.image || '/logo.png';
+                  const cardImg = resolveImageUrl(card.imageUrl || card.image);
                   return (
                     <tr
                       key={card._id}
@@ -439,7 +451,7 @@ export const AdminTopmate: React.FC = () => {
                     {/* Top Cover Photo */}
                     <div className="relative w-full aspect-[4/3] bg-slate-100 dark:bg-dark-800 overflow-hidden">
                       <img
-                        src={formData.imageUrl || '/logo.png'}
+                        src={resolveImageUrl(formData.imageUrl)}
                         alt="Preview"
                         className="w-full h-full object-cover"
                         onError={(e) => {
