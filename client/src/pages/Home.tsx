@@ -34,7 +34,6 @@ import { BlogCard } from '../components/BlogCard'
 import { CourseCardSkeleton } from '../components/ui/SkeletonLoader'
 import { TestimonialCard } from '../components/TestimonialCard'
 import { CompaniesMarquee } from '../components/CompaniesMarquee'
-import TopmateCard from '../components/TopmateCard'
 import { useTitle } from '../hooks/useTitle'
 
 const words = ["Future!", "MohitDecodes", "Family!"];
@@ -597,14 +596,7 @@ const Home: React.FC = () => {
       {/* TRUSTED BY LEADING COMPANIES MARQUEE */}
       <CompaniesMarquee />
 
-      {/* 1:1 MENTORSHIP & GUIDANCE (TOPMATE) */}
-      <section className="py-16 sm:py-20 border-t border-slate-200 dark:border-white/5">
-        <div className="container-max">
-          <div className="max-w-4xl mx-auto">
-            <TopmateCard variant="card" />
-          </div>
-        </div>
-      </section>
+
 
       {/* LATEST BLOGS */}
       {blogs.length > 0 && (
