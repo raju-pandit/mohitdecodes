@@ -177,7 +177,7 @@ export const Topmate: React.FC = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 gap-6">
+            <div className={`grid gap-6 ${cards.length === 1 ? 'grid-cols-1 max-w-xl mx-auto' : cards.length === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
               {cards.map((card) => (
                 <TopmateCard key={card._id} cardData={card} variant="card" />
               ))}

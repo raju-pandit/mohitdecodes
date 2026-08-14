@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import {
+  ArrowRight,
+  Sparkles,
+  CheckCircle2,
+  Video,
+  Calendar,
+  ShieldCheck,
+  Star,
+  ExternalLink
+} from 'lucide-react';
 import { TopmateCard as TopmateCardType } from '../types';
 import { getPublicTopmateCards, DEFAULT_TOPMATE_URL } from '../services/topmateService';
 
@@ -29,7 +38,6 @@ export const TopmateCard: React.FC<TopmateCardProps> = ({
       try {
         const cards = await getPublicTopmateCards();
         if (isMounted && Array.isArray(cards) && cards.length > 0) {
-          // Find first active card or first card
           const activeCard = cards.find(c => c.status === 'active') || cards[0];
           if (activeCard) {
             setCard(activeCard);
@@ -46,7 +54,7 @@ export const TopmateCard: React.FC<TopmateCardProps> = ({
     };
   }, [cardData]);
 
-  // If card is explicitly fetched and set to inactive, hide
+  // If card is explicitly set to inactive, hide
   if (card && card.status === 'inactive') {
     return null;
   }
@@ -55,7 +63,7 @@ export const TopmateCard: React.FC<TopmateCardProps> = ({
   const title = card?.title || 'Developer Roadmap & Career Guidance';
   const description =
     card?.description ||
-    'Book a 1:1 mentorship session and get personalized guidance for your developer career.';
+    'Book a 1:1 mentorship session and get personalized guidance for your developer career, resume audits, and mock interviews.';
   const badge = card?.badge || 'TOPMATE';
   const buttonText = card?.buttonText || 'Book on Topmate';
   const rawImage = card?.imageUrl || card?.image || '/logo.png';
@@ -66,7 +74,7 @@ export const TopmateCard: React.FC<TopmateCardProps> = ({
     window.open(targetUrl, '_blank', 'noopener,noreferrer');
   };
 
-  // Compact Variant (used in sidebars / contact lists)
+  // Compact Variant (sidebars & contact list)
   if (variant === 'compact') {
     return (
       <div
@@ -74,13 +82,16 @@ export const TopmateCard: React.FC<TopmateCardProps> = ({
         className={`group p-4 rounded-2xl bg-white dark:bg-dark-900 border border-purple-500/30 hover:border-purple-500 shadow-sm hover:shadow-xl hover:shadow-purple-500/10 transition-all duration-300 cursor-pointer flex items-center justify-between gap-4 ${className}`}
       >
         <div className="flex items-center gap-3.5 min-w-0">
-          <div className="w-12 h-12 min-w-[48px] max-w-[48px] h-[48px] max-h-[48px] rounded-xl bg-slate-100 dark:bg-dark-800 border border-slate-200 dark:border-dark-700 overflow-hidden shrink-0 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+          <div
+            style={{ width: '48px', height: '48px', minWidth: '48px', maxWidth: '48px', minHeight: '48px', maxHeight: '48px' }}
+            className="rounded-xl bg-slate-100 dark:bg-dark-800 border border-slate-200 dark:border-dark-700 overflow-hidden shrink-0 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform"
+          >
             <img
               src={displayImage}
               alt={title}
               loading="lazy"
               onError={() => setImageError(true)}
-              className="w-full h-full object-cover"
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           </div>
           <div className="min-w-0">
@@ -102,7 +113,95 @@ export const TopmateCard: React.FC<TopmateCardProps> = ({
     );
   }
 
-  // Full Promotional Card (Used on Homepage & Topmate Page)
+  // Grid Card Layout (Vertical Card with Header, Image, Benefits, and Full Width Button)
+  if (variant === 'card') {
+    return (
+      <motion.div
+        whileHover={{ y: -6 }}
+        transition={{ duration: 0.25, ease: 'easeOut' }}
+        onClick={handleClick}
+        className={`group relative overflow-hidden rounded-3xl bg-white dark:bg-dark-900 border border-purple-500/20 dark:border-purple-500/30 hover:border-purple-500 shadow-lg shadow-purple-500/5 hover:shadow-2xl hover:shadow-purple-500/15 transition-all duration-300 cursor-pointer flex flex-col justify-between p-6 sm:p-7 select-none ${className}`}
+      >
+        {/* Ambient Top Glow */}
+        <div className="absolute -top-20 -right-20 w-48 h-48 bg-purple-500/15 dark:bg-purple-500/25 rounded-full blur-3xl pointer-events-none group-hover:scale-125 transition-transform duration-500" />
+        <div className="absolute -bottom-20 -left-20 w-48 h-48 bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 space-y-5">
+          {/* Top Row: Thumbnail + Badge + Live Indicator */}
+          <div className="flex items-center justify-between gap-3">
+            <div
+              style={{ width: '64px', height: '64px', minWidth: '64px', maxWidth: '64px', minHeight: '64px', maxHeight: '64px' }}
+              className="rounded-2xl bg-gradient-to-br from-purple-500/20 via-slate-100 to-rose-500/20 dark:from-purple-950 dark:via-dark-800 dark:to-rose-950/40 p-1 border border-purple-300/60 dark:border-purple-500/40 overflow-hidden shrink-0 shadow-md group-hover:scale-105 transition-transform duration-300 flex items-center justify-center"
+            >
+              <img
+                src={displayImage}
+                alt={title}
+                loading="lazy"
+                onError={() => setImageError(true)}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                className="rounded-xl"
+              />
+            </div>
+
+            <div className="flex flex-col items-end gap-1.5">
+              <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-100 dark:bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30 shadow-2xs">
+                {badge}
+              </span>
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span>1:1 Sessions Available</span>
+              </span>
+            </div>
+          </div>
+
+          {/* Title & Description */}
+          <div className="space-y-2">
+            <h3 className="text-xl font-black text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors tracking-tight leading-snug">
+              {title}
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal line-clamp-3">
+              {description}
+            </p>
+          </div>
+
+          {/* Feature Highlights Chips */}
+          <div className="pt-2 border-t border-slate-100 dark:border-dark-800/80 grid grid-cols-2 gap-2 text-[11px] font-bold text-slate-600 dark:text-slate-400">
+            <div className="flex items-center gap-1.5">
+              <Video size={13} className="text-purple-500 shrink-0" />
+              <span className="truncate">Google Meet 1:1</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Calendar size={13} className="text-rose-500 shrink-0" />
+              <span className="truncate">Instant Booking</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Star size={13} className="text-amber-500 fill-amber-500 shrink-0" />
+              <span className="truncate">4.9+ Star Rating</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <ShieldCheck size={13} className="text-emerald-500 shrink-0" />
+              <span className="truncate">Verified Mentor</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Full-Width CTA Button */}
+        <div className="relative z-10 pt-5">
+          <button
+            type="button"
+            className="w-full inline-flex items-center justify-center gap-2.5 bg-gradient-to-r from-purple-600 via-rose-600 to-amber-600 hover:from-purple-500 hover:to-amber-500 text-white font-black text-sm py-3.5 px-6 rounded-2xl shadow-lg shadow-purple-600/25 border-none transition-all duration-300 transform group-hover:scale-102 active:scale-98 cursor-pointer"
+          >
+            <span>{buttonText}</span>
+            <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+              <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </button>
+        </div>
+      </motion.div>
+    );
+  }
+
+  // Full-Width Banner Layout (Used in Homepage Section)
   return (
     <motion.div
       whileHover={{ y: -4 }}
@@ -115,33 +214,37 @@ export const TopmateCard: React.FC<TopmateCardProps> = ({
       <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 md:gap-8">
-        {/* Left Area: Cloudinary Image + Badge + Title + Description */}
+        {/* Left Area: Image + Badge + Title + Description */}
         <div className="flex items-start gap-4 sm:gap-6 flex-1 min-w-0">
-          {/* Fixed aspect ratio rounded image with zoom on hover */}
-          <div className="relative w-16 h-16 sm:w-20 sm:h-20 min-w-[64px] min-h-[64px] sm:min-w-[80px] sm:min-h-[80px] rounded-2xl bg-slate-100 dark:bg-dark-800 border border-purple-300/40 dark:border-purple-500/30 overflow-hidden shrink-0 shadow-lg shadow-purple-500/10 group-hover:scale-105 transition-transform duration-300 flex items-center justify-center">
+          <div
+            style={{ width: '72px', height: '72px', minWidth: '72px', maxWidth: '72px', minHeight: '72px', maxHeight: '72px' }}
+            className="rounded-2xl bg-gradient-to-br from-purple-500/20 via-slate-100 to-rose-500/20 dark:from-purple-950 dark:via-dark-800 dark:to-rose-950/40 p-1 border border-purple-300/40 dark:border-purple-500/30 overflow-hidden shrink-0 shadow-lg shadow-purple-500/10 group-hover:scale-105 transition-transform duration-300 flex items-center justify-center"
+          >
             <img
               src={displayImage}
               alt={title}
               loading="lazy"
               onError={() => setImageError(true)}
-              className="w-full h-full object-cover"
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              className="rounded-xl"
             />
           </div>
 
           <div className="space-y-2 flex-1 min-w-0">
-            {/* Small Category / Badge Text */}
             <div className="flex items-center gap-2 flex-wrap">
               <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-100 dark:bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30">
                 {badge}
               </span>
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span>1:1 Live Mentorship</span>
+              </span>
             </div>
 
-            {/* Admin-Controlled Title */}
             <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors tracking-tight">
               {title}
             </h3>
 
-            {/* Admin-Controlled Short Description */}
             <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
               {description}
             </p>
