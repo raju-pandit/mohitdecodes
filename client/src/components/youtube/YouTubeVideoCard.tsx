@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Play, PlayCircle, Eye, Calendar, Clock } from 'lucide-react';
 import { YouTubeVideo } from '../../services/youtubeService';
+import YouTubeIcon from './YouTubeIcon';
 
 interface YouTubeVideoCardProps {
   video: YouTubeVideo;
@@ -108,11 +109,8 @@ export const YouTubeVideoCard: React.FC<YouTubeVideoCardProps> = ({
         )}
 
         {/* YouTube Red Icon Watermark */}
-        <div className="absolute top-3 right-3 w-7 h-7 rounded-lg bg-black/60 backdrop-blur-sm flex items-center justify-center text-white z-10 pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity">
-          <svg viewBox="0 0 24 24" className="w-4 h-4 fill-red-600" xmlns="http://www.w3.org/2000/svg">
-            <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.108C19.524 3.545 12 3.545 12 3.545s-7.525 0-9.387.51a3.003 3.003 0 0 0-2.11 2.108C0 8.025 0 12 0 12s0 3.975.503 5.837a3.003 3.003 0 0 0 2.11 2.108c1.862.51 9.387.51 9.387.51s7.525 0 9.387-.51a3.003 3.003 0 0 0 2.11-2.108C24 15.975 24 12 24 12s0-3.975-.502-5.837z" />
-            <polygon points="9.545 15.568 15.818 12 9.545 8.432" className="fill-white" />
-          </svg>
+        <div className="absolute top-3 right-3 w-8 h-8 rounded-lg bg-black/70 backdrop-blur-sm flex items-center justify-center z-10 pointer-events-none opacity-85 group-hover:opacity-100 transition-opacity shadow-sm">
+          <YouTubeIcon className="w-5 h-3.5" />
         </div>
 
         {/* Hover Center Play Button Overlay (when not in preview mode) */}

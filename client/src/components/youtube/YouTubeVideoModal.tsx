@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Eye, Calendar, Clock, ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
 import { YouTubeVideo } from '../../services/youtubeService';
+import YouTubeIcon from './YouTubeIcon';
 
 interface YouTubeVideoModalProps {
   video: YouTubeVideo | null;
@@ -59,11 +60,8 @@ export const YouTubeVideoModal: React.FC<YouTubeVideoModalProps> = ({ video, onC
         >
           {/* Top Bar Header */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-dark-800 bg-slate-50/80 dark:bg-dark-950/80 backdrop-blur shrink-0">
-            <div className="flex items-center gap-2 text-red-600 dark:text-red-500 font-bold text-sm">
-              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" xmlns="http://www.w3.org/2000/svg">
-                <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.108C19.524 3.545 12 3.545 12 3.545s-7.525 0-9.387.51a3.003 3.003 0 0 0-2.11 2.108C0 8.025 0 12 0 12s0 3.975.503 5.837a3.003 3.003 0 0 0 2.11 2.108c1.862.51 9.387.51 9.387.51s7.525 0 9.387-.51a3.003 3.003 0 0 0 2.11-2.108C24 15.975 24 12 24 12s0-3.975-.502-5.837z" />
-                <polygon points="9.545 15.568 15.818 12 9.545 8.432" className="fill-white" />
-              </svg>
+            <div className="flex items-center gap-2.5 text-red-600 dark:text-red-500 font-bold text-sm">
+              <YouTubeIcon className="w-5 h-3.5" />
               <span>MohitDecodes Video Player</span>
             </div>
 
@@ -121,14 +119,11 @@ export const YouTubeVideoModal: React.FC<YouTubeVideoModalProps> = ({ video, onC
                 href={watchUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-primary bg-red-600 hover:bg-red-700 text-white py-2.5 px-5 rounded-xl font-bold text-sm inline-flex items-center gap-2 border-none shadow-md shadow-red-600/20 shrink-0 cursor-pointer self-start transition-transform transform hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2.5 bg-[#FF0000] hover:bg-[#D90000] text-white py-3 px-6 rounded-xl font-bold text-sm shadow-lg shadow-red-600/30 shrink-0 cursor-pointer self-start transition-all transform hover:-translate-y-0.5"
               >
-                <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.108C19.524 3.545 12 3.545 12 3.545s-7.525 0-9.387.51a3.003 3.003 0 0 0-2.11 2.108C0 8.025 0 12 0 12s0 3.975.503 5.837a3.003 3.003 0 0 0 2.11 2.108c1.862.51 9.387.51 9.387.51s7.525 0 9.387-.51a3.003 3.003 0 0 0 2.11-2.108C24 15.975 24 12 24 12s0-3.975-.502-5.837z" />
-                  <polygon points="9.545 15.568 15.818 12 9.545 8.432" className="fill-white" />
-                </svg>
-                Watch on YouTube
-                <ExternalLink size={14} />
+                <YouTubeIcon className="w-5 h-3.5" />
+                <span>Watch on YouTube</span>
+                <ExternalLink size={14} className="text-white/90" />
               </a>
             </div>
 

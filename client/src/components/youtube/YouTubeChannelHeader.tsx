@@ -1,6 +1,7 @@
 import React from 'react';
 import { Users, Eye, Video, ExternalLink, RefreshCw } from 'lucide-react';
 import { YouTubeChannel } from '../../services/youtubeService';
+import YouTubeIcon from './YouTubeIcon';
 
 interface YouTubeChannelHeaderProps {
   channel: YouTubeChannel | null;
@@ -23,16 +24,16 @@ export const YouTubeChannelHeader: React.FC<YouTubeChannelHeaderProps> = ({
   const videoCount = channel?.videoCount ? `${channel.videoCount}` : '85';
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-red-500/20 dark:border-red-900/30 bg-gradient-to-br from-red-500/5 via-white to-purple-500/5 dark:from-red-950/20 dark:via-dark-900 dark:to-dark-950 p-6 sm:p-8 md:p-12 shadow-sm transition-all">
-      {/* Background Decorative Blur */}
+    <div className="relative overflow-hidden rounded-3xl border border-red-500/25 dark:border-red-900/40 bg-gradient-to-br from-red-500/5 via-white to-purple-500/5 dark:from-red-950/20 dark:via-dark-900 dark:to-dark-950 p-6 sm:p-8 md:p-12 shadow-sm transition-all">
+      {/* Background Decorative Glow */}
       <div className="absolute -right-16 -top-16 w-64 h-64 bg-red-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -left-16 -bottom-16 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
-        {/* Left Column: Brand & Info */}
+        {/* Left Column: Brand & Channel Info */}
         <div className="space-y-6 text-center lg:text-left flex-1">
           <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
-            <div className="w-16 h-16 rounded-2xl bg-red-600 flex items-center justify-center shrink-0 shadow-lg shadow-red-600/25 overflow-hidden">
+            <div className="relative w-16 h-16 rounded-2xl bg-[#090d16] border border-red-500/30 flex items-center justify-center shrink-0 shadow-lg shadow-red-600/20 overflow-hidden">
               {channel?.thumbnail ? (
                 <img
                   src={channel.thumbnail}
@@ -40,10 +41,7 @@ export const YouTubeChannelHeader: React.FC<YouTubeChannelHeaderProps> = ({
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <svg viewBox="0 0 24 24" className="w-9 h-9 text-white fill-current" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.108C19.524 3.545 12 3.545 12 3.545s-7.525 0-9.387.51a3.003 3.003 0 0 0-2.11 2.108C0 8.025 0 12 0 12s0 3.975.503 5.837a3.003 3.003 0 0 0 2.11 2.108c1.862.51 9.387.51 9.387.51s7.525 0 9.387-.51a3.003 3.003 0 0 0 2.11-2.108C24 15.975 24 12 24 12s0-3.975-.502-5.837z" />
-                  <polygon points="9.545 15.568 15.818 12 9.545 8.432" className="fill-white" />
-                </svg>
+                <YouTubeIcon className="w-10 h-7" />
               )}
             </div>
 
@@ -52,42 +50,41 @@ export const YouTubeChannelHeader: React.FC<YouTubeChannelHeaderProps> = ({
                 <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                   {channel?.title || 'MohitDecodes'} <span className="text-red-600 dark:text-red-500">YouTube</span>
                 </h1>
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-100 dark:bg-red-500/10 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-500/20">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-red-100 dark:bg-red-500/15 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-500/30 tracking-wide">
                   LIVE
                 </span>
               </div>
-              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-1">
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-semibold mt-1">
                 Learn • Build • Code • Grow with weekly full-stack tutorials
               </p>
             </div>
           </div>
 
-          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-xl leading-relaxed mx-auto lg:mx-0">
+          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed mx-auto lg:mx-0 font-normal">
             {channel?.description ||
-              'Join thousands of developers mastering modern web development, systems design, and DSA with step-by-step project-driven videos on YouTube.'}
+              'Mohit Decodes is my way of teaching coding in a simple and fast way. I share the coding tricks and techniques that took me years to learn, but in a way that saves you time! Learn quality programming in Hindi and English.'}
           </p>
 
           {/* Action Buttons */}
-          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-1">
+          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
             <a
               href={subscribeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary bg-red-600 hover:bg-red-700 text-white py-3 px-8 rounded-xl inline-flex items-center gap-2.5 font-bold text-base border-none shadow-lg shadow-red-600/25 transition-all transform hover:-translate-y-0.5 cursor-pointer"
+              className="inline-flex items-center gap-3 bg-[#FF0000] hover:bg-[#D90000] text-white py-3.5 px-7 rounded-xl font-bold text-base shadow-lg shadow-red-600/30 transition-all duration-200 transform hover:-translate-y-0.5 active:scale-98 cursor-pointer select-none"
             >
-              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" xmlns="http://www.w3.org/2000/svg">
-                <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.108C19.524 3.545 12 3.545 12 3.545s-7.525 0-9.387.51a3.003 3.003 0 0 0-2.11 2.108C0 8.025 0 12 0 12s0 3.975.503 5.837a3.003 3.003 0 0 0 2.11 2.108c1.862.51 9.387.51 9.387.51s7.525 0 9.387-.51a3.003 3.003 0 0 0 2.11-2.108C24 15.975 24 12 24 12s0-3.975-.502-5.837z" />
-                <polygon points="9.545 15.568 15.818 12 9.545 8.432" className="fill-white" />
-              </svg>
-              Subscribe on YouTube
-              <ExternalLink size={16} />
+              <div className="w-6 h-4 flex items-center justify-center bg-white/10 rounded-sm">
+                <YouTubeIcon className="w-6 h-4" />
+              </div>
+              <span>Subscribe on YouTube</span>
+              <ExternalLink size={16} className="text-white/90" />
             </a>
 
             <button
               onClick={onRefresh}
               disabled={refreshing || loading}
               title="Refresh live YouTube stats"
-              className="p-3 rounded-xl border border-slate-200 dark:border-dark-700 bg-white/80 dark:bg-dark-800/80 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:border-purple-400 dark:hover:border-purple-500/40 transition-all cursor-pointer shadow-xs"
+              className="p-3.5 rounded-xl border border-slate-200 dark:border-dark-700 bg-white/80 dark:bg-dark-800/80 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:border-purple-400 dark:hover:border-purple-500/40 transition-all cursor-pointer shadow-xs"
               aria-label="Refresh YouTube Data"
             >
               <RefreshCw size={18} className={refreshing ? 'animate-spin text-purple-600' : ''} />
