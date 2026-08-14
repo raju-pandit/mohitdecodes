@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Edit2, Trash2, X, AlertTriangle } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, AlertTriangle, Loader2 } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import api from '../../services/api';
 import ImageUploadInput from '../../components/admin/ImageUploadInput';
 
@@ -26,6 +27,7 @@ interface Course {
 const AdminCourses = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
@@ -49,9 +51,10 @@ const AdminCourses = () => {
 
   const fetchCourses = async () => {
     try {
-      const data = await api.get('/courses/admin/all');
+      const data: any = await api.get('/courses/admin/all');
       setCourses(data?.data || []);
-    } catch (error) {
+    } catch (error: any) {
+      console.error('Fetch courses error:', error);
       toast.error('Failed to fetch courses');
     } finally {
       setLoading(false);
@@ -62,18 +65,34 @@ const AdminCourses = () => {
     if (course) {
       setSelectedCourse(course);
       setFormData({
-        title: course.title, shortDescription: course.shortDescription, description: course.description,
-        category: course.category, difficulty: course.difficulty, price: course.price ? course.price : '',
-        isFree: course.isFree, thumbnail: course.thumbnail, duration: (course as any).duration || '',
-        instructorName: course.instructor?.name || '', instructorBio: course.instructor?.bio || '',
-        isPublished: course.isPublished
+        title: course.title || '',
+        shortDescription: course.shortDescription || '',
+        description: course.description || '',
+        category: course.category || 'React',
+        difficulty: course.difficulty || 'Beginner',
+        price: course.price ? course.price : '',
+        isFree: course.isFree ?? true,
+        thumbnail: course.thumbnail || '',
+        duration: (course as any).duration || '',
+        instructorName: course.instructor?.name || '',
+        instructorBio: course.instructor?.bio || '',
+        isPublished: course.isPublished ?? false
       });
     } else {
       setSelectedCourse(null);
       setFormData({
-        title: '', shortDescription: '', description: '', category: 'React',
-        difficulty: 'Beginner', price: '', isFree: true, thumbnail: '',
-        instructorName: '', instructorBio: '', isPublished: false, duration: ''
+        title: '',
+        shortDescription: '',
+        description: '',
+        category: 'React',
+        difficulty: 'Beginner',
+        price: '',
+        isFree: true,
+        thumbnail: '',
+        instructorName: '',
+        instructorBio: '',
+        isPublished: true,
+        duration: ''
       });
     }
     setIsModalOpen(true);
@@ -81,14 +100,43 @@ const AdminCourses = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!formData.title.trim()) {
+      toast.error('Please enter course title');
+      return;
+    }
+    if (!formData.shortDescription.trim()) {
+      toast.error('Please enter a short description');
+      return;
+    }
+    if (!formData.description.trim()) {
+      toast.error('Please enter course description');
+      return;
+    }
+    if (!formData.thumbnail.trim()) {
+      toast.error('Please upload or enter a course thumbnail');
+      return;
+    }
+
+    setSubmitting(true);
     try {
       const payload = {
-        ...formData,
+        title: formData.title.trim(),
+        shortDescription: formData.shortDescription.trim(),
+        description: formData.description.trim(),
+        category: formData.category,
+        difficulty: formData.difficulty,
+        duration: formData.duration.trim(),
+        isFree: formData.isFree,
         price: formData.isFree ? 0 : Math.max(0, Number(formData.price) || 0),
-
-        instructor: { name: formData.instructorName, bio: formData.instructorBio }
+        thumbnail: formData.thumbnail.trim(),
+        instructor: {
+          name: formData.instructorName.trim(),
+          bio: formData.instructorBio.trim()
+        },
+        isPublished: formData.isPublished
       };
-      
+
       if (selectedCourse) {
         await api.put(`/courses/${selectedCourse._id}`, payload);
         toast.success('Course updated successfully');
@@ -99,11 +147,13 @@ const AdminCourses = () => {
       setIsModalOpen(false);
       fetchCourses();
     } catch (error: any) {
+      console.error('Course save error:', error);
       const msg = error?.message || error?.error || 'Failed to save course';
       toast.error(msg);
+    } finally {
+      setSubmitting(false);
     }
   };
-
 
   const handleDelete = async () => {
     if (!selectedCourse) return;
@@ -112,7 +162,7 @@ const AdminCourses = () => {
       toast.success('Course deleted successfully');
       setIsDeleteModalOpen(false);
       fetchCourses();
-    } catch (error) {
+    } catch (error: any) {
       toast.error('Failed to delete course');
     }
   };
@@ -153,14 +203,12 @@ const AdminCourses = () => {
               {courses.map((course) => (
                 <tr key={course._id} className="hover:bg-slate-50/80 dark:hover:bg-gray-800/30 transition-colors">
                   <td className="p-4">
-                    <img src={course.thumbnail} alt="thumb" className="w-16 h-10 object-cover rounded-lg border border-slate-200 dark:border-dark-700" />
+                    <img src={course.thumbnail || '/logo.png'} alt="thumb" className="w-16 h-10 object-cover rounded-lg border border-slate-200 dark:border-dark-700" />
                   </td>
                   <td className="p-4 font-semibold text-slate-900 dark:text-white">{course.title}</td>
                   <td className="p-4 font-medium text-slate-600 dark:text-slate-300">{course.category}</td>
                   <td className="p-4 font-bold">{course.isFree ? <span className="badge-green">Free</span> : `₹${course.price}`}</td>
-
                   <td className="p-4 font-bold text-slate-900 dark:text-slate-200">{course.students ?? (course as any).studentsCount ?? 0}</td>
-
                   <td className="p-4">
                     <span className={course.isPublished ? 'badge-primary' : 'badge-orange'}>
                       {course.isPublished ? 'Published' : 'Draft'}
@@ -190,25 +238,27 @@ const AdminCourses = () => {
           >
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
-              className="relative w-full max-w-3xl flex flex-col rounded-2xl bg-white dark:bg-[#13111f] border border-slate-200 dark:border-purple-700/30 shadow-2xl"
+              className="relative w-full max-w-3xl flex flex-col rounded-2xl bg-white dark:bg-[#13111f] border border-slate-200 dark:border-purple-700/30 shadow-2xl overflow-hidden"
               style={{ maxHeight: '88vh' }}
             >
-              {/* Sticky Header */}
-              <div className="flex justify-between items-center px-5 py-3.5 border-b border-slate-200 dark:border-white/5 flex-shrink-0">
-                <h2 className="text-base font-bold text-slate-900 dark:text-white">
-                  {selectedCourse ? 'Edit Course' : 'Create Course'}
-                </h2>
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="text-slate-400 hover:text-slate-900 dark:hover:text-white p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 transition cursor-pointer"
-                >
-                  <X size={18} />
-                </button>
-              </div>
+              {/* Form wrapping entire modal */}
+              <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
+                {/* Sticky Header */}
+                <div className="flex justify-between items-center px-5 py-3.5 border-b border-slate-200 dark:border-white/5 flex-shrink-0">
+                  <h2 className="text-base font-bold text-slate-900 dark:text-white">
+                    {selectedCourse ? 'Edit Course' : 'Create Course'}
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={() => setIsModalOpen(false)}
+                    className="text-slate-400 hover:text-slate-900 dark:hover:text-white p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 transition cursor-pointer"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
 
-              {/* Scrollable Body */}
-              <div className="overflow-y-auto flex-1 px-5 py-4">
-                <form id="course-form" onSubmit={handleSubmit} className="space-y-3">
+                {/* Scrollable Body */}
+                <div className="overflow-y-auto flex-1 px-5 py-4 space-y-4">
                   {/* Row 1: Title | Category */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
@@ -278,14 +328,14 @@ const AdminCourses = () => {
                   </div>
 
                   {/* Row 4: Thumbnail Upload & Difficulty */}
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     <ImageUploadInput
                       label="Course Thumbnail"
                       required
                       value={formData.thumbnail}
                       onChange={(url) => setFormData({ ...formData, thumbnail: url })}
                       folder="mohitdecodes/courses"
-                      placeholder="https://... or click Upload Image"
+                      placeholder="https://... or upload from system"
                       aspectRatio="video"
                     />
 
@@ -344,12 +394,12 @@ const AdminCourses = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="flex items-center gap-2 cursor-pointer select-none pt-6 sm:pt-6">
+                      <label className="flex items-center gap-2 cursor-pointer select-none pt-2">
                         <input
                           type="checkbox"
                           checked={formData.isFree}
                           onChange={e => setFormData({ ...formData, isFree: e.target.checked })}
-                          className="w-4 h-4 rounded accent-purple-500"
+                          className="w-4 h-4 rounded accent-purple-500 cursor-pointer"
                         />
                         <span className="text-sm font-medium text-gray-300">Is Free Course</span>
                       </label>
@@ -382,31 +432,32 @@ const AdminCourses = () => {
                         type="checkbox"
                         checked={formData.isPublished}
                         onChange={e => setFormData({ ...formData, isPublished: e.target.checked })}
-                        className="w-4 h-4 rounded accent-purple-500"
+                        className="w-4 h-4 rounded accent-purple-500 cursor-pointer"
                       />
                       <span className="text-sm text-gray-300">Publish immediately</span>
                     </label>
                   </div>
-                </form>
-              </div>
+                </div>
 
-              {/* Sticky Footer */}
-              <div className="flex justify-end gap-2 px-5 py-3 border-t border-white/5 flex-shrink-0">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="btn-secondary text-sm px-4 py-2"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  form="course-form"
-                  className="btn-primary text-sm px-5 py-2"
-                >
-                  {selectedCourse ? 'Update Course' : 'Save Course'}
-                </button>
-              </div>
+                {/* Sticky Footer */}
+                <div className="flex justify-end gap-2 px-5 py-3 border-t border-slate-200 dark:border-white/5 flex-shrink-0 bg-slate-50 dark:bg-[#13111f]">
+                  <button
+                    type="button"
+                    onClick={() => setIsModalOpen(false)}
+                    className="btn-secondary text-sm px-4 py-2 cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="btn-primary text-sm px-6 py-2 rounded-xl font-bold inline-flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                  >
+                    {submitting && <Loader2 size={15} className="animate-spin" />}
+                    <span>{submitting ? 'Saving...' : selectedCourse ? 'Update Course' : 'Save Course'}</span>
+                  </button>
+                </div>
+              </form>
             </motion.div>
           </motion.div>
         )}

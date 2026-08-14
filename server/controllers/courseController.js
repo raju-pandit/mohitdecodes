@@ -1,5 +1,6 @@
 import Course from '../models/Course.js';
 import User from '../models/User.js';
+import slugify from 'slugify';
 
 export const getCourses = async (req, res, next) => {
     try {
@@ -61,6 +62,9 @@ export const getCourse = async (req, res, next) => {
 
 export const createCourse = async (req, res, next) => {
     try {
+        if (!req.body.slug && req.body.title) {
+            req.body.slug = slugify(req.body.title, { lower: true, strict: true });
+        }
         const course = await Course.create(req.body);
         res.status(201).json({ success: true, data: course });
     } catch (err) { next(err); }
@@ -68,6 +72,9 @@ export const createCourse = async (req, res, next) => {
 
 export const updateCourse = async (req, res, next) => {
     try {
+        if (req.body.title) {
+            req.body.slug = slugify(req.body.title, { lower: true, strict: true });
+        }
         const course = await Course.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
         if (!course) return res.status(404).json({ success: false, error: 'Course not found' });
         res.status(200).json({ success: true, data: course });

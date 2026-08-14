@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Edit2, Trash2, X, AlertTriangle, ChevronUp, ChevronDown, Link as LinkIcon } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, AlertTriangle, ChevronUp, ChevronDown, Link as LinkIcon, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
 
@@ -32,6 +32,7 @@ interface Roadmap {
 const AdminRoadmaps = () => {
   const [roadmaps, setRoadmaps] = useState<Roadmap[]>([]);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedRoadmap, setSelectedRoadmap] = useState<Roadmap | null>(null);
@@ -183,6 +184,17 @@ const AdminRoadmaps = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!formData.title.trim()) {
+      toast.error('Please enter roadmap title');
+      return;
+    }
+    if (!formData.description.trim()) {
+      toast.error('Please enter roadmap description');
+      return;
+    }
+
+    setSubmitting(true);
     try {
       // Re-order steps cleanly (1, 2, 3...)
       const cleanedSteps = formData.steps.map((step, idx) => ({
@@ -195,6 +207,8 @@ const AdminRoadmaps = () => {
 
       const payload = {
         ...formData,
+        title: formData.title.trim(),
+        description: formData.description.trim(),
         steps: cleanedSteps
       };
 
@@ -208,8 +222,11 @@ const AdminRoadmaps = () => {
       setIsModalOpen(false);
       fetchRoadmaps();
     } catch (error: any) {
+      console.error('Roadmap save error:', error);
       const msg = error?.message || error?.error || 'Failed to save roadmap';
       toast.error(msg);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -299,25 +316,26 @@ const AdminRoadmaps = () => {
               className="relative w-full max-w-3xl flex flex-col rounded-2xl bg-white dark:bg-[#13111f] border border-slate-200 dark:border-purple-700/30 shadow-2xl"
               style={{ maxHeight: '88vh' }}
             >
-              {/* Sticky Header */}
-              <div className="flex justify-between items-center px-5 py-3.5 border-b border-slate-200 dark:border-white/5 flex-shrink-0">
-                <div>
-                  <h2 className="text-base font-bold text-slate-900 dark:text-white">
-                    {selectedRoadmap ? 'Edit Roadmap' : 'Add New Roadmap'}
-                  </h2>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Structure developer learning paths & add steps</p>
+              <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
+                {/* Sticky Header */}
+                <div className="flex justify-between items-center px-5 py-3.5 border-b border-slate-200 dark:border-white/5 flex-shrink-0">
+                  <div>
+                    <h2 className="text-base font-bold text-slate-900 dark:text-white">
+                      {selectedRoadmap ? 'Edit Roadmap' : 'Add New Roadmap'}
+                    </h2>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Structure developer learning paths & add steps</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsModalOpen(false)}
+                    className="text-slate-400 hover:text-slate-900 dark:hover:text-white p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 transition cursor-pointer"
+                  >
+                    <X size={18} />
+                  </button>
                 </div>
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="text-slate-400 hover:text-slate-900 dark:hover:text-white p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 transition cursor-pointer"
-                >
-                  <X size={18} />
-                </button>
-              </div>
 
-              {/* Scrollable Form Body */}
-              <div className="overflow-y-auto flex-1 px-5 py-4">
-                <form id="roadmap-form" onSubmit={handleSubmit} className="space-y-5">
+                {/* Scrollable Form Body */}
+                <div className="overflow-y-auto flex-1 px-5 py-4 space-y-5">
                   {/* Section 1: Basic Info */}
                   <div className="space-y-3">
                     <h3 className="text-xs uppercase tracking-wider text-purple-400 font-bold">1. Basic Information</h3>
@@ -547,26 +565,27 @@ const AdminRoadmaps = () => {
                       </div>
                     )}
                   </div>
-                </form>
-              </div>
+                </div>
 
-              {/* Sticky Footer */}
-              <div className="flex justify-end gap-2 px-5 py-3 border-t border-white/5 flex-shrink-0">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="btn-secondary text-sm px-4 py-2"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  form="roadmap-form"
-                  className="btn-primary text-sm px-5 py-2"
-                >
-                  {selectedRoadmap ? 'Update Roadmap' : 'Save Roadmap'}
-                </button>
-              </div>
+                {/* Sticky Footer */}
+                <div className="flex justify-end gap-2 px-5 py-3 border-t border-slate-200 dark:border-white/5 flex-shrink-0 bg-slate-50 dark:bg-[#13111f]">
+                  <button
+                    type="button"
+                    onClick={() => setIsModalOpen(false)}
+                    className="btn-secondary text-sm px-4 py-2 cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="btn-primary text-sm px-6 py-2 rounded-xl font-bold inline-flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                  >
+                    {submitting && <Loader2 size={15} className="animate-spin" />}
+                    <span>{submitting ? 'Saving...' : selectedRoadmap ? 'Update Roadmap' : 'Save Roadmap'}</span>
+                  </button>
+                </div>
+              </form>
             </motion.div>
           </motion.div>
         )}

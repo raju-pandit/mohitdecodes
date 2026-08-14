@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Plus, Edit2, Trash2, X, AlertTriangle, ExternalLink, Github, Loader2 } from 'lucide-react';
+import toast from 'react-hot-toast';
 import api from '../../services/api';
 import ImageUploadInput from '../../components/admin/ImageUploadInput';
 
@@ -19,6 +21,7 @@ interface Project {
 const AdminProjects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -31,9 +34,10 @@ const AdminProjects = () => {
 
   const fetchProjects = async () => {
     try {
-      const data = await api.get('/projects');
+      const data: any = await api.get('/projects');
       setProjects(data?.data || []);
-    } catch (error) {
+    } catch (error: any) {
+      console.error('Fetch projects error:', error);
       toast.error('Failed to fetch projects');
     } finally {
       setLoading(false);
@@ -44,16 +48,28 @@ const AdminProjects = () => {
     if (project) {
       setSelectedProject(project);
       setFormData({
-        title: project.title, description: project.description,
-        image: project.image, technologies: project.technologies.join(', '),
-        githubUrl: project.githubUrl, liveUrl: project.liveUrl,
-        difficulty: project.difficulty, category: project.category, featured: project.featured
+        title: project.title || '',
+        description: project.description || '',
+        image: project.image || '',
+        technologies: project.technologies ? project.technologies.join(', ') : '',
+        githubUrl: project.githubUrl || '',
+        liveUrl: project.liveUrl || '',
+        difficulty: project.difficulty || 'Beginner',
+        category: project.category || 'Frontend',
+        featured: project.featured ?? false
       });
     } else {
       setSelectedProject(null);
       setFormData({
-        title: '', description: '', image: '', technologies: '',
-        githubUrl: '', liveUrl: '', difficulty: 'Beginner', category: 'Frontend', featured: false
+        title: '',
+        description: '',
+        image: '',
+        technologies: '',
+        githubUrl: '',
+        liveUrl: '',
+        difficulty: 'Beginner',
+        category: 'Frontend',
+        featured: false
       });
     }
     setIsModalOpen(true);
@@ -61,12 +77,38 @@ const AdminProjects = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!formData.title.trim()) {
+      toast.error('Please enter project title');
+      return;
+    }
+    if (!formData.description.trim()) {
+      toast.error('Please enter project description');
+      return;
+    }
+    if (!formData.image.trim()) {
+      toast.error('Please upload or enter a project image');
+      return;
+    }
+    if (!formData.technologies.trim()) {
+      toast.error('Please enter technologies (comma separated)');
+      return;
+    }
+
+    setSubmitting(true);
     try {
       const payload = {
-        ...formData,
-        technologies: formData.technologies.split(',').map(t => t.trim()).filter(Boolean)
+        title: formData.title.trim(),
+        description: formData.description.trim(),
+        image: formData.image.trim(),
+        technologies: formData.technologies.split(',').map(t => t.trim()).filter(Boolean),
+        githubUrl: formData.githubUrl.trim(),
+        liveUrl: formData.liveUrl.trim(),
+        difficulty: formData.difficulty,
+        category: formData.category,
+        featured: formData.featured
       };
-      
+
       if (selectedProject) {
         await api.put(`/projects/${selectedProject._id}`, payload);
         toast.success('Project updated successfully');
@@ -76,8 +118,12 @@ const AdminProjects = () => {
       }
       setIsModalOpen(false);
       fetchProjects();
-    } catch (error) {
-      toast.error('Failed to save project');
+    } catch (error: any) {
+      console.error('Project save error:', error);
+      const msg = error?.message || error?.error || 'Failed to save project';
+      toast.error(msg);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -88,29 +134,34 @@ const AdminProjects = () => {
       toast.success('Project deleted successfully');
       setIsDeleteModalOpen(false);
       fetchProjects();
-    } catch (error) {
+    } catch (error: any) {
       toast.error('Failed to delete project');
     }
   };
 
   return (
     <div className="p-2 sm:p-6 space-y-6">
+      {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Projects</h1>
-          <p className="text-slate-500 text-sm mt-0.5">Manage full-stack projects and showcase repositories.</p>
+          <p className="text-slate-500 text-sm mt-0.5">Showcase real-world portfolio projects for your community.</p>
         </div>
-        <button onClick={() => handleOpenModal()} className="btn-primary flex items-center gap-2 cursor-pointer shadow-md text-sm">
+        <button
+          onClick={() => handleOpenModal()}
+          className="btn-primary flex items-center gap-2 cursor-pointer shadow-md text-sm"
+        >
           <Plus size={18} /> Add Project
         </button>
       </div>
 
+      {/* Table */}
       {loading ? (
         <div className="flex justify-center h-64 items-center">
           <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : projects.length === 0 ? (
-        <div className="p-10 text-center text-slate-500 bg-white dark:bg-dark-900/30 rounded-2xl border border-slate-200 dark:border-dark-700 shadow-sm font-medium">No projects found.</div>
+        <div className="p-10 text-center text-slate-500 bg-white dark:bg-dark-900/30 rounded-2xl border border-slate-200 dark:border-dark-700 shadow-sm font-medium">No projects found. Add one!</div>
       ) : (
         <div className="bg-white dark:bg-dark-900 border border-slate-200/90 dark:border-dark-800 rounded-2xl shadow-sm overflow-x-auto">
           <table className="w-full text-left text-sm text-slate-700 dark:text-gray-300">
@@ -120,7 +171,7 @@ const AdminProjects = () => {
                 <th className="p-4">Title</th>
                 <th className="p-4">Category</th>
                 <th className="p-4">Difficulty</th>
-                <th className="p-4">Tech (Top 3)</th>
+                <th className="p-4">Featured</th>
                 <th className="p-4">Links</th>
                 <th className="p-4">Actions</th>
               </tr>
@@ -129,34 +180,43 @@ const AdminProjects = () => {
               {projects.map((project) => (
                 <tr key={project._id} className="hover:bg-slate-50/80 dark:hover:bg-gray-800/30 transition-colors">
                   <td className="p-4">
-                    <img src={project.image || 'https://via.placeholder.com/150'} alt="thumb" className="w-16 h-10 object-cover rounded-lg border border-slate-200 dark:border-dark-700" />
+                    {project.image ? (
+                      <img src={project.image} alt="project" className="w-16 h-10 object-cover rounded-lg border border-slate-200 dark:border-dark-700" />
+                    ) : (
+                      <div className="w-16 h-10 bg-slate-100 dark:bg-dark-800 rounded-lg flex items-center justify-center text-slate-400 text-xs border border-slate-200 dark:border-dark-700">No img</div>
+                    )}
                   </td>
-                  <td className="p-4 font-semibold text-slate-900 dark:text-white">
-                    {project.title} {project.featured && <span className="ml-2 badge-orange font-semibold">Featured</span>}
-                  </td>
-                  <td className="p-4 font-medium text-slate-600 dark:text-slate-300">{project.category}</td>
-                  <td className="p-4"><span className="badge-blue font-semibold">{project.difficulty}</span></td>
+                  <td className="p-4 font-semibold text-slate-900 dark:text-white">{project.title}</td>
+                  <td className="p-4"><span className="badge-blue">{project.category}</span></td>
+                  <td className="p-4"><span className="badge-primary">{project.difficulty}</span></td>
                   <td className="p-4">
-                    <div className="flex gap-1.5 flex-wrap">
-                      {project.technologies.slice(0, 3).map((tech, i) => (
-                        <span key={i} className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-gray-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-transparent text-xs font-medium">{tech}</span>
-                      ))}
-                      {project.technologies.length > 3 && <span className="text-xs text-slate-400 font-medium">+{project.technologies.length - 3}</span>}
-                    </div>
-                  </td>
-                  <td className="p-4 flex gap-3 items-center">
-                    {project.githubUrl && <a href={project.githubUrl} target="_blank" rel="noreferrer" className="text-slate-500 hover:text-slate-900 dark:text-gray-400 dark:hover:text-white transition-colors"><Github size={16} /></a>}
-                    {project.liveUrl && <a href={project.liveUrl} target="_blank" rel="noreferrer" className="text-purple-600 hover:text-purple-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"><ExternalLink size={16} /></a>}
+                    {project.featured ? (
+                      <span className="badge-green">Featured</span>
+                    ) : (
+                      <span className="text-gray-500 text-xs">-</span>
+                    )}
                   </td>
                   <td className="p-4">
-                    <div className="flex gap-2">
-                      <button onClick={() => handleOpenModal(project)} className="p-2 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-400/10 rounded-lg cursor-pointer transition-colors" title="Edit Project">
-                        <Edit2 size={16} />
-                      </button>
-                      <button onClick={() => { setSelectedProject(project); setIsDeleteModalOpen(true); }} className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-400/10 rounded-lg cursor-pointer transition-colors" title="Delete Project">
-                        <Trash2 size={16} />
-                      </button>
+                    <div className="flex items-center gap-2 text-gray-400">
+                      {project.githubUrl && (
+                        <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition-colors" title="GitHub">
+                          <Github size={16} />
+                        </a>
+                      )}
+                      {project.liveUrl && (
+                        <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition-colors" title="Live Demo">
+                          <ExternalLink size={16} />
+                        </a>
+                      )}
                     </div>
+                  </td>
+                  <td className="p-4 flex gap-2">
+                    <button onClick={() => handleOpenModal(project)} className="p-2 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-400/10 rounded-lg cursor-pointer transition-colors" title="Edit Project">
+                      <Edit2 size={16} />
+                    </button>
+                    <button onClick={() => { setSelectedProject(project); setIsDeleteModalOpen(true); }} className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-400/10 rounded-lg cursor-pointer transition-colors" title="Delete Project">
+                      <Trash2 size={16} />
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -174,29 +234,31 @@ const AdminProjects = () => {
           >
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
-              className="relative w-full max-w-3xl flex flex-col rounded-2xl bg-white dark:bg-[#13111f] border border-slate-200 dark:border-purple-700/30 shadow-2xl"
-              style={{ maxHeight: '85vh' }}
+              className="relative w-full max-w-3xl flex flex-col rounded-2xl bg-white dark:bg-[#13111f] border border-slate-200 dark:border-purple-700/30 shadow-2xl overflow-hidden"
+              style={{ maxHeight: '88vh' }}
             >
-              {/* Sticky Header */}
-              <div className="flex justify-between items-center px-5 py-3.5 border-b border-slate-200 dark:border-white/5 flex-shrink-0">
-                <h2 className="text-base font-bold text-slate-900 dark:text-white">
-                  {selectedProject ? 'Edit Project' : 'Add Project'}
-                </h2>
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="text-slate-400 hover:text-slate-900 dark:hover:text-white p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 transition cursor-pointer"
-                >
-                  <X size={18} />
-                </button>
-              </div>
+              {/* Form wrapping entire modal */}
+              <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
+                {/* Header */}
+                <div className="flex justify-between items-center px-5 py-3.5 border-b border-slate-200 dark:border-white/5 flex-shrink-0">
+                  <h2 className="text-base font-bold text-slate-900 dark:text-white">
+                    {selectedProject ? 'Edit Project' : 'Add Project'}
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={() => setIsModalOpen(false)}
+                    className="text-slate-400 hover:text-slate-900 dark:hover:text-white p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 transition cursor-pointer"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
 
-              {/* Scrollable Body */}
-              <div className="overflow-y-auto flex-1 px-5 py-4">
-                <form id="project-form" onSubmit={handleSubmit} className="space-y-3">
+                {/* Body */}
+                <div className="overflow-y-auto flex-1 px-5 py-4 space-y-4">
                   {/* Title */}
                   <div>
                     <label className="block text-xs font-medium mb-1 text-gray-400">
-                      Title <span className="text-red-400">*</span>
+                      Project Title <span className="text-red-400">*</span>
                     </label>
                     <input
                       required
@@ -217,8 +279,8 @@ const AdminProjects = () => {
                     <textarea
                       required
                       className="input w-full text-sm resize-none"
-                      style={{ height: '85px' }}
-                      placeholder="Short description of the project..."
+                      style={{ height: '110px' }}
+                      placeholder="Project description, features, architecture..."
                       value={formData.description}
                       onChange={e => setFormData({ ...formData, description: e.target.value })}
                     />
@@ -231,7 +293,7 @@ const AdminProjects = () => {
                     value={formData.image}
                     onChange={(url) => setFormData({ ...formData, image: url })}
                     folder="mohitdecodes/projects"
-                    placeholder="https://... or click Upload Image"
+                    placeholder="https://... or upload from system"
                     aspectRatio="video"
                   />
 
@@ -280,18 +342,20 @@ const AdminProjects = () => {
                   {/* Category | Difficulty */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-medium mb-1 text-gray-400">
-                        Category <span className="text-red-400">*</span>
-                      </label>
-                      <input
-                        required
-                        type="text"
+                      <label className="block text-xs font-medium mb-1 text-gray-400">Category</label>
+                      <select
                         className="input w-full text-sm"
                         style={{ height: '40px' }}
-                        placeholder="e.g. Frontend, MERN, Full Stack..."
                         value={formData.category}
                         onChange={e => setFormData({ ...formData, category: e.target.value })}
-                      />
+                      >
+                        <option value="Frontend">Frontend</option>
+                        <option value="Backend">Backend</option>
+                        <option value="Full Stack">Full Stack</option>
+                        <option value="Mobile">Mobile</option>
+                        <option value="AI / ML">AI / ML</option>
+                        <option value="Other">Other</option>
+                      </select>
                     </div>
                     <div>
                       <label className="block text-xs font-medium mb-1 text-gray-400">Difficulty</label>
@@ -308,44 +372,45 @@ const AdminProjects = () => {
                     </div>
                   </div>
 
-                  {/* Featured Project */}
+                  {/* Featured */}
                   <div className="pt-1">
                     <label className="flex items-center gap-2 cursor-pointer select-none w-fit">
                       <input
                         type="checkbox"
                         checked={formData.featured}
                         onChange={e => setFormData({ ...formData, featured: e.target.checked })}
-                        className="w-4 h-4 rounded accent-purple-500"
+                        className="w-4 h-4 rounded accent-purple-500 cursor-pointer"
                       />
-                      <span className="text-sm text-gray-300">Featured Project</span>
+                      <span className="text-sm text-gray-300">Feature this project on homepage</span>
                     </label>
                   </div>
-                </form>
-              </div>
+                </div>
 
-              {/* Sticky Footer */}
-              <div className="flex justify-end gap-2 px-5 py-3 border-t border-white/5 flex-shrink-0">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="btn-secondary text-sm px-4 py-2"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  form="project-form"
-                  className="btn-primary text-sm px-5 py-2"
-                >
-                  {selectedProject ? 'Update Project' : 'Save Project'}
-                </button>
-              </div>
+                {/* Sticky Footer */}
+                <div className="flex justify-end gap-2 px-5 py-3 border-t border-slate-200 dark:border-white/5 flex-shrink-0 bg-slate-50 dark:bg-[#13111f]">
+                  <button
+                    type="button"
+                    onClick={() => setIsModalOpen(false)}
+                    className="btn-secondary text-sm px-4 py-2 cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="btn-primary text-sm px-6 py-2 rounded-xl font-bold inline-flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                  >
+                    {submitting && <Loader2 size={15} className="animate-spin" />}
+                    <span>{submitting ? 'Saving...' : selectedProject ? 'Update Project' : 'Save Project'}</span>
+                  </button>
+                </div>
+              </form>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Delete Confirm Modal */}
+      {/* Delete Modal */}
       <AnimatePresence>
         {isDeleteModalOpen && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
