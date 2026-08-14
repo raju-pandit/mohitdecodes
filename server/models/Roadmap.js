@@ -42,7 +42,6 @@ roadmapSchema.pre('save', function (next) {
 roadmapSchema.set('toJSON', { virtuals: true });
 roadmapSchema.set('toObject', { virtuals: true });
 
-roadmapSchema.index({ slug: 1 });
 roadmapSchema.index({ title: 'text', description: 'text' });
 
 
